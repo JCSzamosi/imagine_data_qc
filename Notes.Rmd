@@ -1,0 +1,55 @@
+IMAGINE Project Data Curation
+=============================
+
+## Files
+
+### Data
+
+The data files used here, which are too large to track under version control,
+are:
+
+1. The metadata sheet provided by Tania and Aida from the IMAGINE project:
+[data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette.xls](data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette.xls)
+2. The .csv version of the first sheet of that Excel file, saved by me: [data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv](data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv)
+3. A .csv file produced from the above using OpenRefine. So far, the only change 
+   has been to replace a single Sample ID value in the table, as instructed by
+   Tania, due to an error made by the collection site. On row 4850, I changed
+   the SampleID from 205759 to 205762. The saved file is
+   [data/corrected_IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv](data/corrected_IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv).
+4. The Sample Info Sheet provided by Laura after sequencing: [data/IMG1-4164_sampleinfosheet_Aug2023.csv](data/IMG1-4164_sampleinfosheet_Aug2023.csv)
+5. The sequence table provided by Laura after running DADA2: [data/seqtab_nochim_transposed_IMG1-4164-Aug2023_v34.csv](data/seqtab_nochim_transposed_IMG1-4164-Aug2023_v34.csv)
+6. The taxonomy table provided by Laura after running DADA2: [data/taxa_IMG1-4164-Aug2023_v34_silva138wsp.csv](data/taxa_IMG1-4164-Aug2023_v34_silva138wsp.csv)
+
+### Scripts & Intermed
+
+1. [make_mapfile.R](scripts/make_mapfile.R)
+    * checks the inputs from files (3) and (4) in the Data section above, 
+      looking for duplicates or any other problems. 
+        * found 10 duplicated sample IDs, including the 3 already identified 
+          from site 25. The full listing of duplicate IDs is in 
+          [intermed/duplicate_sampleIDs.csv](intermed/duplicate_sampleIDS.csv)
+          has 10 duplicated sample IDs.
+        * found 33 duplicated sample IDs in Laura's infosheet file. There is 
+          zero overlap between the duplicated IDs in Laura's file and the 
+          duplicated IDs in the IMAGINE file. I don't know if that is good or 
+          bad. The full listing of duplicate IDs is in
+          [intermed/l_duplicate_sampleIDs.csv](intermed/l_duplicate_sampleIDs.csv)
+    * eliminates all samples from site 25 until sample ID errors can be 
+      corrected.
+    * removes all duplicated samples regardless of site until I have 
+      instructions otherwise
+2. [sample_qc.R](scripts/sample_qc.R)
+	* imports data and produces an unfiltered phyloseq object and sequence
+	  vector. These live in [cleaned/ps_full.Rdata](cleaned/ps_full.Rdata).
+	*
+     
+### Cleaned
+
+1. [mapfile_all.csv](cleaned/mapfile_all.csv) 
+	* A mapfile containing all samples not eliminated by the sample duplication
+	errors descibed in (Scripts 1.).  Produced by
+	[scripts/make_mapfile.R](scripts/make_mapfile.R)
+2. [mapfile_sequenced.csv](cleaned/mapfile_sequenced.csv)
+	* A mapfile containing only those samples not eliminated by the sample
+	duplication errors described in (Scripts 1.) and for which we have done
+	sequencing. Produced by [scripts/make_mapfile.R](scripts/make_mapfile.R)

@@ -38,10 +38,11 @@ are:
       corrected.
     * removes all duplicated samples regardless of site until I have 
       instructions otherwise
-2. [sample_qc.R](scripts/sample_qc.R)
+2. [sample_qc.Rmd](scripts/sample_qc.Rmd)
 	* imports data and produces an unfiltered phyloseq object and sequence
 	  vector. These live in [cleaned/ps_full.Rdata](cleaned/ps_full.Rdata).
-	*
+	* creates an unfiltered phyloseq object that contains all samples and all
+	  taxa, which is stored at [cleaned/ps_full.Rdata](cleaned/ps_full.Rdata).
      
 ### Cleaned
 
@@ -53,3 +54,5 @@ are:
 	* A mapfile containing only those samples not eliminated by the sample
 	duplication errors described in (Scripts 1.) and for which we have done
 	sequencing. Produced by [scripts/make_mapfile.R](scripts/make_mapfile.R)
+3. [cleaned/ps_full.Rdata](cleaned/ps_full.Rdata)
+	* A phyloseq object containing all ASVs and all samples.

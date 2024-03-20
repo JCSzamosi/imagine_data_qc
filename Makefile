@@ -6,3 +6,6 @@ cleaned/ps_samfilt.Rdata:scripts/make_ps_samfilt.R cleaned/ps_full.Rdata
 
 intermed/aln_samfilt.Rdata:scripts/make_aln_samfilt.R cleaned/ps_samfilt.Rdata
 	Rscript scripts/make_aln_samfilt.R
+
+intermed/clst_samfilt.Rdata:scripts/make_clst_samfilt.R intermed/aln_samfilt.Rdata
+	Rscript scripts/make_clst_samfilt.R

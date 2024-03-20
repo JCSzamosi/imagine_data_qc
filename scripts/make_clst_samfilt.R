@@ -17,17 +17,18 @@ nohost = (taxtab
 seqs = as.character(nohost$Seq)
 
 # Create a distance matrix 
-dmat = DistanceMatrix(aln, type = 'dist')
+dmat = DistanceMatrix(aln, type = 'dist', processors = 10)
 
 # Cluster sequences using UPGMA method (splits the difference between
 # "complete" and "single" method with a maximum between-cluster difference of
 # 0.01)
-clsts = IdClusters(dmat, cutoff = 0.01, method = 'UPGMA')
+clsts = TreeLine(aln, dmat, cutoff = 0.01, method = 'UPGMA',
+                   type = 'clusters', processors = 10)
 	# Each sequence has its own row, in the order they were originally listed in
 	# The cluster number that each sequence belongs to is listed in its row in
 	# the "cluster" column
 
 # Add the sequences to the data frame so we can make consensus sequences
-clsts$seqs = seqs
+clsts$seqs = seqs[rownames(clsts)]
 
 save(list = c('dmat','clsts','seqs'), file = 'intermed/clst_samfilt.Rdata')

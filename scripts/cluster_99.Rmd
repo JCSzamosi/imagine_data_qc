@@ -18,83 +18,8 @@ load('cleaned/ps_samfilt.Rdata')
 ls()
 ```
 
-### Reduce to just a few taxa
-
-```{r}
-taxtab = data.frame(tax_table(ps_samfilt))
-table(taxtab$Family)
-ps_reduced = prune_taxa(taxtab$Family %in% c('Prevotellaceae', 'Veillonellaceae'),
-                        ps_samfilt)
-ps_reduced
-summary(sample_sums(ps_reduced))
-ps_reduced = prune_samples(sample_sums(ps_reduced) > 0, ps_reduced)
-head(taxa_names(ps_reduced))
-seqs_reduced = seqs_samfilt[taxa_names(ps_reduced)]
-```
-
-
-```{r}
-seqs = DNAStringSet(seqs_reduced)
-clusts = Clusterize(seqs, cutoff = 0.01, method = 'longest', includeTerminalGaps = TRUE,
-          minCoverage = 0.99, processors = 10, verbose = TRUE)
-dim(clusts)
-head(clusts)
-clusts %>% count(cluster) %>% arrange(desc(n)) %>% head()
-
-cl_30 = rownames(filter(clusts, cluster == 30))
-cl_30
-
-seqs_30 = seqs_reduced[cl_30]
-seqs_30 = DNAStringSet(seqs_30)
-seqs_30
-
-aln_30 = AlignSeqs(seqs_30, processors = 10)
-BrowseSeqs(aln_30)
-
-cl_134 = rownames(filter(clusts, cluster == 134))
-cl_134
-
-seqs_134 = seqs_reduced[cl_134]
-seqs_134 = DNAStringSet(seqs_134)
-seqs_134
-
-aln_134 = AlignSeqs(seqs_134, processors = 10)
-BrowseSeqs(aln_134)
-```
-
-There's also the TreeLine option. I think this might be the same as IdClusters?
-
-```{r}
-aln_reduced = AlignSeqs(seqs, processors = 10)
-BrowseSeqs(aln_reduced)
-
-dmat_reduced = DistanceMatrix(aln_reduced, type = 'dist', processors = 10)
-
 clsts = TreeLine(aln_reduced, dmat_reduced, cutoff = 0.01, method = 'UPGMA',
                  type = 'clusters', processors = 10)
-
-dim(clsts)
-head(clsts)
-
-clsts %>% count(cluster) %>% arrange(desc(n)) %>% filter(cluster == 212)
-cl_27 = rownames(filter(clsts, cluster == 27))
-cl_27
-
-sum(cl_27 %in% cl_30)
-sum(cl_30 %in% cl_27)
-
-cl_30[!cl_30 %in% cl_27]
-
-clsts[c('sp15709', 'sp20261'),]
-clsts %>% filter(cluster %in% c(25, 158))
-
-clsts['sp20462',]
-
-```
-
-These two methods produce very similar results and both seem fine. I think it is 
-reasonable to replace IdClusters with TreeLine.
-
 ### Prep the sequences
 
 ```{r}
@@ -126,7 +51,8 @@ dmat = DistanceMatrix(aln, type = 'dist', processors = 10)
 # Cluster sequences using UPGMA method (splits the difference between
 # "complete" and "single" method with a maximum between-cluster difference of
 # 0.01)
-clsts = Clusterize(dmat, cutoff = 0.01, method = 'UPGMA')
+clsts = TreeLine(aln, dmat, cutoff = 0.01, method = 'UPGMA', type = 'clusters',
+                 processors = 10)
 head(clsts)
 	# Each sequence has its own row, in the order they were originally listed in
 	# The cluster number that each sequence belongs to is listed in its row in

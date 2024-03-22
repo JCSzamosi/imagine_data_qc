@@ -1,5 +1,6 @@
 library(phyloseq)
 library(tidyverse)
+library(AfterSl1p)
 
 taxfile = 'data/taxa_IMG1-4164-Aug2023_v34_silva138wsp.csv'
 taxtab = read.csv(taxfile, row.names = 1)
@@ -39,4 +40,12 @@ ps = phyloseq(otu_table(asvtab, taxa_are_rows = TRUE),
 # Name the sequence data
 names(seqs) = taxa_names(ps)
 
-save(ps, seqs, file = 'cleaned/ps_full.Rdata')
+# Remove host sequences
+ps = prop_tax_down(ps, indic = FALSE)
+ps = subset_taxa(ps,
+                        Kingdom %in% c('Bacteria','Archaea') &
+                            !startsWith(as.character(Phylum), 'k_') &
+                            Family != 'Mitochondria' &
+                            Order != 'Chloroplast')
+save(ps, file = 'cleaned/ps_full.Rdata')
+save(seqs, file = 'cleaned/seqs_full.Rdata')

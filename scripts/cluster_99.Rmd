@@ -23,36 +23,27 @@ clsts = TreeLine(aln_reduced, dmat_reduced, cutoff = 0.01, method = 'UPGMA',
 ### Prep the sequences
 
 ```{r}
-# # Host sequences get in the way of alignment. Remove them.
-# taxtab = data.frame(tax_table(ps_samfilt))
-# rownames(taxtab) = seqs_samfilt[rownames(taxtab)]
-# nohost = (taxtab
-# 	%>% mutate(Seq = rownames(.))
-# 	%>% filter(!is.na(Phylum),
-# 			   Kingdom %in% c('Bacteria','Archaea')))
-# 
-# # Get the sequences on their own for clustering
-# seqs = as.character(nohost$Seq)
+# Host sequences get in the way of alignment. Remove them.
+taxtab = data.frame(tax_table(ps_samfilt))
+rownames(taxtab) = seqs_samfilt[rownames(taxtab)]
+nohost = (taxtab
+	%>% mutate(Seq = rownames(.))
+	%>% filter(!is.na(Phylum),
+			   Kingdom %in% c('Bacteria','Archaea')))
+
+# Get the sequences on their own for clustering
+seqs = as.character(nohost$Seq)
 ```
 
 ### Cluster the sequences
 
 ```{r}
 # # Start by making a multisequence alignment of the ASVs
-# aln = AlignSeqs(DNAStringSet(seqs), processors = 10)
 load(file = 'intermed/aln_samfilt.Rdata')
 
-# It's not a bad idea to look at the alignment and make sure it's not too bad
-# BrowseSeqs(aln)
+load('intermed/clst_samfilt.Rdata')
+clsts$seqs = seqs
 
-# Create a distance matrix 
-dmat = DistanceMatrix(aln, type = 'dist', processors = 10)
-
-# Cluster sequences using UPGMA method (splits the difference between
-# "complete" and "single" method with a maximum between-cluster difference of
-# 0.01)
-clsts = TreeLine(aln, dmat, cutoff = 0.01, method = 'UPGMA', type = 'clusters',
-                 processors = 10)
 head(clsts)
 	# Each sequence has its own row, in the order they were originally listed in
 	# The cluster number that each sequence belongs to is listed in its row in

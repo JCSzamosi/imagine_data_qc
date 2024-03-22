@@ -15,15 +15,16 @@ img_dups
 
 
 ds = read.csv('data/Surette_datasheet.csv')
+ds = read.csv('data/IMG_Mar2024.csv')
 any(is.na(ds$Sample.ID..))
 head(ds)
 summary(ds)
 
 dups = (ds 
-        %>% count(Sample.ID..) 
+        %>% count(Sample.ID) 
         %>% filter(n > 1) 
         %>% left_join(ds))
-dups = select(dups, -n, -ID)
+dups = select(dups, -n)
 dups
 
 write.csv(dups, file = 'intermed/l_dup2.csv')

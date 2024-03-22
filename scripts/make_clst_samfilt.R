@@ -2,6 +2,7 @@ library(DECIPHER)
 
 load('intermed/aln_samfilt.Rdata')
 load('intermed/dmat_samfilt.Rdata')
+load('cleaned/seqs_samfilt.Rdata')
 
 # Cluster sequences using UPGMA method (splits the difference between
 # "complete" and "single" method with a maximum between-cluster difference of
@@ -13,6 +14,6 @@ clsts = TreeLine(aln, dmat, cutoff = 0.01, method = 'UPGMA',
 	# the "cluster" column
 
 # Add the sequences to the data frame so we can make consensus sequences
-clsts$seqs = seqs[rownames(clsts)]
+clsts$seqs = seqs_samfilt[rownames(clsts)]
 
-save('dmat', file = 'intermed/clst_samfilt.Rdata')
+save('clsts', file = 'intermed/clst_samfilt.Rdata')

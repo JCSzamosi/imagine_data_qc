@@ -5,45 +5,20 @@ Cluster Protocol
 
 ```{r Setup, include=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
-library(DECIPHER)
-library(dada2)
 library(tidyverse)
-library(phyloseq)
 ```
 
 ### Import Data
 
 ```{r}
 load('cleaned/ps_samfilt.Rdata')
+load('intermed/clst_samfilt.Rdata')
 ls()
 ```
 
-clsts = TreeLine(aln_reduced, dmat_reduced, cutoff = 0.01, method = 'UPGMA',
-                 type = 'clusters', processors = 10)
-### Prep the sequences
+### Look at the clusters
 
 ```{r}
-# Host sequences get in the way of alignment. Remove them.
-taxtab = data.frame(tax_table(ps_samfilt))
-rownames(taxtab) = seqs_samfilt[rownames(taxtab)]
-nohost = (taxtab
-	%>% mutate(Seq = rownames(.))
-	%>% filter(!is.na(Phylum),
-			   Kingdom %in% c('Bacteria','Archaea')))
-
-# Get the sequences on their own for clustering
-seqs = as.character(nohost$Seq)
-```
-
-### Cluster the sequences
-
-```{r}
-# # Start by making a multisequence alignment of the ASVs
-load(file = 'intermed/aln_samfilt.Rdata')
-
-load('intermed/clst_samfilt.Rdata')
-clsts$seqs = seqs
-
 head(clsts)
 	# Each sequence has its own row, in the order they were originally listed in
 	# The cluster number that each sequence belongs to is listed in its row in
@@ -52,12 +27,9 @@ head(clsts)
 # Count the clusters
 n_distinct(clsts$cluster)
 
-# Add the sequences to the data frame so we can make consensus sequences
-clsts$seqs = seqs
-head(clsts)
-
 # Count the number of clusters of each size
-clsts %>% count(cluster, name = 'size') %>% count(size, name = 'count')
+clsts %>% count(cluster, name = 'size') %>% count(size, name = 'count') %>%
+    arrange(desc(size))
 ```
 
 ### Get a consensus sequence for each cluster, using ambiguity codes

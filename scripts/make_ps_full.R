@@ -2,11 +2,11 @@ library(phyloseq)
 library(tidyverse)
 library(AfterSl1p)
 
-taxfile = 'data/taxa_IMG1-4164-Aug2023_v34_silva138wsp.csv'
+taxfile = 'data/active_taxtab_silva138wsp.csv'
 taxtab = read.csv(taxfile, row.names = 1)
 
 # Read in the asv table
-asvfile = 'data/seqtab_nochim_transposed_IMG1-4164-Aug2023_v34.csv'
+asvfile = 'data/active_seqtab_nochim.csv'
 asvtab = read.csv(asvfile, row.names = 1)
 
 # Check the rows
@@ -27,8 +27,8 @@ maptab = read.csv(mapfile)
 
 # Clean/organize the maptab
 maptab = (maptab
-          %>% column_to_rownames('Study.ID..')
-          %>% mutate_at(vars(Site, DiseaseType, Timepoint, Study,
+          %>% column_to_rownames('Study.ID')
+          %>% mutate_at(vars(Site, DiseaseType, Timepoint, Study.Name,
                              Sample.Type, Illumina.Plate.Number,
                              GPrep.Plate...), factor))
 

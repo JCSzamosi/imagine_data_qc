@@ -1,8 +1,8 @@
 library(DECIPHER)
 
-load('intermed/aln_samfilt.Rdata')
+load('intermed/aln.Rdata')
 
 # Create a distance matrix 
 dmat = DistanceMatrix(aln, type = 'dist', processors = 10)
 
-save(dmat, file = 'intermed/dmat_samfilt.Rdata')
+save(dmat, file = 'intermed/dmat.Rdata')

@@ -5,93 +5,70 @@
 ## Setup ####
 library(tidyverse)
 
-## QC IMAGINE sheet ####
-img_sheet = read.csv('data/corrected_IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surrete_sheet1.csv')
-head(img_sheet)
+## IMAGINE sheet ####
+img_sheet = read.csv('data/active_IMAGINE_metadata_wide.csv')
+# head(img_sheet)
 colnames(img_sheet) = c('Site', 'DiseaseType','Baseline','Year1','Year2',
                         'Year3','Year4')
 img_long = (img_sheet
            %>% pivot_longer(c(Baseline, starts_with('Year')), names_to = 'Timepoint',
-                            values_to = 'SampleID'))
-head(img_long)
-dim(img_long)
+                            values_to = 'SampleID')
+           %>% filter(!is.na(SampleID)))
+# head(img_long)
+# dim(img_long)
 
-# check for duplicate sample IDs
-dups = (img_long
-        %>% filter(!is.na(SampleID))
-        %>% count(SampleID)
-        %>% left_join(img_long)
-        %>% filter(n > 1)
-        %>% select(-n)
-        %>% arrange(SampleID, Site))
-dups
-write.csv(dups, file = 'intermed/duplicate_sampleIDs.csv', row.names = FALSE)
-
-# There are 10 duplicated sample IDs. These must be eliminated from analysis
-# until they can be corrected
-
-## QC Laura's infosheet ####
+## Laura's infosheet ####
 
 # Read in Laura's info sheet
-infosheet = read.csv('data/IMG1-4164_sampleinfosheet_Aug2023.csv',
+infosheet = read.csv('data/active_Rossi_info_datasheet.csv',
                      header = TRUE, strip.white = TRUE)
-head(infosheet)
-l_dups = (infosheet 
-          %>% count(Sample.ID..) 
-          %>% left_join(infosheet)
-          %>% filter(n > 1))
-dim(l_dups)
-summary(l_dups)
+# head(infosheet)
 
 ## Compare the two sheets ####
 
-any(l_dups$Sample.ID.. %in% dups$SampleID)
-any(dups$SampleID %in% l_dups$Sample.ID..)
+# sum(!infosheet$Sample.ID %in% img_long$SampleID)
+# infosheet %>%
+#     filter(!Sample.ID %in% img_long$SampleID)
 
-# It's not the same set of duplicates
-dim(infosheet)
+## Houston, we have a problem. There are 155 Sample IDs in Laura's info sheet
+# that are not in the metadata from IMAGINE.
 
-write.csv(l_dups, file = 'intermed/l_duplicate_sampleIDs.csv',
-          row.names = FALSE)
-
-
-# For now, we'll just remove everything that is duplicated. We're also removing
-# everything from site 25 until they are able to figure out what caused their
-# sample duplication problems.
-
-img_filt = (img_long
-            %>% filter(Site != 25, 
-                       !is.na(SampleID),
-                       !SampleID %in% dups$SampleID))
-dim(img_long)
-dim(img_filt)
-
-# Removing site 25 means removing 3385 samples. The duplicates are just an
-# additional 6 or so.
-
-insh_filt = (infosheet
-             %>% filter(!Sample.ID.. %in% l_dups$Sample.ID..)
-             %>% rename(SampleID = 'Sample.ID..'))
-dim(infosheet)
-dim(insh_filt)
-
-# This cost us 66 rows, which is 33 samples.
+# probs = (infosheet
+#          %>% filter(!(Sample.ID %in% img_long$SampleID)))
+# 
+# write.csv(probs, file = 'intermed/missing_from_IMAGINE.csv')
 
 ## Generate the Mapfile ####
 
-mapfile = (img_filt
-           %>% left_join(insh_filt)
+# Filter out site 25 until its sample IDs are sorted
+infosheet = (infosheet
+             %>% rename(SampleID = 'Sample.ID'))
+
+mapfile = (img_long
+           %>% full_join(infosheet)
            %>% select(SampleID, everything()))
-dim(mapfile)
-head(mapfile)
+# dim(mapfile)
+# head(mapfile)
+
+# this mapfile includes everything: site 25 is in there, as are the Surette
+# sample IDs that are absent from the IMAGINE metadata
+
+write.csv(mapfile, file = 'intermed/mapfile_full.csv', row.names = FALSE)
+
+# this mapfile excludes site 25 but includes samples which have not yet been
+# sequenced
+
+mapfile_clean = (mapfile
+                 %>% filter(Site != '25'))
+
+write.csv(mapfile_clean, file = 'cleaned/mapfile_clean.csv', row.names = FALSE)
+
+# this mapfile only includes samples that have been sequenced, and excludes
+# those from site 25
+
+mapfile_seq = (mapfile_clean
+               %>% filter(SampleID %in% infosheet$SampleID))
 
 
-# this mapfile excludes site 25 and all duplicate Sample IDs, but includes
-# samples which have not yet been sequenced
-
-write.csv(mapfile, file = 'cleaned/mapfile_all.csv', row.names = FALSE)
-
-# now write a mapfile only including sequenced samples
-
-write.csv(filter(mapfile, !is.na(Study.ID..)),
-          file = 'cleaned/mapfile_sequenced.csv', row.names = FALSE)
+write.csv(mapfile_seq, file = 'cleaned/mapfile_sequenced.csv',
+          row.names = FALSE)

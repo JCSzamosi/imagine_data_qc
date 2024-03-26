@@ -47,5 +47,6 @@ ps = subset_taxa(ps,
                             !startsWith(as.character(Phylum), 'k_') &
                             Family != 'Mitochondria' &
                             Order != 'Chloroplast')
+seqs = seqs[taxa_names(ps)]
 save(ps, file = 'cleaned/ps_full.Rdata')
 save(seqs, file = 'cleaned/seqs_full.Rdata')

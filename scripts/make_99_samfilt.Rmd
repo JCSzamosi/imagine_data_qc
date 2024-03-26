@@ -1,0 +1,26 @@
+Make 99 Samfilt
+===============
+
+```{r}
+library(phyloseq)
+load('cleaned/ps_full.Rdata')
+load('intermed/tax_99.Rdata')
+load('intermed/clst.Rdata')
+load('cleaned/seqs_full.Rdata')
+ls()
+
+colnames(clstax)
+head(rownames(clstax))
+
+head(conseq)
+head(clsts)
+dim(clsts)
+ps
+length(seqs)
+
+asvtab = data.frame(otu_table(ps))
+head(rownames(asvtab))
+all(rownames(clsts) %in% rownames(asvtab))
+rownames(clsts)[!rownames(clsts) %in% rownames(asvtab)]
+```
+

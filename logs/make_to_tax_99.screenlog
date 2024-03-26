@@ -1,0 +1,13 @@
+make intermed/tax_99_samfilt.Rdata 
+Rscript scripts/make_ps_full.R
+^C
+Execution halted
+[?25hmake: *** [Makefile:2: cleaned/ps_full.Rdata] Error 1
+
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ make intermed/tax_99_samfilt.Rdata cd ../[Kmv make_99_ps.R assign_tax_99.Rls[Kcd scripts/git push origin[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kmake intermed/tax_99_samfilt.Rdata 
+Rscript scripts/make_ps_full.R
+^C
+Execution halted
+[?25h^make: *** [Makefile:2: cleaned/ps_full.Rdata] Error 1
+
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ 

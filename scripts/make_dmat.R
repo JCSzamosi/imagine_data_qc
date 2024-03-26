@@ -3,6 +3,6 @@ library(DECIPHER)
 load('intermed/aln.Rdata')
 
 # Create a distance matrix 
-dmat = DistanceMatrix(aln, type = 'dist', processors = 10)
+dmat = DistanceMatrix(aln, type = 'dist', processors = 20)
 
 save(dmat, file = 'intermed/dmat.Rdata')

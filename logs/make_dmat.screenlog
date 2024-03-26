@@ -1,0 +1,108 @@
+./scripts/[K[K[K[K[K[K[K[K[K[Kmake intermed/dmat.Rdata 
+Rscript scripts/make_dmat.R
+Error in library(DECIPHER) : there is no package called ‘DECIPHER’
+Execution halted
+make: *** [Makefile:14: intermed/dmat.Rdata] Error 1
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ conda activate imagine_dt[Kata_qc
+(imagine_data_qc) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ conda activate imagine_data_qc[5Pmake intermed/dmat.Rdata 
+Rscript scripts/make_dmat.R
+Loading required package: Biostrings
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+Loading required package: stats4
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:utils’:
+
+    findMatches
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: XVector
+Loading required package: GenomeInfoDb
+
+Attaching package: ‘Biostrings’
+
+The following object is masked from ‘package:base’:
+
+    strsplit
+
+Loading required package: RSQLite
+Loading required package: parallel
+[?25h[?25h^C^C^C^C=^C^C^C=====^C^C^C^C^C^C^C^C^C=^C^C^C^C^C^C^C^C^C^C=
+===./[K[Kmake intermed/dmat.Rdata 
+Rscript scripts/make_dmat.R
+Error in library(DECIPHER) : there is no package called ‘DECIPHER’
+Execution halted
+make: *** [Makefile:14: intermed/dmat.Rdata] Error 1
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ conda activate imagine_data_qc
+(imagine_data_qc) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ conda activate imagine_data_qc[5Pmake intermed/dmat.Rdata 
+Rscript scripts/make_dmat.R
+Loading required package: Biostrings
+Loading required package: BiocGenerics
+
+Attaching package: ‘BiocGenerics’
+
+The following objects are masked from ‘package:stats’:
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from ‘package:base’:
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which.max, which.min
+
+Loading required package: S4Vectors
+Loading required package: stats4
+
+Attaching package: ‘S4Vectors’
+
+The following object is masked from ‘package:utils’:
+
+    findMatches
+
+The following objects are masked from ‘package:base’:
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+Loading required package: XVector
+Loading required package: GenomeInfoDb
+
+Attaching package: ‘Biostrings’
+
+The following object is masked from ‘package:base’:
+
+    strsplit
+
+Loading required package: RSQLite
+Loading required package: parallel
+[?25h[?25h================================================================================
+
+Time difference of 626.61 secs
+
+[?25h[?25h[?25h(imagine_data_qc) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ 

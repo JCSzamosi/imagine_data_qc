@@ -65,13 +65,13 @@ clstax = (conseq
           %>% column_to_rownames('cluster'))
 
 # Check outputs
-if (!nrow(otutab) == nrow(asv_clst) == n_distinct(clsts$cluster)){
+if (!nrow(otutab) == n_distinct(clsts$cluster)) {
     msg = 'The summing within cluster didn\'t work. Wrong number of clusters'
     stop(msg)
 }
 
 # Create the 99% otu phyloseq object
-ps_99 = phyloseq(otu_table(as.matrix(tst), taxa_are_rows = TRUE),
+ps_99 = phyloseq(otu_table(as.matrix(otutab), taxa_are_rows = TRUE),
                  tax_table(as.matrix(clstax)),
                  sample_data(maptab))
 save(ps_99, file = 'cleaned/ps_99.Rdata')

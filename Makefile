@@ -21,3 +21,6 @@ intermed/tax_99.Rdata:scripts/assign_tax_99.R intermed/clst.Rdata
 
 cleaned/ps_99.Rdata:scripts/make_ps_99.R cleaned/ps_full.Rdata intermed/tax_99.Rdata intermed/clst.Rdata cleaned/seqs_full.Rdata
 	Rscript scripts/make_ps_99.R
+
+cleaned/ps_99_samfilt.Rdata:scripts/make_ps_99_samfilt.R cleaned/ps_samfilt.Rdata cleaned/ps_99.Rdata
+	Rscript scripts/make_ps_99_samfilt.R

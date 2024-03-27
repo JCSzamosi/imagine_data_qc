@@ -102,4 +102,98 @@ Rscript scripts/make_ps_full.R
 [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
 [36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
 [?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1m[22mJoining with `by = join_by(Kingdom, Phylum, Class, Order, Family, Genus)`
-[?25h[?25h[?25h[?25h[?25h[?25h(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ 
+[?25h[?25h[?25h[?25h[?25h[?25h(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git st
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   logs/make_ps_full.screenlog[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git add logs/
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git st
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	[32mmodified:   logs/make_ps_full.screenlog[m
+
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git ct -m "regenerate ps_full"
+[main 14f9608] regenerate ps_full
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git po
+Enumerating objects: 7, done.
+Counting objects:  14% (1/7)Counting objects:  28% (2/7)Counting objects:  42% (3/7)Counting objects:  57% (4/7)Counting objects:  71% (5/7)Counting objects:  85% (6/7)Counting objects: 100% (7/7)Counting objects: 100% (7/7), done.
+Delta compression using up to 12 threads
+Compressing objects:  25% (1/4)Compressing objects:  50% (2/4)Compressing objects:  75% (3/4)Compressing objects: 100% (4/4)Compressing objects: 100% (4/4), done.
+Writing objects:  25% (1/4)Writing objects:  50% (2/4)Writing objects:  75% (3/4)Writing objects: 100% (4/4)Writing objects: 100% (4/4), 397 bytes | 397.00 KiB/s, done.
+Total 4 (delta 3), reused 0 (delta 0)
+remote: Resolving deltas:   0% (0/3)[Kremote: Resolving deltas:  33% (1/3)[Kremote: Resolving deltas:  66% (2/3)[Kremote: Resolving deltas: 100% (3/3)[Kremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[K
+To github.com:JCSzamosi/imagine_data_qc.git
+   cf6fd4a..14f9608  main -> main
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ ssh alpsr4.[K[K[K[K[K[Ks[K[Kszamosjc@mcmaster.ca[K[K[K[K[K[K[K[K[K[K[Kalpsr4.mcmaster. a[K[Kca
+szamosjc@alpsr4.mcmaster.ca's password: 
+Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-91-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+  System information as of Wed 27 Mar 2024 10:10:01 AM EDT
+
+  System load:  3.1                 Processes:                 1356
+  Usage of /:   37.1% of 273.21GB   Users logged in:           2
+  Memory usage: 5%                  IPv4 address for docker0:  172.17.0.1
+  Swap usage:   0%                  IPv4 address for enp5s0f0: 130.113.77.131
+  Temperature:  8.3 C
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+18 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+New release '22.04.3 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+
+
+*** System restart required ***
+Last login: Tue Mar 26 12:10:35 2024 from 130.113.160.92
+(base) [01;32mszamosjc@alpsr4[00m:[01;34m~[00m$ ls[K[Kcd IMAGINE/DataQC/
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ ls
+[0m[01;34mcleaned[0m  [01;34mdata[0m  [01;34mintermed[0m  [01;34mlogs[0m  Makefile  Notes.Rmd  [01;34mscripts[0m
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ git pull origin
+remote: Enumerating objects: 7, done.[K
+remote: Counting objects:  14% (1/7)[Kremote: Counting objects:  28% (2/7)[Kremote: Counting objects:  42% (3/7)[Kremote: Counting objects:  57% (4/7)[Kremote: Counting objects:  71% (5/7)[Kremote: Counting objects:  85% (6/7)[Kremote: Counting objects: 100% (7/7)[Kremote: Counting objects: 100% (7/7), done.[K
+remote: Compressing objects: 100% (1/1)[Kremote: Compressing objects: 100% (1/1), done.[K
+remote: Total 4 (delta 3), reused 4 (delta 3), pack-reused 0[K
+Unpacking objects:  25% (1/4)Unpacking objects:  50% (2/4)Unpacking objects:  75% (3/4)Unpacking objects: 100% (4/4)Unpacking objects: 100% (4/4), 377 bytes | 11.00 KiB/s, done.
+From github.com:JCSzamosi/imagine_data_qc
+   cf6fd4a..14f9608  main       -> origin/main
+Updating cf6fd4a..14f9608
+Fast-forward
+ logs/make_ps_full.screenlog | 15 [32m++++++++++++++[m[31m-[m
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ ls [K[K[Kscreen -ls
+There are screens on:
+	189722.RNASeqInstall	(02/13/2024 04:02:14 PM)	(Detached)
+	3073095.ucfmt	(02/05/2024 03:09:19 PM)	(Detached)
+2 Sockets in /run/screen/S-szamosjc.
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ screen -S imagine
+[!p[?3;4l[4l>[?1049h[22;0;0t[4l[?1h=[0m(B[1;52r[H[2J[H[2J(base) szamosjc@alpsr4:~/IMAGINE/DataQC$ [?5h[?5lxit[K[K[Kexit
+exit
+[?1l>[52;1H
+[?1049l[23;0;0t[screen is terminating]
+(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ exit
+logout
+Connection to alpsr4.mcmaster.ca closed.
+(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ cd [K[K[K

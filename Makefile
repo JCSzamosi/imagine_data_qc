@@ -1,3 +1,6 @@
+intermed/missing_from_seqtab.csv:scripts/check_sequenced_runs.R data/active_Rossi_info_datasheet.csv data/active_seqtab_nochim.csv
+	Rscript scripts/check_sequenced_runs.R
+
 cleaned/mapfile_full.csv cleaned/mapfile_sequenced.csv cleaned/mapfile_full.Rdata:scripts/make_mapfile.R data/active_IMAGINE_metadata_wide.csv data/active_Rossi_info_datasheet.csv
 	Rscript scripts/make_mapfile.R
 

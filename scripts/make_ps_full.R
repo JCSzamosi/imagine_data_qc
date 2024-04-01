@@ -1,6 +1,5 @@
 library(phyloseq)
-library(dplyr)
-library(tidyr)
+library(tidyverse)
 library(AfterSl1p)
 
 taxfile = 'data/active_taxtab_silva138wsp.csv'

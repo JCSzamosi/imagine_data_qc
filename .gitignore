@@ -8,3 +8,4 @@ data/*
 intermed/*
 cleaned/*
 DataQC.Rproj
+*.~lock.*

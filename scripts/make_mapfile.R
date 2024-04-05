@@ -24,34 +24,42 @@ infosheet = read.csv('data/active_Rossi_info_datasheet.csv',
                      header = TRUE, strip.white = TRUE)
 # head(infosheet)
 
+# Filter out samples we're not using and remove duplicate rows
+infosheet = (infosheet
+             %>% filter(!grepl('DNP', Illumina.Plate.Number),
+                        !grepl('DNP',Study.ID))
+             %>% select(-ID)
+             %>% unique())
+
+# dim(infosheet)
+
 ## Compare the two sheets ####
 
-# sum(!infosheet$Sample.ID %in% img_long$SampleID)
-# infosheet %>%
-#     filter(!Sample.ID %in% img_long$SampleID)
+# sum(!(infosheet$Sample.ID %in% img_long$SampleID))
 
-## Houston, we have a problem. There are 155 Sample IDs in Laura's info sheet
+## Houston, we have a problem. There are 327 Sample IDs in Laura's info sheet
 # that are not in the metadata from IMAGINE.
 
-# probs = (infosheet
-#          %>% filter(!(Sample.ID %in% img_long$SampleID)))
-# 
-# write.csv(probs, file = 'intermed/missing_from_IMAGINE.csv')
+probs = (infosheet
+         %>% filter(!(Sample.ID %in% img_long$SampleID)))
+# old_probs = read.csv('intermed/missing_from_IMAGINE.csv')
+
+# all(probs$Sample.ID %in% old_probs$Sample.ID)
 
 ## Generate the Mapfile ####
 
-# Filter out site 25 until its sample IDs are sorted
 infosheet = (infosheet
              %>% rename(SampleID = 'Sample.ID'))
 
 mapfile = (img_long
            %>% full_join(infosheet)
            %>% select(SampleID, everything()))
-# dim(mapfile)
-# head(mapfile)
+dim(mapfile)
+head(mapfile)
 
 # this mapfile includes everything: site 25 is in there, as are the Surette
-# sample IDs that are absent from the IMAGINE metadata
+# sample IDs that are absent from the IMAGINE metadata, and the two remaining
+# duplicate sample IDs
 
 write.csv(mapfile, file = 'intermed/mapfile_full.csv', row.names = FALSE)
 

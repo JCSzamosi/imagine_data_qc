@@ -1,5 +1,5 @@
 library(tidyverse)
-img_d = read.csv('data/IMAGINE_wide.csv')
+img_d = read.csv('data/active_IMAGINE_metadata_wide.csv')
 head(img_d)
 colnames(img_d) = c('Site','Disease', 'Baseline', 'Y1', 'Y2', 'Y3','Y4')
 
@@ -14,21 +14,35 @@ img_dups = (img_d_long
 img_dups
 
 
-ds = read.csv('data/Surette_datasheet.csv')
-ds = read.csv('data/IMG_Mar2024.csv')
+ds = read.csv('data/active_Rossi_info_datasheet.csv')
+ds_dedup = unique(select(ds, -ID))
 any(is.na(ds$Sample.ID..))
 head(ds)
 summary(ds)
+dim(ds)
+dim(ds_dedup)
 
-dups = (ds 
+dups = (ds_dedup
         %>% count(Sample.ID) 
         %>% filter(n > 1) 
         %>% left_join(ds))
 dups = select(dups, -n)
-dups
+dim(dups)
+head(arrange(dups, Sample.ID))
 
-write.csv(dups, file = 'intermed/l_dup2.csv')
+img_d_long %>% filter(SampleID %in% dups$Sample.ID)
 
+write.csv(dups, file = 'intermed/actual_dups.csv')
+
+ident = (ds
+         %>% count(Sample.ID)
+         %>% filter(n > 1)
+         %>% left_join(ds)
+         %>% select(-n)
+         %>% filter(!Sample.ID %in% dups$Sample.ID))
+dim(ident)
+head(ident)
+write.csv(ident, file = 'intermed/identical_dups.csv')
 
 # Are any duplicates in the sequenced data?
 

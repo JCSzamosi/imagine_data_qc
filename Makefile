@@ -1,3 +1,6 @@
+data/current/taxtab_nochim_IMG1-5525-April2024_v34.rds:scripts/assign_taxonomy.R data/current/seqtab_nochim_transposed_IMG1-5525-April2024_v34.rds
+	Rscript scripts/assign_taxonomy.R
+
 intermed/missing_from_seqtab.csv:scripts/check_sequenced_runs.R data/active_Rossi_info_datasheet.csv data/active_seqtab_nochim.csv
 	Rscript scripts/check_sequenced_runs.R
 

@@ -3,6 +3,13 @@ library(tidyverse)
 infosheet = read.csv('data/active_Rossi_info_datasheet.csv')
 seqtab = read.csv('data/active_seqtab_nochim.csv', nrow = 1)
 
+mergetab = readRDS('../Analysis/data/mergetab_nochim_IMG1-4164-Aug2023_v34.rds')
+dim(mergetab)
+
+missing_merge = (infosheet
+                 %>% filter(!(Study.ID %in% rownames(mergetab))))
+dim(missing_merge)
+
 # head(infosheet)
 missing = (infosheet
            %>% filter(!(Study.ID %in% colnames(seqtab))))

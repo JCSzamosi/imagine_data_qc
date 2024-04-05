@@ -30,7 +30,6 @@ infosheet = (infosheet
                         !grepl('DNP',Study.ID))
              %>% select(-ID)
              %>% unique())
-
 # dim(infosheet)
 
 ## Compare the two sheets ####
@@ -54,29 +53,21 @@ infosheet = (infosheet
 mapfile = (img_long
            %>% full_join(infosheet)
            %>% select(SampleID, everything()))
-dim(mapfile)
-head(mapfile)
+# dim(mapfile)
+# head(mapfile)
 
 # this mapfile includes everything: site 25 is in there, as are the Surette
 # sample IDs that are absent from the IMAGINE metadata, and the two remaining
 # duplicate sample IDs
-
+# dim(mapfile)
 write.csv(mapfile, file = 'intermed/mapfile_full.csv', row.names = FALSE)
 
-# this mapfile excludes site 25 but includes samples which have not yet been
-# sequenced
+# this mapfile includes everything that has been sequenced
 
-mapfile_clean = (mapfile
-                 %>% filter(Site != '25'))
-
-write.csv(mapfile_clean, file = 'cleaned/mapfile_clean.csv', row.names = FALSE)
-
-# this mapfile only includes samples that have been sequenced, and excludes
-# those from site 25
-
-mapfile_seq = (mapfile_clean
-               %>% filter(SampleID %in% infosheet$SampleID))
-
+mapfile_seq = (mapfile
+               %>% filter(!(Illumina.Plate.Number %in% c('','no amp')),
+                          !is.na(Illumina.Plate.Number)))
+# dim(mapfile_clean)
 
 write.csv(mapfile_seq, file = 'cleaned/mapfile_sequenced.csv',
           row.names = FALSE)

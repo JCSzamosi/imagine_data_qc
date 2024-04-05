@@ -1,10 +1,13 @@
 data/current/taxtab_nochim_IMG1-5525-April2024_v34.rds:scripts/assign_taxonomy.R data/current/seqtab_nochim_transposed_IMG1-5525-April2024_v34.rds
 	Rscript scripts/assign_taxonomy.R
 
+cleaned/seqtab_cleaned.csv:scripts/make_clean_seqtab.R data/current/seqtab_nochim_transposed_IMG1-April2024_v34.csv
+	Rscript scripts/make_clean_seqtab.R
+
 intermed/missing_from_seqtab.csv:scripts/check_sequenced_runs.R data/active_Rossi_info_datasheet.csv data/active_seqtab_nochim.csv
 	Rscript scripts/check_sequenced_runs.R
 
-cleaned/mapfile_full.csv cleaned/mapfile_sequenced.csv:scripts/make_mapfile.R data/active_IMAGINE_metadata_wide.csv data/active_Rossi_info_datasheet.csv
+intermed/mapfile_full.csv cleaned/mapfile_sequenced.csv:scripts/make_mapfile.R data/active_IMAGINE_metadata_wide.csv data/active_Rossi_info_datasheet.csv
 	Rscript scripts/make_mapfile.R
 
 cleaned/ps_full.Rdata cleaned/seqs_full.Rdata:scripts/make_ps_full.R data/active_seqtab_nochim.csv data/active_taxtab_silva138wsp.csv cleaned/mapfile_sequenced.csv

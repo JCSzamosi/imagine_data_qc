@@ -11,7 +11,8 @@ img_sheet = read.csv('data/active_IMAGINE_metadata_wide.csv')
 colnames(img_sheet) = c('Site', 'DiseaseType','Baseline','Year1','Year2',
                         'Year3','Year4')
 img_long = (img_sheet
-           %>% pivot_longer(c(Baseline, starts_with('Year')), names_to = 'Timepoint',
+           %>% pivot_longer(c(Baseline, starts_with('Year')), 
+                            names_to = 'Timepoint',
                             values_to = 'SampleID')
            %>% filter(!is.na(SampleID)))
 # head(img_long)
@@ -67,7 +68,16 @@ write.csv(mapfile, file = 'intermed/mapfile_full.csv', row.names = FALSE)
 mapfile_seq = (mapfile
                %>% filter(!(Illumina.Plate.Number %in% c('','no amp')),
                           !is.na(Illumina.Plate.Number)))
-# dim(mapfile_clean)
+# dim(mapfile_seq)
 
 write.csv(mapfile_seq, file = 'cleaned/mapfile_sequenced.csv',
+          row.names = FALSE)
+
+# this mapfile includes only sequenced samples and excludes Site 25
+
+mapfile_clean = (mapfile_seq
+                 %>% filter(Site != 25))
+# dim(mapfile_clean)
+
+write.csv(mapfile_clean, file = 'cleaned/mapfile_clean.csv',
           row.names = FALSE)

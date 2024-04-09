@@ -6,7 +6,7 @@ taxfile = 'data/active_taxtab_silva138wsp.rds'
 taxtab = readRDS(taxfile)
 
 # Read in the asv table
-asvfile = 'data/active_seqtab_nochim.csv'
+asvfile = 'cleaned/seqtab_cleaned.csv'
 asvtab = read.csv(asvfile, row.names = 1)
 
 # Check the rows
@@ -18,35 +18,13 @@ if (!all(seqs == rownames(asvtab))){
 rownames(taxtab) = rownames(asvtab) = NULL
 
 # Read in the mapfile
-mapfile = 'cleaned/mapfile_sequenced.csv'
+mapfile = 'cleaned/mapfile_clean.csv'
 maptab = read.csv(mapfile)
 
 # Check the samples
 
 all(colnames(asvtab) %in% maptab$Study.ID)
 all(maptab$Study.ID %in% colnames(asvtab))
-
-missing_from_seq = maptab$Study.ID[!maptab$Study.ID %in% colnames(asvtab)]
-length(missing_from_seq)
-head(missing_from_seq)
-
-missing_from_map = colnames(asvtab)[!(colnames(asvtab) %in% maptab$Study.ID)]
-length(missing_from_map)
-missing_from_map
-
-keep = !grepl('neg',colnames(asvtab))
-asvtab = asvtab[,keep]
-dim(asvtab)
-
-missing_from_map = colnames(asvtab)[!(colnames(asvtab) %in% maptab$Study.ID)]
-length(missing_from_map)
-missing_from_map
-missing_fixed = sub('A','',missing_from_map)
-missing_fixed = sub('B','',missing_fixed)
-missing_fixed
-all(missing_from_seq %in% missing_fixed)
-
-DO SOMETHING SMART HERE
 
 # Make matrices
 asvtab = as.matrix(asvtab)

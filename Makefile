@@ -7,7 +7,7 @@ cleaned/seqtab_cleaned.csv:scripts/make_clean_seqtab.R data/current/seqtab_nochi
 intermed/missing_from_seqtab.csv:scripts/check_sequenced_runs.R data/active_Rossi_info_datasheet.csv data/active_seqtab_nochim.csv
 	Rscript scripts/check_sequenced_runs.R
 
-intermed/mapfile_full.csv cleaned/mapfile_sequenced.csv cleaned/mapfile_sequenced.csv:scripts/make_mapfile.R data/active_IMAGINE_metadata_wide.csv data/active_Rossi_info_datasheet.csv
+intermed/mapfile_full.csv cleaned/mapfile_sequenced.csv cleaned/mapfile_clean.csv:scripts/make_mapfile.R data/active_IMAGINE_metadata_wide.csv data/active_Rossi_info_datasheet.csv
 	Rscript scripts/make_mapfile.R
 
 cleaned/ps_full.Rdata cleaned/seqs_full.Rdata:scripts/make_ps_full.R data/active_seqtab_nochim.csv data/active_taxtab_silva138wsp.rds cleaned/mapfile_sequenced.csv

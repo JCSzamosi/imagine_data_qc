@@ -1,0 +1,78 @@
+make cleaned/ps_99_samfilt.Rdata 
+[?2004lRscript scripts/assign_taxonomy.R
+Loading required package: Rcpp
+[?25h[?25hLoading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.8.2 (2022-06-13 22:00:14 UTC) successfully loaded. See ?R.methodsS3 for help.
+R.oo v1.27.0 (2024-11-01 18:00:02 UTC) successfully loaded. See ?R.oo for help.
+
+Attaching package: ‘R.oo’
+
+The following object is masked from ‘package:R.methodsS3’:
+
+    throw
+
+The following objects are masked from ‘package:methods’:
+
+    getClasses, getMethods
+
+The following objects are masked from ‘package:base’:
+
+    attach, detach, load, save
+
+R.utils v2.12.3 (2023-11-18 01:00:02 UTC) successfully loaded. See ?R.utils for help.
+
+Attaching package: ‘R.utils’
+
+The following object is masked from ‘package:utils’:
+
+    timestamp
+
+The following objects are masked from ‘package:base’:
+
+    cat, commandArgs, getOption, isOpen, nullfile, parse, use, warnings
+
+[?25h[?25h[?25h[?25h[?25hNULL
+[?25hError in if (!length(unique(seqs))/length(seqs) == 1) { : 
+  missing value where TRUE/FALSE needed
+Execution halted
+[?25hmake: *** [Makefile:4: data/active_taxtab_silva138wsp.rds] Error 1
+[?2004h(base) jcszamosi@bioinformation2:DataQC$ make cleaned/ps_99_samfilt.Rdata 
+[?2004lRscript scripts/assign_taxonomy.R
+Loading required package: Rcpp
+[?25h[?25hLoading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.8.2 (2022-06-13 22:00:14 UTC) successfully loaded. See ?R.methodsS3 for help.
+R.oo v1.27.0 (2024-11-01 18:00:02 UTC) successfully loaded. See ?R.oo for help.
+
+Attaching package: ‘R.oo’
+
+The following object is masked from ‘package:R.methodsS3’:
+
+    throw
+
+The following objects are masked from ‘package:methods’:
+
+    getClasses, getMethods
+
+The following objects are masked from ‘package:base’:
+
+    attach, detach, load, save
+
+R.utils v2.12.3 (2023-11-18 01:00:02 UTC) successfully loaded. See ?R.utils for help.
+
+Attaching package: ‘R.utils’
+
+The following object is masked from ‘package:utils’:
+
+    timestamp
+
+The following objects are masked from ‘package:base’:
+
+    cat, commandArgs, getOption, isOpen, nullfile, parse, use, warnings
+
+[?25h[?25h[?25h[?25h[?25h[1] "CCTGTTTGCTCCCCACGCTTTCGAGCCTCAACGTCAGTTACCGTCCAGTAAGCCGCCTTCGCCACTGGTGTTCCTCCTAATATCTACGCATTTCACCGCTACACTAGGAATTCCGCTTACCCCTCCGGCACTCAAGTATGACAGTTTCCAATGCAGTCCACAGGTTGAGCCCATGCCTTTCACATCAGACTTGCCACACCGTCTACGCTCCCTTTACACCCAGTAAATCCGGATAACGCTTGCCCCCTACGTATTACCGCGGCTGCTGGCACGTAGTTAGCCGGGGCTTCTTAGTCAGGTACCGTCACTATCTTCCCTGCTGATAGAAGTTTACATACCGAGATACTTCTTCCTTCACGCGGCGTCGCTGCATCAGGGTTTCCCCCATTGTGCAATATTCCCCA"                         
+[2] "CCTGTTTGCTCCCCACGCTTTCGAGCCTCAGCGTCAGTTATCGTCCAGTAAGCCGCCTTCGCCACTGGTGTTCCTCCTAATATCTACGCATTTCACCGCTACACTAGGAATTCCGCTTACCCCTCCGACACTCTAGTACGACAGTTTCCAATGCAGTACCGGGGTTGAGCCCCGGGCTTTCACATCAGACTTGCCGCACCGCCTGCGCTCCCTTTACACCCAGTAAATCCGGATAACGCTTGCACCATACGTATTACCGCGGCTGCTGGCACGTATTTAGCCGGTGCTTCTTAGTCAGGTACCGTCATTATCTTCCCTGCTGATAGAGCTTTACATACCGAAATACTTCTTCGCTCACGCGGCGTCGCTGCATCAGGCTTTCGCCCATTGTGCAATATTCCCCA"                         
+[3] "CCTGTTTGCTACCCATGCTTTCGAGCCTCAGCGTCAGTTGGTGCCCAGTAGACCGCCTTCGCCACTGGTGTTCCTCCCGATATCTACGCATTCCACCGCTACACCGGGAATTCCATCTACCTCTGCACTACTCAAGAAAAACAGTTTTGAAAGCAATTCATGGGTTGAGCCCATGGTTTTCACTTCCAACTTGTCTTCCCGCCTGCGCTCCCTTTACACCCAGTAATTCCGGACAACGCTTGCACCCTACGTTTTACCGCGGCTGCTGGCACGTAGTTAGCCGGTGCTTTCTTGTTAGGTACCGTCATTATCGTCCCTAACGACAGGAGTTTACAATCCGAAAACCTTCTTCCTCCACGCGGCGTCGCTGCATCAGGGTTTCCCCCATTGTGCAATATCCCCCA"                         
+[4] "CCTGTTTGCTACCCACACTTTCGAGCCTCAGCGTCAGTTGGTGCCCAGTAGGCCGCCTTCGCCACTGGTGTTCCTCCCGATATCTACGCATTCCACCGCTACACCGGGAATTCCGCCTACCTCTGCACTACTCAAGAAAAACAGTTTTGAAAGCAGTTCATGGGTTGAGCCCATGGATTTCACTTCCAACTTGTCTTCCCGCCTGCGCTCCCTTTACACCCAGTAATTCCGGACAACGCTTGTGACCTACGTTTTACCGCGGCTGCTGGCACGTAGTTAGCCGTCACTTCCTTGTTGAGTACCGTCATTATCTTCCTCAACAACAGGAGTTTACAATCCGAAGACCTTCTTCCTCCACGCGGCGTCGCTGCATCAGGGTTTCCCCCATTGTGCAATATTCCCCA"                         
+[5] "CCTGTTTGCTCCCCACGCTTTCGCACCTGAGCGTCAGTCTTCGTCCAGGGGGCCGCCTTCGCCACCGGTATTCCTCCAGATCTCTA

@@ -1,5 +1,10 @@
 library(dada2)
-asvtab = readRDS('data/current/seqtab_nochim_transposed_IMG1-5525-April2024_v34.rds')
+library(stringr)
+library(R.utils)
+
+indir = 'data'
+inf = file.path(indir, 'active_seqtab_nochim.csv')
+asvtab = read.csv(inf)
 
 seqs = asvtab$X
 head(seqs)
@@ -11,4 +16,15 @@ if (!length(unique(seqs))/length(seqs) == 1){
 taxtab = assignTaxonomy(seqs,
                         refFasta = 'data/silva_nr99_v138_wSpecies_train_set.fa',
                         tryRC = TRUE, multithread = 20, verbose = TRUE)
-saveRDS(taxtab, 'data/current/taxtab_nochim_IMG1-5525-April2024_v34.rds')
+
+# Get the filename for the output file
+outf = (inf
+        %>% Sys.readlink()
+        %>% basename()
+        %>% str_replace('seqtab_nochim_transposed', 'taxtab_nochim')
+        %>% str_replace('.csv', '.rds'))
+outp = file.path(indir, 'current', outf)
+saveRDS(taxtab, outp)
+
+lnf = file.path(indir, 'active_taxtab_silva138wsp.rds')
+createLink(link = lnf, target = outp, overwrite = TRUE)

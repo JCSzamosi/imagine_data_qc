@@ -1,0 +1,144 @@
+make cleaned/seqtab_cleaned.csv 
+[?2004lRscript scripts/transpose_mergetab.R
+[?25hLoading required package: R.oo
+Loading required package: R.methodsS3
+R.methodsS3 v1.8.2 (2022-06-13 22:00:14 UTC) successfully loaded. See ?R.methodsS3 for help.
+R.oo v1.27.0 (2024-11-01 18:00:02 UTC) successfully loaded. See ?R.oo for help.
+
+Attaching package: ‘R.oo’
+
+The following object is masked from ‘package:R.methodsS3’:
+
+    throw
+
+The following objects are masked from ‘package:methods’:
+
+    getClasses, getMethods
+
+The following objects are masked from ‘package:base’:
+
+    attach, detach, load, save
+
+R.utils v2.12.3 (2023-11-18 01:00:02 UTC) successfully loaded. See ?R.utils for help.
+
+Attaching package: ‘R.utils’
+
+The following object is masked from ‘package:utils’:
+
+    timestamp
+
+The following objects are masked from ‘package:base’:
+
+    cat, commandArgs, getOption, isOpen, nullfile, parse, use, warnings
+
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1] "data/active_seqtab_nochim.csv"
+attr(,"linkType")
+[1] "unix-symlink"
+[?25h[?25hRscript scripts/make_clean_seqtab.R
+── Attaching core tidyverse packages ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
+[?25h[?25h[1] 89824 10191
+[?25h[1] "IMG100" "IMG101" "IMG102" "IMG103" "IMG104" "IMG105"
+[?25h[?25h[?25h[?25h[1] 89824 10141
+[?25h[?25h [1] "IMG176A" "IMG177A" "IMG178A" "IMG179A" "IMG180A" "IMG181A" "IMG182A"
+ [8] "IMG265A" "IMG266A" "IMG267A" "IMG268A" "IMG269A" "IMG270A" "IMG271A"
+[15] "IMG272A" "IMG273A" "IMG358A" "IMG359A" "IMG360A" "IMG361A" "IMG362A"
+[22] "IMG363A" "IMG364A" "IMG85A"  "IMG86A"  "IMG87A"  "IMG88A"  "IMG89A" 
+[29] "IMG90A"  "IMG91A"  "IMG129B" "IMG184B" "IMG256B" "IMG259B" "IMG262B"
+[36] "IMG26B"  "IMG2B"   "IMG373B" "IMG40B"  "IMG41B"  "IMG481B" "IMG7B"  
+[?25h[?25h[?25h [1] "IMG176" "IMG177" "IMG178" "IMG179" "IMG180" "IMG181" "IMG182" "IMG265"
+ [9] "IMG266" "IMG267" "IMG268" "IMG269" "IMG270" "IMG271" "IMG272" "IMG273"
+[17] "IMG358" "IMG359" "IMG360" "IMG361" "IMG362" "IMG363" "IMG364" "IMG85" 
+[25] "IMG86"  "IMG87"  "IMG88"  "IMG89"  "IMG90"  "IMG91"  "IMG129" "IMG184"
+[33] "IMG256" "IMG259" "IMG262" "IMG26"  "IMG2"   "IMG373" "IMG40"  "IMG41" 
+[41] "IMG481" "IMG7"  
+[?25h[?25h[?25h   IMG129    IMG184    IMG256    IMG259    IMG262     IMG26      IMG2    IMG373 
+"IMG129B" "IMG184B" "IMG256B" "IMG259B" "IMG262B"  "IMG26B"   "IMG2B" "IMG373B" 
+    IMG40     IMG41    IMG481      IMG7 
+ "IMG40B"  "IMG41B" "IMG481B"   "IMG7B" 
+[?25h[?25h  IMG129B IMG184B IMG256B IMG259B IMG262B IMG26B IMG2B IMG373B IMG40B IMG41B
+1    7599      32    1308    2041    7174    895   589     294   1876    132
+2     372    1179      83    1537   15662    165   851       0    504      0
+3     256       0    1162       0       0      0  1076    1350  10526    509
+4      24       0     535    1779      81      0  1644       0    121      0
+5     591       0      65      10      97   6626    78   34214   8634  11717
+6    1509     385     247     750     901      0   681     298      0     54
+  IMG481B IMG7B IMG129 IMG184 IMG256 IMG259 IMG262 IMG26 IMG2 IMG373 IMG40
+1    2768   707   3562    136    978    294   2298   559  318    365  2709
+2    6052  3057    232   1845     63    225   6715   208  581      0   771
+3    1039   899    166    374    943      0      0    17  835   1597 13073
+4   12983  2180     23    314    485    394     22    33 1032     19   198
+5       0    41    205   3809     31      4     28  2257   38  14827  7833
+6    4196   270    637    480    207    136    342    26  407    400     0
+  IMG41 IMG481 IMG7
+1   104    648  429
+2     0   1350 1779
+3   870    228  505
+4     0   2572 1056
+5  4132      0   26
+6    68    949  136
+[?25h[?25h[?25h     sum_df samp_col samp_col samp_col samp_col samp_col samp_col samp_col
+[1,]     NA    11161      168     2286     2335     9472     1454      907
+[2,]     NA      604     3024      146     1762    22377      373     1432
+[3,]     NA      422      374     2105        0        0       17     1911
+[4,]     NA       47      314     1020     2173      103       33     2676
+[5,]     NA      796     3809       96       14      125     8883      116
+[6,]     NA     2146      865      454      886     1243       26     1088
+     samp_col samp_col samp_col samp_col samp_col
+[1,]      659     4585      236     3416     1136
+[2,]        0     1275        0     7402     4836
+[3,]     2947    23599     1379     1267     1404
+[4,]       19      319        0    15555     3236
+[5,]    49041    16467    15849        0       67
+[6,]      698        0      122     5145      406
+[?25h[?25h[?25h  IMG129 IMG184 IMG256 IMG259 IMG262 IMG26 IMG2 IMG373 IMG40 IMG41 IMG481 IMG7
+1  11161    168   2286   2335   9472  1454  907    659  4585   236   3416 1136
+2    604   3024    146   1762  22377   373 1432      0  1275     0   7402 4836
+3    422    374   2105      0      0    17 1911   2947 23599  1379   1267 1404
+4     47    314   1020   2173    103    33 2676     19   319     0  15555 3236
+5    796   3809     96     14    125  8883  116  49041 16467 15849      0   67
+6   2146    865    454    886   1243    26 1088    698     0   122   5145  406
+[?25h[?25h[?25h   IMG176    IMG177    IMG178    IMG179    IMG180    IMG181    IMG182    IMG265 
+"IMG176A" "IMG177A" "IMG178A" "IMG179A" "IMG180A" "IMG181A" "IMG182A" "IMG265A" 
+   IMG266    IMG267    IMG268    IMG269    IMG270    IMG271    IMG272    IMG273 
+"IMG266A" "IMG267A" "IMG268A" "IMG269A" "IMG270A" "IMG271A" "IMG272A" "IMG273A" 
+   IMG358    IMG359    IMG360    IMG361    IMG362    IMG363    IMG364     IMG85 
+"IMG358A" "IMG359A" "IMG360A" "IMG361A" "IMG362A" "IMG363A" "IMG364A"  "IMG85A" 
+    IMG86     IMG87     IMG88     IMG89     IMG90     IMG91    IMG129    IMG184 
+ "IMG86A"  "IMG87A"  "IMG88A"  "IMG89A"  "IMG90A"  "IMG91A" "IMG129B" "IMG184B" 
+   IMG256    IMG259    IMG262     IMG26      IMG2    IMG373     IMG40     IMG41 
+"IMG256B" "IMG259B" "IMG262B"  "IMG26B"   "IMG2B" "IMG373B"  "IMG40B"  "IMG41B" 
+   IMG481      IMG7 
+"IMG481B"   "IMG7B" 
+[?25h   IMG129    IMG184    IMG256    IMG259    IMG262     IMG26      IMG2    IMG373 
+"IMG129B" "IMG184B" "IMG256B" "IMG259B" "IMG262B"  "IMG26B"   "IMG2B" "IMG373B" 
+    IMG40     IMG41    IMG481      IMG7 
+ "IMG40B"  "IMG41B" "IMG481B"   "IMG7B" 
+[?25h[?25h   IMG176    IMG177    IMG178    IMG179    IMG180    IMG181    IMG182    IMG265 
+"IMG176A" "IMG177A" "IMG178A" "IMG179A" "IMG180A" "IMG181A" "IMG182A" "IMG265A" 
+   IMG266    IMG267    IMG268    IMG269    IMG270    IMG271    IMG272    IMG273 
+"IMG266A" "IMG267A" "IMG268A" "IMG269A" "IMG270A" "IMG271A" "IMG272A" "IMG273A" 
+   IMG358    IMG359    IMG360    IMG361    IMG362    IMG363    IMG364     IMG85 
+"IMG358A" "IMG359A" "IMG360A" "IMG361A" "IMG362A" "IMG363A" "IMG364A"  "IMG85A" 
+    IMG86     IMG87     IMG88     IMG89     IMG90     IMG91 
+ "IMG86A"  "IMG87A"  "IMG88A"  "IMG89A"  "IMG90A"  "IMG91A" 
+[?25h[?25h[?25h IMG176A  IMG177A  IMG178A  IMG179A  IMG180A  IMG181A  IMG182A  IMG265A 
+"IMG176" "IMG177" "IMG178" "IMG179" "IMG180" "IMG181" "IMG182" "IMG265" 
+ IMG266A  IMG267A  IMG268A  IMG269A  IMG270A  IMG271A  IMG272A  IMG273A 
+"IMG266" "IMG267" "IMG268" "IMG269" "IMG270" "IMG271" "IMG272" "IMG273" 
+ IMG358A  IMG359A  IMG360A  IMG361A  IMG362A  IMG363A  IMG364A   IMG85A 
+"IMG358" "IMG359" "IMG360" "IMG361" "IMG362" "IMG363" "IMG364"  "IMG85" 
+  IMG86A   IMG87A   IMG88A   IMG89A   IMG90A   IMG91A 
+ "IMG86"  "IMG87"  "IMG88"  "IMG89"  "IMG90"  "IMG91" 
+[?25h[?25h[1] 10517  6210  1386  2461     0     0
+[?25h[1] 10517  6210  1386  2461     0     0
+[?25h[1] 89824 10129
+[?25h[?25h[?25h[?25h[?2004h(base) jcszamosi@bioinformation2:DataQC$ 

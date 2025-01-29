@@ -15,8 +15,8 @@ img_long = (img_sheet
                             names_to = 'Timepoint',
                             values_to = 'SampleID')
            %>% filter(!is.na(SampleID)))
-# head(img_long)
-# dim(img_long)
+head(img_long)
+dim(img_long)
 
 ## Laura's infosheet ####
 
@@ -31,11 +31,11 @@ infosheet = (infosheet
                         !grepl('DNP',Study.ID))
              %>% select(-ID)
              %>% unique())
-# dim(infosheet)
+dim(infosheet)
 
 ## Compare the two sheets ####
 
-# sum(!(infosheet$Sample.ID %in% img_long$SampleID))
+sum(!(infosheet$Sample.ID %in% img_long$SampleID))
 
 ## Houston, we have a problem. There are 327 Sample IDs in Laura's info sheet
 # that are not in the metadata from IMAGINE.

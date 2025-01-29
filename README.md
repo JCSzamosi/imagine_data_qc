@@ -41,7 +41,7 @@ put it in that directory, and then create the symlink.
 
 Everything is controlled by the [Makefile](./Makefile). If you're on a normal
 linux system and you have gnu-make installed, you should just be able to type
-`make TARGETNAME` from the top of the (../DataQC)[../DataQC] directory structure
+`make TARGETNAME` from the top of the [../DataQC](../DataQC) directory structure
 and everything required to generate the latest version of whatever you're trying
 to generate.
 
@@ -116,7 +116,7 @@ In the Makefile:
 	zero everywhere. "samfilt" is short for "sample-filtered"
 8. `intermed/clst.Rdata`
 	* Clusters the sequences to 99% similarity. This just creates the clustering.
-	Downstream scripts
+	Downstream scripts will assign taxonomy and create the phyloseq object.
 9. `intermed/tax_99.Rdata`
 	* Creates consensus sequences for the clusters, and assigns taxonomy to them
 10. `cleaned/ps_99.Rdata`

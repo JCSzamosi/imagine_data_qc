@@ -5,7 +5,7 @@ library(dada2)
 load('intermed/clst.Rdata')
 
 # Create computer core clusters for parallel processing, and sub-divide data
-cores = new_cluster(20)
+cores = new_cluster(10)
 
 # A function to convert a set of sequences into a consensus sequence
 ## create it in each cluster

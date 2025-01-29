@@ -18,13 +18,7 @@ cleaned/ps_full.Rdata cleaned/seqs_full.Rdata:scripts/make_ps_full.R data/active
 cleaned/ps_samfilt.Rdata cleaned/seqs_samfilt.Rdata:scripts/make_ps_samfilt.R cleaned/ps_full.Rdata
 	Rscript scripts/make_ps_samfilt.R
 
-intermed/aln.Rdata:scripts/make_aln.R cleaned/seqs_full.Rdata
-	Rscript scripts/make_aln.R
-
-intermed/dmat.Rdata:scripts/make_dmat.R intermed/aln.Rdata
-	Rscript scripts/make_dmat.R
-
-intermed/clst.Rdata:scripts/make_clst.R intermed/dmat.Rdata
+intermed/clst.Rdata:scripts/make_clst.R cleaned/seqs_full.Rdata
 	Rscript scripts/make_clst.R
 
 intermed/tax_99.Rdata:scripts/assign_tax_99.R intermed/clst.Rdata

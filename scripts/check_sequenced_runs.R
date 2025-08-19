@@ -1,7 +1,7 @@
 library(tidyverse)
 
 infosheet = read.csv('data/active_Rossi_info_datasheet.csv')
-seqtab = read.csv('data/active_seqtab_nochim.csv', nrow = 1)
+seqtab = readRDS('data/active_mergetab_nochim.rds', nrow = 1)
 
 missing_merge = (infosheet
                  %>% filter(!(Study.ID %in% colnames(seqtab))))

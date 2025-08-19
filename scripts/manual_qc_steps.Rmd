@@ -1,0 +1,207 @@
+# Metadata QC
+
+Reconcile the IMAGINE metadata with the Surette sample data sheet.
+
+```{r}
+library(tidyverse)
+```
+
+## IMAGINE metadata
+
+Reading in the IMAGINE metadata sheet I received from Jehane on 2025-08-18
+
+```{r}
+# list.files('data/')
+img_meta = read.csv(file = 'data/active_IMAGINE_metadata_wide.csv')
+head(img_meta)
+
+colnames(img_meta) = str_replace(colnames(img_meta), 
+                                 fixed('.Stool.Specimen.ID'), '')
+
+meta_long = (img_meta
+             %>% pivot_longer(Baseline:X4.Year, names_to = 'Timepoint',
+                              values_to = 'Sample.ID'))
+
+head(meta_long)
+
+meta_long = filter(meta_long,!is.na(Sample.ID))
+dim(meta_long)
+```
+
+This file has 13,486 samples in it. I'm going to clean it up a bit:
+
+```{r}
+head(meta_long)
+summary(meta_long)
+
+meta_long = (meta_long
+             %>% mutate(IBD.Classification = str_replace_all(IBD.Classification,
+                                                             '"',''),
+                    IBD.Classification = case_when(Disease.Type %in% c('IBS',
+                                                               'Healthy') ~ 
+                                                       Disease.Type,
+                                                   TRUE ~ IBD.Classification),
+                    IBD.Classification = factor(IBD.Classification,
+                                                levels = c('CD', 'UC',
+                                                           'IBD unclassified',
+                                                          'IBS', 'Healthy','')),
+                    Timepoint = case_when(Timepoint == 'Baseline' ~ Timepoint,
+                                          TRUE ~ paste('Y',
+                                                       substr(Timepoint,2,2),
+                                                       sep = '')),
+                    Timepoint = factor(Timepoint, levels = c('Baseline',
+                                                             'Y1','Y2','Y3',
+                                                             'Y4')),
+                    Disease.Type = factor(Disease.Type, levels = c('Healthy',
+                                                                   'IBS','IBD',
+                                                                   '')),
+                    across(c(Site.Number, Participant.ID, Sample.ID), factor)))
+summary(meta_long)
+```
+
+I can see immediately that some sample IDs are duplicated. Let's look at that.
+
+```{r}
+meta_dup = (meta_long
+            %>% count(Sample.ID)
+            %>% filter(n > 1)
+            %>% left_join(meta_long, by = 'Sample.ID'))
+dim(meta_dup)
+meta_dup
+```
+
+There are 5 repeated sample IDs. They are all from site 21, and I can't find
+any of them in my previous lists of duplicate/problem IDs. I will check with the
+IMAGINE people if there's any chance they are data entry errors. For now I'll
+write them to a file:
+
+```{r}
+write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-18.csv')
+```
+
+## Surette Lab Sample Info Sheet
+
+Now I am loading the most recent version of Laura's sample info sheet
+
+```{r}
+samp_inf = read.csv(file = 'data/active_Rossi_info_datasheet.csv')
+dim(samp_inf)
+```
+
+This is 13,526 samples. That is 40 more samples than in the IMAGINE metadata
+sheet. My guess is that these will be the negative controls. Before I check, I
+will clean this up and remove any columns I don't need:
+
+```{r}
+summary(samp_inf)
+head(samp_inf)
+
+samp_inf = (samp_inf
+            %>% select(ID, Sample.ID, Study.ID, Notes)
+            %>% mutate(across(c(Sample.ID, Study.ID), factor)))
+summary(samp_inf)
+```
+
+This has some duplicated Sample IDs as well, but that's less alarming since 
+they are likely to be resequenced samples. Let's see:
+
+```{r}
+samp_dup = (samp_inf
+            %>% count(Sample.ID)
+            %>% filter(n > 1)
+            %>% left_join(samp_inf, by = 'Sample.ID'))
+dim(samp_dup)
+samp_dup
+```
+
+No, they have different IMG numbers. These seem to have been introduced since I
+spoke with Laura about the old set of duplicates on August 18, 2025. I will send
+this to her.
+
+```{r}
+any(meta_dup$Sample.ID %in% samp_dup$Sample.ID)
+```
+
+This duplicate is not present in the IMAGINE metadata duplicates. Weird.
+
+```{r}
+write.csv(samp_dup, file = 'intermed/Rossi_sample_info_duplicate_SampleIDs.csv')
+```
+
+Check if there are any duplicated Study IDs:
+
+```{r}
+samp_inf %>% count(Study.ID) %>% filter(n > 1)
+```
+
+Nope, none. Excellent!
+
+It is odd, though, that none of the duplicates in the sample info sheet are also
+duplicates in the IMAGINE sheet. What happened to those?
+
+```{r}
+any(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
+all(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
+```
+
+All of the duplicated IDs from IMAGINE are present in the sample info sheet, but
+they are only present once. This suggests that there was a data entry error when
+the metadata sheet was produced, but that the samples had different (correct?)
+IDs when they were delivered here.
+
+## Compare the two sheets
+
+Are all the metadata Sample IDs in the sample info sheet?
+
+```{r}
+all(meta_long$Sample.ID %in% samp_inf$Sample.ID)
+meta_only = meta_long$Sample.ID[!meta_long$Sample.ID %in% samp_inf$Sample.ID]
+length(meta_only)
+```
+
+Nope. There are 42 Sample IDs in the metadata that are absent from the sample
+info sheet:
+
+```{r}
+meta_only
+meta_only = filter(meta_long, Sample.ID %in% meta_only)
+meta_only
+```
+
+I will ask Michelle and Laura about these.
+
+```{r}
+write.csv(meta_only, file = 'intermed/IMAGINE_samps_missing_from_info_sheet.csv')
+```
+
+Okay, what about the other way around? What is in the sample info sheet but
+missing from the IMAGINE metadata?
+
+```{r}
+all(samp_inf$Sample.ID %in% meta_long$Sample.ID)
+samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
+dim(samp_only)
+```
+
+There are 70 samples in the sample info sheet that are missing from the metadata:
+
+```{r}
+samp_only
+
+samp_only %>% filter(grepl('D', Study.ID))
+```
+
+5 of these are discards, leaving 65:
+
+```{r}
+samp_only = (samp_only 
+              %>% filter(!grepl('D', Study.ID)))
+samp_only
+```
+
+I will ask Michelle and Laura:
+
+```{r}
+write.csv(samp_only, file = 'intermed/SuretteLab_samps_missing_from_IMAGINE_sheet.csv')
+```
+

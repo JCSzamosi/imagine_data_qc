@@ -25,7 +25,7 @@ are:
 1. The metadata sheet provided by Tania and Aida from the IMAGINE project:
 	* [data/current/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette.xls](data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette.xls)
 2. The .csv version of the first sheet of that Excel file, saved by me: 
-	* [data/currentIMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv](data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv)
+	* [data/current/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv](data/IMAGINE_Stool_SpecimenCollectionIDListing_20230628_Surette_sheet1.csv)
 3. The .csv provided by Mike with the first samples from the sites that need
 	more profiles
 	* [data/current/IMAGINE_first HC.csv](data/current/IMAGINE_first HC.csv)
@@ -41,9 +41,9 @@ put it in that directory, and then create the symlink.
 
 Everything is controlled by the [Makefile](./Makefile). If you're on a normal
 linux system and you have gnu-make installed, you should just be able to type
-`make TARGETNAME` from the top of the [../DataQC](../DataQC) directory structure
+`make TARGETNAME` from the top of the [DataQC/](../DataQC) directory structure
 and everything required to generate the latest version of whatever you're trying
-to generate.
+to generate will get created.
 
 That's the idea in principle. In practice, I guarantee you will run into errors.
 I recommend looking at the Makefile with your target in mind, checking what's

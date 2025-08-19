@@ -9,6 +9,8 @@ doesn't work as expected. Please no touching right now.
 
 ## Directory Overview
 
+### Not tracked under Git
+
 * [input/](./input/) - DO NOT TOUCH
 	* raw input files received from Aida or Laura that need to be QC'ed and
 	reformatted before use. These should be read-only and in general no one
@@ -23,7 +25,8 @@ doesn't work as expected. Please no touching right now.
 	with any missing/duplicated sample IDs.
 	* generating the files in this directory is a manual step and should be the
 	responsibility of one person. Currently that person is Jake.
-	* I am debating
+	* I am debating whether to move this directory up out of the [DataQC](./)
+	directory and into the [16S](../) directory so it's more accessible.
 * [cleaned/](./cleaned/)
 	* contains a number of tables or rds/Rdata objects. Jake has and will update
 	scripts to produce a few different cleaned datasets, including datasets that
@@ -37,9 +40,17 @@ doesn't work as expected. Please no touching right now.
 	following the example format, so that we have a record of what everything
 	is. Scripts that produce the clean datasets should be stored in the
 	[scripts/](./scripts/) directory.
+		* **Example:** [cleaned file](./path/to/file) is created by 
+		[script name](./path/to/script)
 	* If you want to play with cleaning and saving datasets without following
 	the above instructions, you are welcome to do so but please do not save any
 	output into this DataQC directory. 
+	* As with [data](./data/), I am debating moving this directory up out of the
+	[DataQC](./) directory and into the [16S](./16S) directory so that it's more
+	accessible.
+
+### Tracked under Git
+
 * [scripts/](./scripts/)
 	* contains all the scripts used to generate the files in [data](./data/) or
 	[cleaned](./cleaned/). Ideally, all scripts should be controlled by a
@@ -53,13 +64,34 @@ doesn't work as expected. Please no touching right now.
 	analysis, please create a different directory outside of the DataQC
 	directory and then symlink to the [cleaned](./cleaned/) or [data](./data/)
 	directory from there to bring in the data you need for your analysis
+* [Makefile](./Makefile)
+	* A Makefile so that things happen in the correct order and only when
+	necessary. If you want to learn about Make you can 
+	[start here](https://makefiletutorial.com/), but I will be honest, I don't
+	recommend it. The plan is to transition this pipeline to Nextflow, which is
+	a lot less hostile.
+* [logs/](./logs/)
+	* A place for log files. I like to log anything that I run
+	non-interactively, so I can see what got written to standard error and
+	standard out. There are a few different options for this, depending on how
+	you run things:
+		* If you use tmux, there is a [pretty user-friend logging
+		extension](https://github.com/tmux-plugins/tmux-logging) that you can
+		use.
+		* If you use screen and want to learn about logging, feel free to ask
+		for my .screenrc file for an example of how to control log output.
+		* If you are running something via slurm, you can control the logfile
+		output following the first answer
+		[here](https://unix.stackexchange.com/questions/285690/slurm-custom-standard-output-name).
 
-## Raw Inputs
+## Directory Details
+
+### Raw Inputs
 
 All raw input data files are stored in [./input/](./input/). In general, no one
 should be interacting with these files. The files people should use to conduct
 their analysis will be generated from these raw inputs and will be stored in
-[./data/](./data/).
+[./data/](./data/) and [./cleaned/](./cleaned/).
 
 All raw input data files are stored in [./input/current/](./input/current). They
 are not tracked under version control, and I am listing them below. Because the
@@ -107,7 +139,10 @@ their symlinks:
 	duplicated samples, removes discards, and reconciles the sample IDs with 1
 	and 2.
 
-Sometimes Laura provides 
+Sometimes Laura provides transposed seqtab files and tax tables, but not always
+because they take forever to generate. I have scripts to produce them.
+
+JAKE STOPPED EDITING HERE. WILL RETURN TOMORROW.
 
 ## Processing Pipeline
 

@@ -125,7 +125,8 @@ any(meta_dup$Sample.ID %in% samp_dup$Sample.ID)
 This duplicate is not present in the IMAGINE metadata duplicates. Weird.
 
 ```{r}
-write.csv(samp_dup, file = 'intermed/Rossi_sample_info_duplicate_SampleIDs.csv')
+write.csv(samp_dup, 
+          file = 'intermed/Rossi_sample_info_duplicate_SampleIDs.csv')
 ```
 
 Check if there are any duplicated Study IDs:
@@ -155,23 +156,23 @@ Are all the metadata Sample IDs in the sample info sheet?
 
 ```{r}
 all(meta_long$Sample.ID %in% samp_inf$Sample.ID)
-meta_only = meta_long$Sample.ID[!meta_long$Sample.ID %in% samp_inf$Sample.ID]
-length(meta_only)
+meta_only = filter(meta_long, !(Sample.ID %in% samp_inf$Sample.ID))
+dim(meta_only)
 ```
 
-Nope. There are 42 Sample IDs in the metadata that are absent from the sample
-info sheet:
+Since fixing duplicates with Laura on August 18, 2025, there remain 24 samples
+in the IMAGINE datasheet that are absent from the Surette sample info sheet.
 
 ```{r}
-meta_only
-meta_only = filter(meta_long, Sample.ID %in% meta_only)
-meta_only
+data.frame(meta_only)
 ```
 
-I will ask Michelle and Laura about these.
+Most of these are from sites 21 and 25, but a couple are from other sites. I
+will email Aida about this.
 
 ```{r}
-write.csv(meta_only, file = 'intermed/IMAGINE_samps_missing_from_info_sheet.csv')
+write.csv(meta_only, 
+          file = 'intermed/IMAGINE_samps_missing_from_Surette_lab_sheet.csv')
 ```
 
 Okay, what about the other way around? What is in the sample info sheet but
@@ -183,15 +184,15 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-There are 70 samples in the sample info sheet that are missing from the metadata:
+As of August 19, 2025, there are 68 samples in the Surette sample data sheet
+that are missing from the IMAGINE sheet.
 
 ```{r}
 samp_only
-
 samp_only %>% filter(grepl('D', Study.ID))
 ```
 
-5 of these are discards, leaving 65:
+5 of these are discards, leaving 63:
 
 ```{r}
 samp_only = (samp_only 
@@ -199,9 +200,10 @@ samp_only = (samp_only
 samp_only
 ```
 
-I will ask Michelle and Laura:
+I will email Aida about these.
 
 ```{r}
-write.csv(samp_only, file = 'intermed/SuretteLab_samps_missing_from_IMAGINE_sheet.csv')
+write.csv(samp_only, 
+          file = 'intermed/SuretteLab_samps_missing_from_IMAGINE_sheet.csv')
 ```
 

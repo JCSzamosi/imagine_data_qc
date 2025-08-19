@@ -12,7 +12,8 @@ Reading in the IMAGINE metadata sheet I received from Jehane on 2025-08-18
 
 ```{r}
 # list.files('data/')
-img_meta = read.csv(file = 'data/active_IMAGINE_metadata_wide.csv')
+img_meta = read.csv(file = 'data/active_IMAGINE_metadata_wide.csv', 
+                    strip.white = TRUE)
 head(img_meta)
 
 colnames(img_meta) = str_replace(colnames(img_meta), 
@@ -84,7 +85,8 @@ write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-18.csv')
 Now I am loading the most recent version of Laura's sample info sheet
 
 ```{r}
-samp_inf = read.csv(file = 'data/active_Rossi_info_datasheet.csv')
+samp_inf = read.csv(file = 'data/active_Rossi_info_datasheet.csv',
+                    strip.white = TRUE)
 dim(samp_inf)
 ```
 
@@ -205,5 +207,208 @@ I will email Aida about these.
 ```{r}
 write.csv(samp_only, 
           file = 'intermed/SuretteLab_samps_missing_from_IMAGINE_sheet.csv')
+```
+
+# Sequencing QC
+
+This is where I check for re-sequenced samples and merge them.
+
+```{r}
+asvtab = readRDS('data/active_mergetab_nochim.rds')
+dim(asvtab)
+asvtab = t(asvtab)
+dim(asvtab)
+
+seq_ids = colnames(asvtab)
+head(seq_ids)
+t1 = seq_ids[!startsWith(seq_ids, 'IMG')]
+length(t1)
+t1
+```
+
+There are 61 negative controls. I will partition them off for now
+
+```{r}
+neg_ctl = asvtab[,t1]
+seq_rem = seq_ids[!(seq_ids %in% t1)]
+asvtab_no_neg = asvtab[,seq_rem]
+dim(asvtab_no_neg)
+```
+
+Now let's look for any IMG ids that are missing from the sample data sheet
+
+```{r}
+t2 = seq_rem[!(seq_rem %in% samp_inf$Study.ID)]
+length(t2)
+sort(t2)
+```
+
+There are 46 samples that start with IMG but are missing from the sample info
+sheet. Most of these end in A or B, which means they are re-sequenced samples,
+but a couple don't. Let's look at those:
+
+```{r}
+asv_missing = t2[!grepl('[AB]$',t2)]
+length(asv_missing)
+asv_missing
+```
+
+There is one sequenced sample missing from the sample info sheet. It is listed
+in the sample info sheet as discarded, so I will remove it from the final table.
+
+Now I'm going to check that all the duplicated samples are present in their
+original forms in the asv table
+
+```{r}
+dups = t2[grepl('[AB]$', t2)]
+length(dups)
+dups
+
+dup_origs = substr(dups, 1, nchar(dups) -1)
+dup_origs
+n_distinct(dups)
+n_distinct(dup_origs)
+
+all(dup_origs %in% seq_rem)
+```
+
+Nope! Some are missing!
+
+```{r}
+sum(dup_origs %in% seq_rem)
+```
+
+Only 12 are in there???
+
+```{r}
+dup_origs[dup_origs %in% colnames(asvtab)]
+dup_origs[!(dup_origs %in% colnames(asvtab))]
+```
+
+This is confusing. Let's see what's up with these guys in samp_info:
+
+```{r}
+sum(dup_origs %in% samp_inf$Study.ID)
+```
+
+All of them are in sample info, which is promising. Is it an A vs B thing?
+
+```{r}
+all(dup_origs[endsWith(dups, 'A')] == 
+        dup_origs[!(dup_origs %in% colnames(asvtab))])
+```
+
+Okay, so the ones that end in A are lacking originals in the ASV table, and the
+ones that end in B are actual duplicates that need to be merged. Cool.
+
+```{r}
+reseq = dups[endsWith(dups, 'A')]
+reseq_orig = dup_origs[endsWith(dups, 'A')]
+
+dup_origs = dup_origs[endsWith(dups, 'B')]
+dups = dups[endsWith(dups, 'B')]
+```
+
+Remove the actual duplicates to their own table for now
+
+```{r}
+duptab = asvtab_no_neg[,c(dups, dup_origs)]
+dim(duptab)
+seq_rem = seq_rem[!(seq_rem %in% c(dups, dup_origs))]
+length(seq_rem)
+asvtab_no_dup = asvtab_no_neg[, seq_rem]
+```
+
+Remove the A from the column names of the non-duplicated samples so they match
+the metadata
+
+```{r}
+colnames(asvtab_no_dup) = str_replace(colnames(asvtab_no_dup), 'A','')
+seq_rem = colnames(asvtab_no_dup)
+```
+
+Merge the sequences of the duplicated samples. Make sure the IDs actually match.
+
+```{r}
+data.frame(dups, dup_origs)
+```
+
+They match, so we'll iterate through it:
+
+```{r}
+dedupped = matrix(nrow = nrow(duptab), ncol = length(dups))
+for (i in 1:length(dups)){
+    d = dups[i]
+    o = dup_origs[i]
+    dedupped[,i] = rowSums(duptab[,c(d,o)])
+}
+head(dedupped)
+colnames(dedupped) = dup_origs
+rownames(dedupped) = rownames(duptab)
+```
+
+Bring all the samples back together:
+
+```{r}
+asvtab_fixed = cbind(neg_ctl, asvtab_no_dup, dedupped)
+dim(asvtab_fixed)
+```
+
+Let's double check that adding up the samples worked:
+
+```{r}
+asv_tots = rowSums(asvtab)
+asv_tot_dedup = rowSums(asvtab_fixed)
+all(asv_tots == asv_tot_dedup)
+
+dim(asvtab)
+dim(asvtab_fixed)
+length(dups)
+```
+
+The rowsums are the same and there are 12 samples fewer in the fixed table than
+the original table, which is the right number of duplicates. 
+
+How many of the samples are missing from the sample info sheet?
+
+```{r}
+samp_ids = colnames(asvtab_fixed)
+head(samp_ids)
+tail(samp_ids)
+head(samp_inf)
+missing = samp_ids[!(samp_ids %in% c(samp_inf$Study.ID))]
+missing = missing[!(missing %in% t1)]
+missing
+```
+
+Just the one that should be discarded. I'll discard it now.
+
+```{r}
+dim(asvtab_fixed)
+asvtab_fixed = asvtab_fixed[,colnames(asvtab_fixed)[!(colnames(asvtab_fixed) ==
+                                                          missing)]]
+dim(asvtab_fixed)
+```
+
+Removed exactly one sample.
+
+# Write Fixed Tables
+
+Create a maptab that is merged from the IMAGINE and Surette metadat sheets and
+an asvtab where all the duplicates are merged, the sample IDs match the maptab,
+and the discards are removed.
+
+```{r}
+maptab = full_join(samp_inf, meta_long, by = 'Sample.ID')
+dim(maptab)
+
+head(maptab)
+head(rownames(asvtab_fixed))
+
+write.csv(maptab, file = 'data/merged_maptab.csv')
+write.csv(asvtab_fixed, file = 'data/merged_seqtab.csv',
+          row.names = TRUE)
+
+library(phyloseq)
 ```
 

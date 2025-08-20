@@ -5,7 +5,8 @@
 *.swp
 *.swo
 data/*
-!data/active*
+input/*
+!input/active*
 intermed/*
 cleaned/*
 DataQC.Rproj

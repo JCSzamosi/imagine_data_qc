@@ -124,7 +124,8 @@ their symlinks:
 	by Aida. It is always in wide format, with one row per participant, and
 	needs to be reformatted before we can use it. There is a manual QC step (see
 	Scripts section) to QC and reformat this file and reconcile it with 2.
-2. [active_Rossi_info_datasheet.csv](./input/active_Rossi_info_datasheet.csv) ->
+2. [active_Surette_sample_info_sheet.csv](./input/active_Rossi_info_datasheet.csv)
+->
 [current/IMG-corrected-sampleinfosheet-Aug2025.csv](./input/current/IMG-corrected-sampleinfosheet-Aug2025.csv)
 	* This is the sample data sheet from the Surette lab provided by Laura. It
 	has some columns we don't need. There is a manual QC step (see Scripts

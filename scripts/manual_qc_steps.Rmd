@@ -85,7 +85,7 @@ write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-18.csv')
 Now I am loading the most recent version of Laura's sample info sheet
 
 ```{r}
-samp_inf = read.csv(file = 'data/active_Rossi_info_datasheet.csv',
+samp_inf = read.csv(file = 'data/active_Surette_sample_info_sheet.csv'
                     strip.white = TRUE)
 dim(samp_inf)
 ```
@@ -128,7 +128,7 @@ This duplicate is not present in the IMAGINE metadata duplicates. Weird.
 
 ```{r}
 write.csv(samp_dup, 
-          file = 'intermed/Rossi_sample_info_duplicate_SampleIDs.csv')
+          file = 'intermed/Surette_sample_info_duplicate_SampleIDs.csv')
 ```
 
 Check if there are any duplicated Study IDs:

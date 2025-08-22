@@ -1,0 +1,2 @@
+module load r/4.5.0
+Rscript ./scripts/02_make_ps_full.R

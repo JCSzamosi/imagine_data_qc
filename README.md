@@ -1,7 +1,7 @@
 IMAGINE Project Data Curation
 =============================
 
-PLEASE DON'T TOUCH THIS REPOSITORY YET
+**PLEASE DON'T TOUCH THIS REPOSITORY YET**
 
 This is a repository for running data QC steps on the IMAGINE 16S data, but Jake
 is currently refactoring it and a lot of stuff in here either doesn't work, or
@@ -143,7 +143,53 @@ their symlinks:
 Sometimes Laura provides transposed seqtab files and tax tables, but not always
 because they take forever to generate. I have scripts to produce them.
 
-JAKE STOPPED EDITING HERE. WILL RETURN TOMORROW.
+### Data Files
+
+Most analyses will probably start with files in the [cleaned/](./cleaned/)
+folder; however, if you want to do your own data cleaning you should start in
+the [data/](./data/) directory. There are three files in this directory, on
+which very minimal cleaning has been done.
+
+1. [merged_maptab.csv](./data/merged_maptab.csv)
+	* This is the mapfile with all the sample metadata from both the IMAGINE
+	database and the Surette lab sample info sheet. As long as there are
+	duplicated sample IDs in either of those databases, this sheet will have
+	some duplicated samples, so you'll need to check for those and remove
+	them before moving forward.
+	* This file is produced manually using the script
+		[00_manual_qc_steps.Rmd](./scripts/00_manual_qc_steps.Rmd)
+2. [merged_seqtab.csv](./data/merged_seqtab.csv)
+	* This is the ASV table. Samples that have been sequenced repeatedly
+	have been merged together, and column names have been cleaned so they
+	match the `Study.ID` column in the mapfile. Samples that were labelled
+	as "discard" have been removed; however, this file contains all negative
+	controls and no read depth filtering has been performed.
+	* This file is produced manually using the script
+	[00_manual_qc_steps.Rmd](./scripts/00_manual_qc_steps.Rmd)
+3. [merged_taxtab.csv](./data/merged_taxtab.csv)
+	* This is the tax table that corresponds with the ASV table in 2. It is
+	produced using the script
+	[01_assign_tax_asvs.R](./scripts/assign_tax_asvs.R)
+	
+### Cleaned
+
+**START HERE!** For the overwhelming majority of analyses, you should be
+starting with data in this directory. These files have all had host ASVs
+removed, and most of them have also had low-read-count samples removed. There
+are options for ASVs or for 99%-clustered OTUs. The specific files are listed
+below:
+
+1. [ps_full.Rdata](./cleaned/ps_full.Rdata)
+	* An `Rdata` file that contains two objects:
+		* `ps` is a phyloseq object with all the non-discard samples and all
+		non-host ASVs. It has not been clustered or filtered except to remove
+		host.
+		* `seqs` is a named vector of DNA sequences that correspond to the taxa
+		in the phyloseq object. They are named the same as the taxa so you can
+		tell which is which. I always remove sequences to their own vector in
+		order to reduce clutter in my objects and dataframes, but it does mean
+		you have to be careful not to rename the taxa in the phyloseq object or
+		you will not be able to reconnect them to their sequences
 
 ### Scripts
 
@@ -172,13 +218,26 @@ similar.
 		contain negative controls and has not been in any way filtered except to
 		remove samples that should have been discarded. The column names
 		correspond to the Study.ID column in the mapfile
-1. [01_assign_tax_asvs.R](01_assign_tax_asvs.R)
+1. [01_assign_tax_asvs.R](./scripts/01_assign_tax_asvs.R)
 	* This assigns taxonomy to the merged, transposed ASV table from step 0. It 
-	takes [data/merged_seqtab.csv] and
+	takes [data/merged_seqtab.csv](./data/merged_seqtab.csv) and
 	[refs/silva_nr99_v138_train_set.fa](./refs/silva_nr99_v138_train_set.fa) as
 	inputs and creates [data/merged_taxtab.csv]. I'm not using the wSpecies file
 	because the dada2 authors are clear that species should only be assigned via
-	100% identity, not the heuristing assignment algorithm.
+	100% identity, not the heuristic assignment algorithm.
+	* This should be run under `sbatch`. The script to do that is in
+	[sbatch/01_run.sh](./sbatch/01_run.sh).
+2. [02_make_ps_full.R](./scripts/02_make_ps_full.R)
+	* This takes all three files in [data/](./data/) as input and produces a
+	phyloseq object and corresponding named vector of sequences in an RData file
+	as output. This script removes host ASVs and any samples that have duplicate
+	sample IDs, but does no other read depth, abundance, or prevalence filtering
+	and does not remove negative controls.
+	* The file produced in the [cleaned/](./cleaned/) directory is
+	[ps_full.Rdata](./cleaned/ps_full.Rdata) and includes the following objects:
+		* ps_full: phyloseq object with all samples and ASVs as described
+		* seqs_full: named vector of sequences corresponding to ASVs
+	* This does not need to be run under `sbatch`.
 
 ## Processing Pipeline
 

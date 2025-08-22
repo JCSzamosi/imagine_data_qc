@@ -48,7 +48,7 @@ if (length(c(dup_samp, dup_stud)) > 0){
 			  %>% filter(!is.na(Sample.ID) & !is.na(Study.ID)))
 } else {
 	cat('No duplicates found\n')
-
+}
 # Check the samples
 
 cat('Checking for missing samples.\n')

@@ -2,6 +2,7 @@ library(phyloseq)
 library(tidyverse)
 library(AfterSl1p)
 
+outdir = 'cleaned'
 cat('\nReading in tax table\n')
 taxfile = 'data/merged_taxtab.csv'
 taxtab = read.csv(taxfile, row.names = 1)
@@ -48,6 +49,7 @@ if (length(c(dup_samp, dup_stud)) > 0){
 			  %>% filter(!is.na(Sample.ID) & !is.na(Study.ID)))
 } else {
 	cat('No duplicates found\n')
+}
 
 # Check the samples
 
@@ -103,5 +105,9 @@ ps = subset_taxa(ps,
                             Order != 'Chloroplast')
 seqs = seqs[taxa_names(ps)]
 cat('Writing files\n')
-save(list = c('ps', 'seqs'), file = 'cleaned/ps_full.Rdata')
+if (!dir.exists(outdir)){
+	dir.create(outdir)
+}
+save(list = c('ps', 'seqs'), file = file.path(outdir, 'ps_full.Rdata'))
+save(seqs, file = file.path(outdir, 'seqs_full.Rdata'))
 cat('DONE\n')

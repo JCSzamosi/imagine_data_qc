@@ -11,3 +11,5 @@ intermed/*
 cleaned/*
 DataQC.Rproj
 *.~lock.*
+refs/*
+!refs/.gitkeep

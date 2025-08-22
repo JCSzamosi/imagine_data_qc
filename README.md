@@ -145,6 +145,41 @@ because they take forever to generate. I have scripts to produce them.
 
 JAKE STOPPED EDITING HERE. WILL RETURN TOMORROW.
 
+### Scripts
+
+I have written several scripts to perform various data cleaning functions. One
+of them should be run interactively, but the rest can be run via a Make file or
+similar.
+
+0. [00_manual_qc__steps.Rmd](./scripts/00_manual_qc_steps.Rmd)
+	* This should always be done interactively, using something like RStudio, so
+	you can look at the output at each step and make decisions. It will probably
+	need to be changed/updated every time the files in [input/](./input/) are
+	updated. Running this should be the responsibility of one person. Currently
+	that person is Jake. Everything downstream of this can be run via the
+	Makefile.
+	* Output files: 
+		* duplicate/missing sample files in [intermed/](./intermed/). These will
+		vary depending on what's up with the sheets.
+		* [data/merged_maptab.csv](./data/merged_maptab.csv) is the mapfile
+		created by merging the IMAGINE sheet and the Surette lab sheet. It might
+		contain duplicate sample IDs, if there were duplicates at the
+		reconciliation step. The goal is to resolve all those duplicates, but
+		for now there are some. This file will contain both sequenced and
+		unsequenced samples, as well as all negative controls. 
+		* [data/merged_seqtab.csv](./data/merged_seqtab.csv) is the transposed
+		ASV table (taxa are rows), with the resequenced samples merged. It will
+		contain negative controls and has not been in any way filtered except to
+		remove samples that should have been discarded. The column names
+		correspond to the Study.ID column in the mapfile
+1. [01_assign_tax_asvs.R](01_assign_tax_asvs.R)
+	* This assigns taxonomy to the merged, transposed ASV table from step 0. It 
+	takes [data/merged_seqtab.csv] and
+	[refs/silva_nr99_v138_train_set.fa](./refs/silva_nr99_v138_train_set.fa) as
+	inputs and creates [data/merged_taxtab.csv]. I'm not using the wSpecies file
+	because the dada2 authors are clear that species should only be assigned via
+	100% identity, not the heuristing assignment algorithm.
+
 ## Processing Pipeline
 
 Everything is controlled by the [Makefile](./Makefile). If you're on a normal

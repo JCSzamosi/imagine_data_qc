@@ -411,7 +411,5 @@ head(rownames(asvtab_fixed))
 write.csv(maptab, file = 'data/merged_maptab.csv')
 write.csv(asvtab_fixed, file = 'data/merged_seqtab.csv',
           row.names = TRUE)
-
-library(phyloseq)
 ```
 

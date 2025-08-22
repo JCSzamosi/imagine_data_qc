@@ -11,8 +11,8 @@ library(tidyverse)
 Reading in the IMAGINE metadata sheet I received from Jehane on 2025-08-18
 
 ```{r}
-# list.files('data/')
-img_meta = read.csv(file = 'data/active_IMAGINE_metadata_wide.csv', 
+# list.files('input/')
+img_meta = read.csv(file = 'input/active_IMAGINE_metadata_wide.csv', 
                     strip.white = TRUE)
 head(img_meta)
 
@@ -77,7 +77,7 @@ IMAGINE people if there's any chance they are data entry errors. For now I'll
 write them to a file:
 
 ```{r}
-write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-18.csv')
+write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-22.csv')
 ```
 
 ## Surette Lab Sample Info Sheet
@@ -85,7 +85,7 @@ write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-18.csv')
 Now I am loading the most recent version of Laura's sample info sheet
 
 ```{r}
-samp_inf = read.csv(file = 'data/active_Surette_sample_info_sheet.csv'
+samp_inf = read.csv(file = 'input/active_Surette_sample_info_sheet.csv',
                     strip.white = TRUE)
 dim(samp_inf)
 ```
@@ -104,8 +104,7 @@ samp_inf = (samp_inf
 summary(samp_inf)
 ```
 
-This has some duplicated Sample IDs as well, but that's less alarming since 
-they are likely to be resequenced samples. Let's see:
+I don't see any duplicates, but let's double check:
 
 ```{r}
 samp_dup = (samp_inf
@@ -116,19 +115,19 @@ dim(samp_dup)
 samp_dup
 ```
 
-No, they have different IMG numbers. These seem to have been introduced since I
-spoke with Laura about the old set of duplicates on August 18, 2025. I will send
-this to her.
+Excellent.
+
+This step is not currently necessary, because there are no duplicates:
 
 ```{r}
-any(meta_dup$Sample.ID %in% samp_dup$Sample.ID)
+# any(meta_dup$Sample.ID %in% samp_dup$Sample.ID)
 ```
 
-This duplicate is not present in the IMAGINE metadata duplicates. Weird.
+No duplicates to write:
 
 ```{r}
-write.csv(samp_dup, 
-          file = 'intermed/Surette_sample_info_duplicate_SampleIDs.csv')
+# write.csv(samp_dup, 
+#           file = 'intermed/Surette_sample_info_duplicate_SampleIDs.csv')
 ```
 
 Check if there are any duplicated Study IDs:
@@ -139,8 +138,7 @@ samp_inf %>% count(Study.ID) %>% filter(n > 1)
 
 Nope, none. Excellent!
 
-It is odd, though, that none of the duplicates in the sample info sheet are also
-duplicates in the IMAGINE sheet. What happened to those?
+Are the duplicates in the IMAGINE sheet present in the Surette sheet?
 
 ```{r}
 any(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
@@ -162,15 +160,15 @@ meta_only = filter(meta_long, !(Sample.ID %in% samp_inf$Sample.ID))
 dim(meta_only)
 ```
 
-Since fixing duplicates with Laura on August 18, 2025, there remain 24 samples
+Since fixing duplicates with Laura on August 22, 2025, there remain 23 samples
 in the IMAGINE datasheet that are absent from the Surette sample info sheet.
 
 ```{r}
 data.frame(meta_only)
 ```
 
-Most of these are from sites 21 and 25, but a couple are from other sites. I
-will email Aida about this.
+Most of these are from sites 21 and 25, and one is from site 30. I will email
+Aida about this.
 
 ```{r}
 write.csv(meta_only, 
@@ -186,7 +184,7 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-As of August 19, 2025, there are 68 samples in the Surette sample data sheet
+As of August 22, 2025, there are 68 samples in the Surette sample data sheet
 that are missing from the IMAGINE sheet.
 
 ```{r}
@@ -214,11 +212,15 @@ write.csv(samp_only,
 This is where I check for re-sequenced samples and merge them.
 
 ```{r}
-asvtab = readRDS('data/active_mergetab_nochim.rds')
+asvtab = readRDS('input/active_mergetab_nochim.rds')
 dim(asvtab)
 asvtab = t(asvtab)
 dim(asvtab)
+```
 
+There are 12,852 samples sequenced.
+
+```{r}
 seq_ids = colnames(asvtab)
 head(seq_ids)
 t1 = seq_ids[!startsWith(seq_ids, 'IMG')]
@@ -226,7 +228,7 @@ length(t1)
 t1
 ```
 
-There are 61 negative controls. I will partition them off for now
+There are 68 negative controls. I will partition them off for now
 
 ```{r}
 neg_ctl = asvtab[,t1]
@@ -235,7 +237,8 @@ asvtab_no_neg = asvtab[,seq_rem]
 dim(asvtab_no_neg)
 ```
 
-Now let's look for any IMG ids that are missing from the sample data sheet
+This leaves 12,784 samples. Now let's look for any IMG ids that are missing from
+the sample data sheet
 
 ```{r}
 t2 = seq_rem[!(seq_rem %in% samp_inf$Study.ID)]
@@ -243,7 +246,7 @@ length(t2)
 sort(t2)
 ```
 
-There are 46 samples that start with IMG but are missing from the sample info
+There are 43 samples that start with IMG but are missing from the sample info
 sheet. Most of these end in A or B, which means they are re-sequenced samples,
 but a couple don't. Let's look at those:
 

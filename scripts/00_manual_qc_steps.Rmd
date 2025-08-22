@@ -395,6 +395,18 @@ dim(asvtab_fixed)
 
 Removed exactly one sample.
 
+Removing a sample may bring some ASVs down to 0 everywhere. Let's check and
+remove them if necessary:
+
+```{r}
+dim(asvtab_fixed)
+sum(rowSums(asvtab_fixed) == 0)
+asvtab_fixed = asvtab_fixed[rowSums(asvtab_fixed) > 0,]
+dim(asvtab_fixed)
+```
+
+There were 10 ASVs with 0s everywhere. They have been removed.
+
 # Write Fixed Tables
 
 Create a maptab that is merged from the IMAGINE and Surette metadat sheets and

@@ -86,7 +86,7 @@ Now I am loading the most recent version of Laura's sample info sheet
 
 ```{r}
 samp_inf = read.csv(file = 'input/active_Surette_sample_info_sheet.csv',
-                    strip.white = TRUE)
+                    strip.white = TRUE, row.names = 1)
 dim(samp_inf)
 ```
 
@@ -99,8 +99,12 @@ summary(samp_inf)
 head(samp_inf)
 
 samp_inf = (samp_inf
-            %>% select(ID, Sample.ID, Study.ID, Notes)
-            %>% mutate(across(c(Sample.ID, Study.ID), factor)))
+            %>% select(Sample.ID, Study.ID, Date.Received.YYYY.MM.DD, 
+                       Illumina.Plate.Number, Notes)
+            %>% rename(Date.Received = Date.Received.YYYY.MM.DD)
+            %>% mutate(across(c(Sample.ID, Study.ID, Illumina.Plate.Number),
+                              factor),
+                       Date.Received = mdy_hm(Date.Received)))
 summary(samp_inf)
 ```
 
@@ -416,12 +420,32 @@ and the discards are removed.
 ```{r}
 maptab = full_join(samp_inf, meta_long, by = 'Sample.ID')
 dim(maptab)
+```
 
+The negative controls aren't in the maptab, which means they will be removed
+from everything downstream of this once we start using phyloseq. I'll put them
+back in.
+
+```{r}
 head(maptab)
-head(rownames(asvtab_fixed))
+plate = unlist(strsplit(t1, 'n'))[(1:length(t1)) * 2 -1]
+plate
+neg_map = data.frame(Sample.ID = NA,
+                     Study.ID = t1,
+                     Date.Received = NA,
+                     Illumina.Plate.Number = plate,
+                     Notes = 'negative control',
+                     Site.Number = NA,
+                     Participant.ID = NA,
+                     Disease.Type = NA,
+                     IBD.Classification = NA,
+                     Timepoint = NA)
+maptab = rbind(maptab, neg_map)
+dim(maptab)
+```
 
-write.csv(maptab, file = 'data/merged_maptab.csv')
-write.csv(asvtab_fixed, file = 'data/merged_seqtab.csv',
-          row.names = TRUE)
+```{r}
+write_rds(maptab, file = 'data/merged_maptab.rds')
+write_rds(asvtab_fixed, file = 'data/merged_seqtab.rds')
 ```
 

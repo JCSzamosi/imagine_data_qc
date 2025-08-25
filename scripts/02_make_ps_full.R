@@ -4,13 +4,13 @@ library(AfterSl1p)
 
 outdir = 'cleaned'
 cat('\nReading in tax table\n')
-taxfile = 'data/merged_taxtab.csv'
-taxtab = read.csv(taxfile, row.names = 1)
+taxfile = 'data/merged_taxtab.rds'
+taxtab = readRDS(taxfile)
 
 # Read in the asv table
 cat('Reading in asv table\n')
-asvfile = 'data/merged_seqtab.csv'
-asvtab = read.csv(asvfile, row.names = 1)
+asvfile = 'data/merged_seqtab.rds'
+asvtab = readRDS(asvfile)
 
 # Check the rowsa
 cat('Checking the rownames match\n')
@@ -23,8 +23,8 @@ rownames(taxtab) = rownames(asvtab) = NULL
 
 # Read in the mapfile
 cat('Reading in the mapfile\n')
-mapfile = 'data/merged_maptab.csv'
-maptab = read.csv(mapfile, row.names = 1)
+mapfile = 'data/merged_maptab.rds'
+maptab = readRDS(mapfile)
 
 # Check for duplicated sample/study IDs
 

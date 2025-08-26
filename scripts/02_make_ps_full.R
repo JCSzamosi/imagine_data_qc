@@ -46,7 +46,7 @@ if (length(c(dup_samp, dup_stud)) > 0){
 	maptab = (maptab
 			  %>% filter(!(Sample.ID %in% dup_samp) &
 								!(Study.ID %in% dup_stud))
-			  %>% filter(!is.na(Sample.ID) & !is.na(Study.ID)))
+			  %>% filter(!is.na(Study.ID)))
 } else {
 	cat('No duplicates found\n')
 }
@@ -72,18 +72,7 @@ taxtab = as.matrix(taxtab)
 
 # Clean/organize the maptab
 cat('Cleaning up the mapfile\n')
-maptab = (maptab
-          %>% column_to_rownames('Study.ID')
-          %>% mutate(across(c(Site.Number, Participant.ID, Sample.ID), factor),
-		  			Disease.Type = factor(Disease.Type, 
-											levels = c('Healthy', 'IBS', 'IBD')),
-					Timepoint = factor(Timepoint, 
-										levels = c('Baseline', 'Y1', 'Y2',
-													'Y3', 'Y4')),
-					IBD.Classification = factor(IBD.Classification,
-												levels = c('UC', 'CD',
-												'IBD unclassified', 'IBS',
-												'Healthy'))))
+rownames(maptab) = maptab$Study.ID
 
 # Create the phyloseq object with all samples and all taxa
 cat('Creating the phyloseq object\n')

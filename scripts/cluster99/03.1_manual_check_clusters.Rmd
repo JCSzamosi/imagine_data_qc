@@ -1,0 +1,32 @@
+Manually check the 99% clustering
+=================================
+
+## Setup
+
+```{r}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+library(tidyverse)
+```
+
+### Import Data
+
+```{r}
+asvtab = readRDS('data/merged_seqtab.rds')
+load('intermed/clsts/Rdata')
+```
+
+### Look at the clusters
+
+```{r}
+head(clsts)
+	# Each sequence has its own row, in the order they were originally listed in
+	# The cluster number that each sequence belongs to is listed in its row in
+	# the "cluster" column
+
+# Count the clusters
+n_distinct(clsts$cluster)
+
+# Count the number of clusters of each size
+clsts %>% count(cluster, name = 'size') %>% count(size, name = 'count') %>%
+    arrange(desc(size))
+```

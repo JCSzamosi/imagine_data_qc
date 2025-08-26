@@ -1,42 +1,19 @@
-Cluster Protocol
-================
+## Setup ####
 
-## Setup 
-
-```{r Setup, include=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 library(tidyverse)
-```
 
-### Import Data
+### Import Data ####
 
-```{r}
-load('cleaned/ps_samfilt.Rdata')
-load('intermed/clst_samfilt.Rdata')
-ls()
-```
+asvtab = readRDS('data/merged_seqtab.rds')
+load('intermed/clsts/Rdata')
 
-### Look at the clusters
+### Get Consensus Seqs ####
 
-```{r}
-head(clsts)
-	# Each sequence has its own row, in the order they were originally listed in
-	# The cluster number that each sequence belongs to is listed in its row in
-	# the "cluster" column
+# Get a consensus sequence for each cluster, using ambiguity codes
 
-# Count the clusters
-n_distinct(clsts$cluster)
-
-# Count the number of clusters of each size
-clsts %>% count(cluster, name = 'size') %>% count(size, name = 'count') %>%
-    arrange(desc(size))
-```
-
-### Get a consensus sequence for each cluster, using ambiguity codes
-
-```{r}
-# A function to convert a set of sequences into a consensus sequence
 get_conseq = function(x){
+	# A function to convert a set of sequences into a consensus sequence
 	if (length(x) > 1){
 		aln = AlignSeqs(DNAStringSet(x))
 	} else {
@@ -51,7 +28,6 @@ conseq = (clsts
 		  %>% summarize(consensus = get_conseq(seqs)))
 
 head(conseq)
-```
 
 ### Assign taxonomy to the consensus sequence
 

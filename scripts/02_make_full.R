@@ -106,7 +106,7 @@ cat(sprintf('\nThe original map table had %i rows after removing duplicates.\n',
 
 cat(sprintf(paste('\nThe phyloseq object has %i samples and %i taxa',
 					'before removing host\n'), 
-			n_samples(ps_full), n_taxa(ps_full)))
+			nsamples(ps_full), ntaxa(ps_full)))
 
 ## Remove host sequences
 cat('\nPropagating taxon IDs down the levels\n')
@@ -120,7 +120,7 @@ ps_full = subset_taxa(ps_full,
 seqs = seqs[taxa_names(ps_full)]
 
 cat(sprintf('\nThe phyloseq object has %i taxa after removing host.\n',
-			n_taxa(ps_full)))
+			ntaxa(ps_full)))
 
 ## Write the phyloseq object
 
@@ -128,21 +128,29 @@ cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
 	dir.create(outdir)
 }
-save(list = c('ps_full', 'seqs'), file = file.path(outdir, 'full_ps.Rdata'))
+save(list = c('ps_full', 'seqs'), file = file.path(outdir, outps))
 save(seqs, file = file.path(outdir, 'full_seqs.Rdata'))
 
 # Create the long dataframe ###
 
+df_full = psmelt(ps_full)
+df_full$seqs = seqs[df_full$OTU]
+
+cat('\nWriting the long data frame\n')
+save(df_full, file = file.path(outdir, outdf))
+
 # Create the individual matrices/data frames ###
 
-asvout = as.matrix(otu_table(ps_full))
-rownames(asvout) = seqs[rownames(asvout)]
-taxout = as.matrix(tax_table(ps_full))
-rownames(taxout) = seqs[rownames(taxout)]
-mapout = data.frame(sample_data(ps_full))
+asv_full = as.matrix(otu_table(ps_full))
+rownames(asv_full) = seqs[rownames(asv_full)]
+tax_full = as.matrix(tax_table(ps_full))
+rownames(tax_full) = seqs[rownames(tax_full)]
+map_full = data.frame(sample_data(ps_full))
 
 ## Write the individual tables
 
-cat('\nWriting
+cat('\nWriting the individual tables\n')
+save(list = c('asv_full', 'tax_full', 'map_full'), 
+     file = file.path(outdir, outmat))
 
 cat('\nDONE\n')

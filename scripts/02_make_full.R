@@ -131,14 +131,6 @@ if (!dir.exists(outdir)){
 save(list = c('ps_full', 'seqs'), file = file.path(outdir, outps))
 save(seqs, file = file.path(outdir, 'full_seqs.Rdata'))
 
-# Create the long dataframe ###
-
-df_full = speedyseq::psmelt(ps_full)
-df_full$seqs = seqs[df_full$OTU]
-
-cat('\nWriting the long data frame\n')
-save(df_full, file = file.path(outdir, outdf))
-
 # Create the individual matrices/data frames ###
 
 asv_full = as.matrix(otu_table(ps_full))

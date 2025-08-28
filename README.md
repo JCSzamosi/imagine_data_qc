@@ -212,11 +212,6 @@ below:
 		* The same data as in `full_ps`, but in two matrices: `full_asvtab` and
 		`full_taxtab`, and one data frame: `full_maptab`. The tax and asv tables
 		have sequences as their rownames.
-	* [full_df.Rdata](./cleaned/full_df.Rdata)
-		* The same data as in `full_ps`, but in a long, merged, dataframe
-		produced by `psmelt()`.  Sequences have their own column in the
-		dataframe and the OTU column in the dataframe carries the taxon IDs used
-		by the phyloseq object in `full_ps`.
 
 ### Scripts
 

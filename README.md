@@ -11,13 +11,13 @@ doesn't work as expected. Please no touching right now.
 
 ### Not tracked under Git
 
-* [input/](./input/) - DO NOT TOUCH
+* [input/](./input/) - **READ ONLY**
 	* raw input files received from Aida or Laura that need to be QC'ed and
 	reformatted before use. These should be read-only and in general no one
 	should be touching these except occasionally to update them to more current
 	versions. That updating should be the responsibility of one person and
 	currently that person is Jake.
-* [data/](./data/) - DO NOT TOUCH
+* [data/](./data/) - **READ ONLY**
 	* mapfiles, tax tables, and asvfiles that have been generated from the
 	[input](./input/) files. These should be in a format that are easy to bring
 	in to R, and should be useable for analysis. They will not have been cleaned
@@ -25,16 +25,17 @@ doesn't work as expected. Please no touching right now.
 	with any missing/duplicated sample IDs.
 	* generating the files in this directory is a manual step and should be the
 	responsibility of one person. Currently that person is Jake.
-	* I am debating whether to move this directory up out of the [DataQC](./)
-	directory and into the [16S](../) directory so it's more accessible.
-* [cleaned/](./cleaned/)
-	* contains a number of tables or rds/Rdata objects. Jake has and will update
-	scripts to produce a few different cleaned datasets, including datasets that
-	are 99% clustered, datasets that have low-read samples removed, etc. These
-	are probably the datasets you want to start with to run your analyses.
+	* I will put a symlink to this directory in the [16S](../) directory so that
+	the files are accessible to everyone.
+* [cleaned/](./cleaned/) - **START HERE**
+	* contains a number of tables or rds/Rdata objects. Jake has, and will
+	update, scripts to produce a few different cleaned datasets, including
+	datasets that are 99% clustered, datasets that have low-read samples
+	removed, etc. These are probably the datasets you want to start with to run
+	your analyses.
 	* If you want to make different cleaned datasets than are currently
 	available, starting from the [data](./data/) files, please feel free. Just
-	make sure to give your dataset an informative file name and avoid
+	make sure to give your dataset an informative and unique file name and avoid
 	overwriting existing files. All cleaned datasets should be generated via
 	scripts, and the script that produces that dataset should be listed below,
 	following the example format, so that we have a record of what everything
@@ -45,15 +46,15 @@ doesn't work as expected. Please no touching right now.
 	* If you want to play with cleaning and saving datasets without following
 	the above instructions, you are welcome to do so but please do not save any
 	output into this DataQC directory. 
-	* As with [data](./data/), I am debating moving this directory up out of the
-	[DataQC](./) directory and into the [16S](./16S) directory so that it's more
-	accessible.
+	* As with [data/](./data/), I am debating moving this directory up out of 
+	the [DataQC/](./) directory and into the [16S](./16S) directory so that it's
+	more accessible.
 
 ### Tracked under Git
 
 * [scripts/](./scripts/)
-	* contains all the scripts used to generate the files in [data](./data/) or
-	[cleaned](./cleaned/). Ideally, all scripts should be controlled by a
+	* contains all the scripts used to generate the files in [data/](./data/) or
+	[cleaned/](./cleaned/). Ideally, all scripts should be controlled by a
 	Makefile (or, later on, a Nextflow pipeline), but if you are not comfortable
 	using Make, that is okay. 
 	* please make a directory with your name on it inside the scripts directory
@@ -61,9 +62,9 @@ doesn't work as expected. Please no touching right now.
 	don't get too much clash.
 	* **analysis scripts do not belong in this directory.** This directory is
 	only for cleaning and QCing the data before analysis. If you want to conduct
-	analysis, please create a different directory outside of the DataQC
-	directory and then symlink to the [cleaned](./cleaned/) or [data](./data/)
-	directory from there to bring in the data you need for your analysis
+	analysis, please create a different directory in the [16S/](../) directory
+	and then symlink to the [cleaned](./cleaned/) or [data](./data/) directory
+	from there to bring in the data you need for your analysis.
 * [Makefile](./Makefile)
 	* A Makefile so that things happen in the correct order and only when
 	necessary. If you want to learn about Make you can 
@@ -82,37 +83,40 @@ doesn't work as expected. Please no touching right now.
 		for my .screenrc file for an example of how to control log output.
 		* If you are running something via slurm, you can control the logfile
 		output following the first answer
-		[here](https://unix.stackexchange.com/questions/285690/slurm-custom-standard-output-name).
+		[here](https://unix.stackexchange.com/questions/285690/slurm-custom-standard-output-name)
+		or copy my method (look in my scripts for the `#SBATCH --output` and
+		`#SBATCH --error` commands.
 
 ## Directory Details
 
-### Raw Inputs
+### Raw Inputs 
 
-All raw input data files are stored in [./input/](./input/). In general, no one
+* [input](./input/)
+
+All raw input data files are stored in [input/](./input/). In general, no one
 should be interacting with these files. The files people should use to conduct
 their analysis will be generated from these raw inputs and will be stored in
-[./data/](./data/) and [./cleaned/](./cleaned/).
+[data/](./data/) and [cleaned/](./cleaned/).
 
-All raw input data files are stored in [./input/current/](./input/current). They
+All raw input data files are stored in [input/current/](./input/current). They
 are not tracked under version control, and I am listing them below. Because the
-file names change as they get updated, I have files in the [./input/](./input/)
+file names change as they get updated, I have files in the [input/](./input/)
 directory that are symlinks to these files. All the symlinks start with
 `active_` followed by a description of what they are. When the input files get
 updated (we get a new IMAGINE metadata sheet or mergetab or something), the
-process is to move the exiting files from [./input/current/](./input/current/)
-to [./input/obsolute](./input/obsolete), put the new files in
-[./input/current/], and update the symlinks in [./input]. Scripts should only
-ever point to the symlinks, not to the actual files, so that they don't need to
-be updated when the files change.
+process is to move the exiting files from [input/current/](./input/current/)
+to [input/obsolute](./input/obsolete), put the new files in
+[input/current/](./input/current/), and update the symlinks in
+[input/](./input/). Scripts should only ever point to the symlinks, not to the
+actual files, so that they don't need to be updated when the files change.
 
-The files in [./input/](./input/) should never be edited, and certainly not by a
-script. Any filtering, QC, etc, happens upstream of that and filtered datasets
-should be written to [./data/](./data/). Nothing should get written to
-[./data/](./data/) manually, but only ever via the scripts in
-[./scripts](./scripts/) and ideally only via the Makefile (or, hopefully in the
-future, a Nextflow workflow).
+The files in [input/](./input/) should never be edited. These are our raw input
+data files.  Any filtering, QC, etc, happens upstream of these files and filtered
+datasets should be written to [data/](./data/) or [cleaned/](./cleaned/).
+Nothing should get written to [data/](./data/) manually, but only ever via the
+scripts in [scripts/](./scripts/).
 
-The files in [./input/](./input/) are not to be tracked under version control
+The files in [input/](./input/) are not to be tracked under version control
 because they are too big, and because they contain sensitive information that
 should not be transfered to github. Below is a list of current input files and
 their symlinks:
@@ -140,10 +144,9 @@ their symlinks:
 	duplicated samples, removes discards, and reconciles the sample IDs with 1
 	and 2.
 
-Sometimes Laura provides transposed seqtab files and tax tables, but not always
-because they take forever to generate. I have scripts to produce them.
-
 ### Data Files
+
+* [data](./data/)
 
 Most analyses will probably start with files in the [cleaned/](./cleaned/)
 folder; however, if you want to do your own data cleaning you should start in
@@ -156,8 +159,8 @@ which very minimal cleaning has been done.
 	duplicated sample IDs in either of those databases, this sheet will have
 	some duplicated samples, so you'll need to check for those and remove
 	them before moving forward.
-	* This file is produced manually using the script
-		[00_manual_qc_steps.Rmd](./scripts/00_manual_qc_steps.Rmd)
+	* This file is produced using the script
+	[00_manual_qc_steps.Rmd](./scripts/00_manual_qc_steps.Rmd).
 2. [merged_seqtab.csv](./data/merged_seqtab.csv)
 	* This is the ASV table. Samples that have been sequenced repeatedly
 	have been merged together, and column names have been cleaned so they
@@ -169,7 +172,7 @@ which very minimal cleaning has been done.
 3. [merged_taxtab.csv](./data/merged_taxtab.csv)
 	* This is the tax table that corresponds with the ASV table in 2. It is
 	produced using the script
-	[01_assign_tax_asvs.R](./scripts/assign_tax_asvs.R)
+	[01_assign_tax_asvs.R](./scripts/assign_tax_asvs.R).
 
 ### Intermed
 
@@ -184,33 +187,42 @@ removed, and most of them have also had low-read-count samples removed. There
 are options for ASVs or for 99%-clustered OTUs. The specific files are listed
 below:
 
-1. [ps_full.Rdata](./cleaned/ps_full.Rdata)
-	* An `Rdata` file that contains two objects:
-		* `ps` is a phyloseq object with all the non-discard samples and all
-		non-host ASVs. It has not been clustered or filtered except to remove
-		host.
-		* `seqs` is a named vector of DNA sequences that correspond to the taxa
-		in the phyloseq object. They are named the same as the taxa so you can
-		tell which is which. I always remove sequences to their own vector in
-		order to reduce clutter in my objects and dataframes, but it does mean
-		you have to be careful not to rename the taxa in the phyloseq object or
-		you will not be able to reconnect them to their sequences
-	* generated by [02_make_ps_full.R](./scripts/02_make_ps_full.R)
-
-	NOTE: THE NEGATIVE CONTROLS ARE NOT IN HERE BECAUSE THEY ARE NOT IN THE
-	MAPFILE! ASK LAURA TO PUT THEM IN THE MAPFILE!
-
-2. [seqs_full.Rdata](./cleaned/seqs_full.Rdata)
-	* An `Rdata` file that only contains the `seqs` object as above. It is the
-	same object, this just stops us from having to load the large phyloseq
-	object into R unless we actually need it.
-	* generated by [02_make_ps_full.R](./scripts/02_make_ps_full.R)
+1. `full` files:
+	* generated by [02_make_full.R](./scripts/02_make_full.R)
+	* [full_ps.Rdata](./cleaned/full_ps.Rdata)
+		* An `Rdata` file that contains two objects:
+			* `ps` is a phyloseq object with all the non-discard samples and all
+			non-host ASVs. It has not been clustered or filtered except to
+			remove host.
+			* for now, samples with duplicate IDs are removed from this dataset,
+			but the goal is to deal with all the duplicate IDs that have come
+			from the IMAGINE metadata so that these contain all the samples in
+			the [data/](./data/) files.
+			* `seqs` is a named vector of DNA sequences that correspond to the 
+			taxa in the phyloseq object. They are named the same as the taxa so
+			you can tell which is which. I always remove sequences to their own
+			vector in order to reduce clutter in my objects and dataframes, but
+			it does mean you have to be careful not to rename the taxa in the
+			phyloseq object or you will not be able to reconnect them to their
+			sequences
+	* [full_seqs.Rdata](./cleaned/full_seqs.Rdata)
+		* the same `seqs` vector as above, but packaged separately so you don't
+		have to load the whole phyloseq object if all you need is the sequences.
+	* [full_mats.Rdata](./cleaned/full_mats.Rdata)
+		* The same data as in `full_ps`, but in two matrices: `full_asvtab` and
+		`full_taxtab`, and one data frame: `full_maptab`. The tax and asv tables
+		have sequences as their rownames.
+	* [full_df.Rdata](./cleaned/full_df.Rdata)
+		* The same data as in `full_ps`, but in a long, merged, dataframe
+		produced by `psmelt()`.  Sequences have their own column in the
+		dataframe and the OTU column in the dataframe carries the taxon IDs used
+		by the phyloseq object in `full_ps`.
 
 ### Scripts
 
-I have written several scripts to perform various data cleaning functions. One
-of them should be run interactively, but the rest can be run via a Make file or
-similar.
+I have written several scripts to perform various data cleaning functions. The
+first one should be run interactively, but the rest can be run via a Make file
+or similar.
 
 0. [00_manual_qc__steps.Rmd](./scripts/00_manual_qc_steps.Rmd)
 	* This should always be done interactively, using something like RStudio, so
@@ -242,7 +254,7 @@ similar.
 	100% identity, not the heuristic assignment algorithm.
 	* This should be run under `sbatch`. The script to do that is in
 	[sbatch/01_run.sh](./sbatch/01_run.sh).
-2. [02_make_ps_full.R](./scripts/02_make_ps_full.R)
+2. [02_make_full.R](./scripts/02_make_ps_full.R)
 	* This takes all three files in [data/](./data/) as input and produces a
 	phyloseq object and corresponding named vector of sequences in an RData file
 	as output. This script removes host ASVs and any samples that have duplicate

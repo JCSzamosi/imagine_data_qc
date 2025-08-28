@@ -14,7 +14,7 @@ load('intermed/clst.Rdata')
 
 ### Set up for parallelization
 cat('\nSetting up for parallel processing.\n')
-ncores = Sys.getenv('SLURM_CPUS_PER_TASK')
+ncores = 10
 registerDoParallel(cores = ncores)
 
 ### Actually get the consensus sequences

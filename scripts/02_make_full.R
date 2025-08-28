@@ -133,7 +133,7 @@ save(seqs, file = file.path(outdir, 'full_seqs.Rdata'))
 
 # Create the long dataframe ###
 
-df_full = psmelt(ps_full)
+df_full = speedyseq::psmelt(ps_full)
 df_full$seqs = seqs[df_full$OTU]
 
 cat('\nWriting the long data frame\n')

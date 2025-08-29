@@ -5,7 +5,7 @@ source('./scripts/functions.R')
 
 # Define I/O Variables ####
 outdir = 'intermed'
-clstrds = 'clstab99.rds'
+clstcsv = 'clstab99.csv'
 
 # Load the input data ####
 
@@ -35,15 +35,28 @@ if (!chck_cl_in_ps){
 # Join the tables together ####
 
 cat('\nJoin the inputs into one table\n')
-rownames(clsts) = clsts$seqs
-full_mat = cbind(clsts[rownames(asv_full),]$cluster,asv_full)
-colnames(full_mat)[1] = 'cluster'
-uniqu_clsts = unique(full_mat[,1])
+
+full_df = (asv_full
+           %>% data.frame()
+           %>% rownames_to_column('seqs')
+           %>% left_join(clsts, by = 'seqs')
+           %>% select(cluster, everything())
+           %>% select(-seqs))
 
 cat('\nStart summing the taxa together within cluster\n')
 
+clsdf = (full_df
+         %>% group_by(cluster)
+         %>% summarize_all(sum))
+
 # Tidy up the output ####
-# Add the cluster consensus sequences as the rownames of the new table 
+# Add the cluster consensus sequences as the rownames of the new table
+
+clsdf = left_join(clsdf, conseq, by = 'cluster')
+clstab = (clsdf
+          %>% column_to_rownames('consensus')
+          %>% select(-cluster)
+          %>% as.matrix())
 
 cat('\nTidying up the output\n')
 if (!all(conseq$cluster == clstab[,'cluster'])){
@@ -53,4 +66,5 @@ if (!all(conseq$cluster == clstab[,'cluster'])){
 rownames(clstab) = conseq$consensus
 
 # Write the files
-write_rds(clstab, file = file.path(outdir,clstrds))
+write.csv(clstab, file = file.path(outdir,clstrds),
+          row.names = TRUE)

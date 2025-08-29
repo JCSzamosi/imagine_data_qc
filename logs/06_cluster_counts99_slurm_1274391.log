@@ -1,0 +1,3 @@
+module load r/4.5.0
+export R_LIBS=/home/szamosjc/R/x86_64-pc-linux-gnu-library/4.5/
+R CMD BATCH --no-save --no-restore ./scripts/cluster99/06_cluster_counts99.R

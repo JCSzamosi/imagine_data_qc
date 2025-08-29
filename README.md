@@ -213,6 +213,12 @@ below:
 		`full_taxtab`, and one data frame: `full_maptab`. The tax and asv tables
 		have sequences as their rownames.
 
+2. [asvs/](./cleaned/asvs/)
+	* files that are cleaned, filtered, and ready for analysis using unclustered
+	asvs.
+3. 
+
+
 ### Scripts
 
 I have written several scripts to perform various data cleaning functions. The
@@ -248,7 +254,7 @@ or similar.
 	because the dada2 authors are clear that species should only be assigned via
 	100% identity, not the heuristic assignment algorithm.
 	* This should be run under `sbatch`. The script to do that is in
-	[sbatch/01_run.sh](./sbatch/01_run.sh).
+	[sbatch/01_run_assign_tax_asvs.sh](./sbatch/01_run_assign_tax_asvs.sh).
 2. [02_make_full.R](./scripts/02_make_ps_full.R)
 	* This takes all three files in [data/](./data/) as input and produces a
 	phyloseq object and corresponding named vector of sequences in an RData file
@@ -261,17 +267,21 @@ or similar.
 		* seqs_full: named vector of sequences corresponding to ASVs
 	* This needs to be run under `sbatch` because it uses more RAM than Nibi
 	gives the login nodes. The script to do that is in
-	[sbatch/02_run.sh](./sbatch/02_run.sh).
-3. [03_make_clusters99.R](./scripts/03_make_clusters99.R)
+	[sbatch/02_run_make_full.sh](./sbatch/02_run_make_full.sh).
+
+#### cluster99
+
+3. [03_make_clusters99.R](./scripts/cluster99/03_make_clusters99.R)
 	* This takes just the sequence vector
-	([seqs_full.Rdata](./cleaned/seqs_full.Rdata)) and runs the 99% clustering
+	([full_seqs.Rdata](./cleaned/full_seqs.Rdata)) and runs the 99% clustering
 	on it. It returns a table of clusters that can then be used to create a new
 	OTU table. This step is separated out into its own script because it takes
 	forever and the next step can be error-prone.
-	* Produces the file [intermed/clst.Rdata](./intermed/clst.Rdata).
+	* Produces the file [intermed/clst99.Rdata](./intermed/clst99.Rdata).
 	* Can be run under sbatch, but does not have to be. The more cores you can
 	give it, the faster it runs, but it doesn't take much RAM. The script to run
-	it under sbatch is at [sbatch/03_run.sh](./sbatch/03_run.sh)
+	it under sbatch is at
+	[sbatch/cluster99/03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
 
 ## Processing Pipeline
 

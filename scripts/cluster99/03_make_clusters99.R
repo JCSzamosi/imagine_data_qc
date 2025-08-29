@@ -1,7 +1,7 @@
 library(DECIPHER)
 
 outdir = 'intermed'
-load('cleaned/seqs_full.Rdata')
+load('cleaned/full_seqs.Rdata')
 
 # Cluster sequences using UPGMA method (splits the difference between
 # "complete" and "single" method with a maximum between-cluster difference of
@@ -19,4 +19,4 @@ clsts$seqs = seqs[rownames(clsts)]
 if (!dir.exists(outdir)){
 	dir.create(outdir)
 }
-save('clsts', file = file.path(outdir, 'clst.Rdata'))
+save('clsts', file = file.path(outdir, 'clst99.Rdata'))

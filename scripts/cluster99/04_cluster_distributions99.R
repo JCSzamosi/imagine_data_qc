@@ -1,13 +1,13 @@
 ## Setup
 
 library(tidyverse)
-outdir = 'intermed'
-sizetab_f = 'cluster_size_distribution.csv'
-sizeplt_f = 'cluster_size_distribution.png'
+outdir = 'stats'
+sizetab_f = 'cluster_size_distribution99.csv'
+sizeplt_f = 'cluster_size_distribution99.png'
 
 ### Import Data
 
-load('intermed/clst.Rdata')
+load('intermed/clst99.Rdata')
 
 ### Look at the clusters
 
@@ -30,7 +30,8 @@ size_tab = (clsts
 cat(sprintf('\nThe largest cluster has %s ASVs',
             format(max(size_tab$size), big.mark = ',')))
 
-cat(sprintf('\nThe smallest cluster size is %i, and there are %s clusters of that size.\n',
+cat(sprintf(paste('\nThe smallest cluster size is %i, and there are %s',
+					'clusters of that size.\n'),
             min(size_tab$size),
             format(size_tab$count[which.min(size_tab$size)],
                      big.mark = ',')))

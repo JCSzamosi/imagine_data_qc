@@ -10,7 +10,7 @@ conseq_f = 'conseqs99.csv'
 
 ### Import Data ####
 cat('\nLoading cluster set.\n')
-load('intermed/clst.Rdata')
+load('intermed/clst99.Rdata')
 
 ### Set up for parallelization
 cat('\nSetting up for parallel processing.\n')

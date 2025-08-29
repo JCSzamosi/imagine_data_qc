@@ -18,6 +18,7 @@ get_conseq_par = function(df, clust){
 }
 
 sum_asv_clusters = function(mat, clust){
+	cat(sprintf('\nCluster: %s\n', as.character(clust)))
     if (length(which(mat[,1] == clust)) == 1){
         mat = mat[which(mat[,1] == clust),]
         return(mat)

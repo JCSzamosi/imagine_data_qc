@@ -43,7 +43,7 @@ uniqu_clsts = unique(full_mat[,1])
 # Run the addition in parallel ####
 
 cat('\nSet up the parallelization\n')
-ncores = Sys.getenv('SLURM_CPUS_PER_TASK')
+ncores = 10
 
 cat('\nStart summing the taxa together within cluster\n')
 clstab = foreach(clust = uniqu_clsts, .combine = rbind) %dopar% {

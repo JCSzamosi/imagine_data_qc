@@ -1,6 +1,6 @@
 # Load Packages ####
 
-library(doParallel)
+library(tidyverse)
 source('./scripts/functions.R')
 
 # Define I/O Variables ####
@@ -40,21 +40,13 @@ full_mat = cbind(clsts[rownames(asv_full),]$cluster,asv_full)
 colnames(full_mat)[1] = 'cluster'
 uniqu_clsts = unique(full_mat[,1])
 
-# Run the addition in parallel ####
-
-cat('\nSet up the parallelization\n')
-ncores = 10
-
 cat('\nStart summing the taxa together within cluster\n')
-clstab = foreach(clust = uniqu_clsts, .combine = rbind) %dopar% {
-    sum_asv_clusters(full_mat, clust)
-}
 
 # Tidy up the output ####
 # Add the cluster consensus sequences as the rownames of the new table 
 
 cat('\nTidying up the output\n')
-if (!all(conseq$cluster == clstab$cluster)){
+if (!all(conseq$cluster == clstab[,'cluster'])){
     msg = 'the clusters are wrong or out of order'
     stop(msg)
 }

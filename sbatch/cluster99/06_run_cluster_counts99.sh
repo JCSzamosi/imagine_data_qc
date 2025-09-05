@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=150G
+#SBATCH --mem=60G
 #SBATCH --output=logs/%x_slurm_%j.log
 #SBATCH --error=logs/%x_slurm_%j.log
 #SBATCH --job-name=06_cluster_counts99

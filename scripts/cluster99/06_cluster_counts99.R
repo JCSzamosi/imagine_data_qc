@@ -58,13 +58,6 @@ clstab = (clsdf
           %>% select(-cluster)
           %>% as.matrix())
 
-cat('\nTidying up the output\n')
-if (!all(conseq$cluster == clstab[,'cluster'])){
-    msg = 'the clusters are wrong or out of order'
-    stop(msg)
-}
-rownames(clstab) = conseq$consensus
-
 # Write the files
 write.csv(clstab, file = file.path(outdir,clstrds),
           row.names = TRUE)

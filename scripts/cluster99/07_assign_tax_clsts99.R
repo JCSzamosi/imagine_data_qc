@@ -1,6 +1,7 @@
 # Load Packages ####
 
 library(dada2)
+library(dplyr)
 
 # Set I/O Variables ####
 
@@ -27,6 +28,10 @@ cat('\nStart assigning taxonomy\n')
 taxtab = assignTaxonomy(seqs,
                         refFasta = 'refs/silva_nr99_v138_train_set.fa',
                         tryRC = TRUE, multithread = 40, verbose = TRUE)
+taxtab = (taxtab
+          %>% data.frame()
+          %>% mutate(seqs = rownames(.))
+          %>% full_join(conseq, by = c('seqs' = 'consensus')))
 
 outp = file.path(outd, outf)
 cat('\nWrite tax table')

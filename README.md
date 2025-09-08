@@ -178,6 +178,21 @@ which very minimal cleaning has been done.
 
 Files that are probably not going to be used directly in analysis, but are
 required to produce the cleaned data files.
+
+1. [clst99.Rdata](./intermed/clst99.Rdata)
+    * The cluster table created by
+    [03_make_clusters99.R](./scripts/cluster99/03_make_clusters99.R).
+    * used as input by
+        * [04_cluster_distributions99.R](./scripts/cluster99/04_cluster_distributions99.R)
+        * [05_get_conseq99.R](./scripts/cluster99/05_get_conseq99.R)
+        * [06_cluster_counts99.R](./scripts/cluster99/06_cluster_counts99.R)
+2. [conseqs99.csv](./intermed/conseqs99.csv)
+    * A csv table of the consensus sequences for each cluster, along with the
+    cluster ID, created by
+    [05_get_conseq99.R](./scripts/cluster99/05_get_conseq99.R).
+    * used as input by
+        * [06_cluster_counts99.R](./scripts/cluster99/06_cluster_counts99.R)
+        * [07_assign_tax_clsts99.r](./scripts/cluster99/07_assign_tax_clsts99.R)
 	
 ### Cleaned
 

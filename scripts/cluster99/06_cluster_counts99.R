@@ -59,5 +59,5 @@ clstab = (clsdf
           %>% as.matrix())
 
 # Write the files
-write.csv(clstab, file = file.path(outdir,clstrds),
+write.csv(clstab, file = file.path(outdir,clstcsv),
           row.names = TRUE)

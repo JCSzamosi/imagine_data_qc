@@ -7,7 +7,7 @@ library(dplyr)
 
 indir = 'intermed'
 conseqf = 'conseqs99.csv'
-outdir = 'cleaned'
+outdir = 'intermed'
 outf = 'clstaxtab99.csv'
 
 # Read in the data ####

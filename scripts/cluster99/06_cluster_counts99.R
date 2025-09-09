@@ -52,12 +52,18 @@ clsdf = (full_df
 # Tidy up the output ####
 # Add the cluster consensus sequences as the rownames of the new table
 
+cat('\nFinish summing taxa. Cleaning up data table.\n')
+
 clsdf = left_join(clsdf, conseq, by = 'cluster')
 clstab = (clsdf
           %>% column_to_rownames('consensus')
           %>% select(-cluster)
           %>% as.matrix())
 
+cat('\nWriting output file.\n')
+
 # Write the files
 write.csv(clstab, file = file.path(outdir,clstcsv),
           row.names = TRUE)
+
+cat('\nDONE\n')

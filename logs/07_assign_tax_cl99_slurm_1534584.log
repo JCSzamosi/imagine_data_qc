@@ -1,0 +1,22 @@
+module load r/4.5.0
+Rscript ./scripts/cluster99/07_assign_tax_clsts99.R
+Loading required package: Rcpp
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Read in the consensus sequences
+
+Check sequences
+
+Start assigning taxonomy
+Finished processing reference fasta.Error: object 'outd' not found
+Execution halted

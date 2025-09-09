@@ -1,62 +1,95 @@
+# Load Packages ####
+
 library(phyloseq)
 library(tidyverse)
 library(AfterSl1p)
 
-cat('\nRead in the data\n')
+# Define I/O Variables ####
 
-indir = 'intermed'
+## input
+
+intdir = 'intermed'
 datdir = 'data'
 cldir = 'cleaned'
 full = 'full'
 cl99 = 'cluster99'
-clstabf = 'clstab99.csv'
-taxtabf = 'clstaxtab99.csv'
+otufile = 'clstab99.csv'
+taxfile = 'clstaxtab99.csv'
 mapfile = 'full_map.csv'
+
+## output
+
 outdir = file.path(cldir, cl99, full)
 outmat = 'full99_mat.Rdata'
-asvcsv = 'full99_asv.csv'
+otucsv = 'full99_otu.csv'
 taxcsv = 'full99_tax.csv'
 mapcsv = 'full99_map.csv'
 outdf = 'full99_df.Rdata'
 outps = 'full99_ps.Rdata'
 
-taxfile = 'data/merged_taxtab.rds'
-asvfile = 'data/merged_seqtab.rds'
-mapfile = 'data/merged_maptab.rds'
+# Import & Check Data ####
 
-clstab = read.csv(file.path(indir, clstabf), row.names = 1)
+cat('\nRead in the tax table\n')
 taxtab = read.csv(file.path(indir, taxtabf), row.names = 1)
-maptab = read.csv(file.path(cldir, full, mapfile), row.names = 1)
+
+cat('\nRead in the otu table\n')
+otutab = read.csv(file.path(indir, otufile), row.names = 1)
 
 cat('\nCheck the sequences\n')
 taxtab = (taxtab
 			%>% column_to_rownames('seqs')
 			%>% select(-cluster))
-if (nrow(taxtab) != nrow(clstab)){
+if (nrow(taxtab) != nrow(otutab)){
 	msg = 'Counts table and tax table have different numbers of taxa'
 	stop(msg)
-} else if (!all(rownames(taxtab) %in% rownames(clstab))){
+} else if (!all(rownames(taxtab) %in% rownames(otutab))){
 	msg = 'The tax and counts tables do not have the same sequences'
 	stop(msg)
 }
 
-if (nrow(maptab) != ncol(clstab)){
+## Read in the mapfile
+maptab = read.csv(file.path(cldir, full, mapfile), row.names = 1)
+
+## Check that the sample IDs match the otu table
+cat('\nCheck the sample IDs\n')
+if (nrow(maptab) != ncol(otutab)){
 	msg = 'Counts table and map file have different numbers of samples'
 	stop(msg)
-} else if (!all(rownames(maptab) %in% colnames(clstab))){
+} else if (!all(rownames(maptab) %in% colnames(otutab))){
 	msg = 'The count and map tables do not have the same sample IDs'
 	stop(msg)
 }
 
 cat('\nReorder the tax table to match the otu table\n')
-taxtab = taxtab[rownames(clstab),]
-otu_seqs = rownames(taxtab)
-rownames(taxtab) = rownames(clstab) = NULL
 
-ps99_full = phyloseq(otu_table(as.matrix(clstab), taxa_are_rows = TRUE),
-				tax_table(as.matrix(taxtab)),
+taxtab = taxtab[rownames(otutab),]
+otu_seqs = rownames(taxtab)
+rownames(taxtab) = rownames(otutab) = NULL
+
+## Make matrices
+otutab = as.matrix(otutab)
+taxtab = as.matrix(taxtab)
+
+
+ps99_full = phyloseq(otu_table(otutab, taxa_are_rows = TRUE),
+				tax_table(taxtab),
 				sample_data(maptab))
+
+## Name the sequence data
 names(otu_seqs) = taxa_names(ps99_full)
+
+## Check the phyloseq object
+
+cat(sprintf('\nThe original OTU table had %i samples and %i OTUs\n', 
+			ncol(otutab), nrow(otutab)))
+
+cat(sprintf('\nThe original map table had %i rows after removing duplicates.\n',
+			nrow(maptab)))
+
+cat(sprintf(paste('\nThe phyloseq object has %i samples and %i taxa',
+					'before removing host\n'), 
+			nsamples(ps99_full), ntaxa(ps99_full)))
+
 
 ## Remove host sequences
 cat('\nPropagating taxon IDs down the levels\n')
@@ -69,11 +102,12 @@ ps99_full = subset_taxa(ps99_full,
                             Order != 'Chloroplast')
 otu_seqs = otu_seqs[taxa_names(ps99_full)]
 
+## Write the phyloseq object
+
 cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
 	dir.create(outdir)
 }
-
 save(list = c('ps99_full', 'otu_seqs'), file = file.path(outdir, outps))
 save(otu_seqs, file = file.path(outdir, 'full99_seqs.Rdata'))
 

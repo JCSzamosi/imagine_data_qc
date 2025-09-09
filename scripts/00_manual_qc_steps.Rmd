@@ -11,7 +11,7 @@ library(tidyverse)
 Reading in the IMAGINE metadata sheet I received from Jehane on 2025-08-18
 
 ```{r}
-# list.files('input/')
+list.files('input/')
 img_meta = read.csv(file = 'input/active_IMAGINE_metadata_wide.csv', 
                     strip.white = TRUE)
 head(img_meta)
@@ -171,8 +171,8 @@ in the IMAGINE datasheet that are absent from the Surette sample info sheet.
 data.frame(meta_only)
 ```
 
-Most of these are from sites 21 and 25, and one is from site 30. I will email
-Aida about this.
+Most of these are from sites 21 and 25, and one is from site 30. have emailed
+Aida about this and am waiting to hear back.
 
 ```{r}
 write.csv(meta_only, 
@@ -204,7 +204,7 @@ samp_only = (samp_only
 samp_only
 ```
 
-I will email Aida about these.
+I have emailed Aida about these and am waiting to hear back.
 
 ```{r}
 write.csv(samp_only, 
@@ -447,5 +447,24 @@ dim(maptab)
 ```{r}
 write_rds(maptab, file = 'data/merged_maptab.rds')
 write_rds(asvtab_fixed, file = 'data/merged_seqtab.rds')
+```
+
+Start tracking sample/taxon counts
+
+```{r}
+dim(asvtab)
+dim(maptab)
+
+stat_df = data.frame(Step = '00_manual_qc_steps.Rmd',
+                     Samples = c(13622, 12856),
+                     Taxa = c(NA, 101619),
+                     File = c('data/merged_maptab.rds', 
+                              'data/merged_seqtab.rds'))
+
+if (!dir.exists('stats')){
+    dir.create('stats')
+}
+
+write.csv(stat_df, file = 'stats/track_counts.csv', row.names = FALSE)
 ```
 

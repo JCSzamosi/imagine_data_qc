@@ -1,9 +1,27 @@
+# Load packages
+
+library(phyloseq)
+
+# Set Up I/O Variables
+
+cld = 'cleaned'
+clst = 'cluster99'
+full = 'full'
+samf = 'samfilt'
+indir = file.path(cld, clst, full)
+outdir = file.path(cld, clst, samf)
+
+inf = 'full99_ps.Rdata'
+outf = 'samfilt99_ps.Rdata'
+outseq = 'otu99_seqs_samfilt.Rdata'
+
+load(file.path(indir, inf))
 
 cat('\nThe distribution of read depths is:\n')
-print(summary(sample_sums(ps99)))
+print(summary(sample_sums(ps99_full)))
 
 cat('\nThe properties of the phyloseq object are:\n')
-print(ps99)
+print(ps99_full)
 
 cat('\nRemoving negative controls\n')
 ps99_samfilt = subset_samples(ps99, startsWith(as.character(Study.ID), 'IMG'))
@@ -27,9 +45,10 @@ cat(paste('\nRemoved 0-count taxa. ', as.character(nt_1), ' out of ',
 			as.character(nt), ' taxa remaining, or ',
 			as.character(round(nt_1/nt, 4) * 100), '%.\n',
 			sep = ''))
-seqs_samfilt = seqs[taxa_names(ps99_samfilt)]
+otu_seqs_samfilt = otu_seqs[taxa_names(ps99_samfilt)]
 
 cat('\nWriting files.\n')
 
-save(ps99_samfilt, file = 'cleaned/ps99_samfilt.Rdata')
-save(seqs_samfilt, file = 'cleaned/seqs_samfilt.Rdata')
+save(list = c('ps99_samfilt', 'otu_seqs_samfilt'), 
+	file = file.path(outdir, outf))
+save(otu_seqs_samfilt, file = file.path(outdir, outseq))

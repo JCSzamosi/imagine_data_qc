@@ -1,6 +1,21 @@
+# Load packages
+
 library(phyloseq)
 
-load('cleaned/ps_full.Rdata')
+# Set Up I/O Variables
+
+cld = 'cleaned'
+asvs = 'asvs'
+full = 'full'
+samf = 'samfilt'
+indir = file.path(cld, asvs, full)
+outdir = file.path(cld, asvs, samf)
+
+inf = 'full_ps.Rdata'
+outf = 'samfilt_ps.Rdata'
+outseq = 'seqs_samfilt.Rdata'
+
+load(file.path(indir, inf)
 
 cat('\nThe distribution of read depths is:\n')
 print(summary(sample_sums(ps)))
@@ -34,5 +49,6 @@ seqs_samfilt = seqs[taxa_names(ps_samfilt)]
 
 cat('\nWriting files.\n')
 
-save(ps_samfilt, file = 'cleaned/ps_samfilt.Rdata')
-save(seqs_samfilt, file = 'cleaned/seqs_samfilt.Rdata')
+save(list = c('ps_samfilt', 'seqs_samfilt'), 
+	file = file.path(outdir, outf))
+save(seqs_samfilt, file = file.path(outdir, outseq))

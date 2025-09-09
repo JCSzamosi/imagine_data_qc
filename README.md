@@ -1,4 +1,4 @@
-IMAGINE Project Data Curation
+MAGINE Project Data Curation
 =============================
 
 **PLEASE DON'T TOUCH THIS REPOSITORY YET**
@@ -193,6 +193,10 @@ required to produce the cleaned data files.
     * used as input by
         * [06_cluster_counts99.R](./scripts/cluster99/06_cluster_counts99.R)
         * [07_assign_tax_clsts99.r](./scripts/cluster99/07_assign_tax_clsts99.R)
+3. [clstaxtab99.csv](./intermed/clstaxtab99.csv)
+    * A csv table of taxon assignments, without host removed, for the 99%
+    clustered data. Created by
+    [07_assign_tax_clsts99.R](./scripts/cluster99/07_assign_tax_clsts99.R).
 	
 ### Cleaned
 
@@ -231,7 +235,9 @@ below:
 2. [asvs/](./cleaned/asvs/)
 	* files that are cleaned, filtered, and ready for analysis using unclustered
 	asvs.
-3. 
+3. [cluster99/](./cleaned/cluster99/)
+    * files that are cleaned, filtered, and redy for analysis using taxa
+    clustered at the 99% similarity level.
 
 
 ### Scripts
@@ -297,6 +303,34 @@ or similar.
 	give it, the faster it runs, but it doesn't take much RAM. The script to run
 	it under sbatch is at
 	[sbatch/cluster99/03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
+4. [04_cluster_distributions99.R](./scripts/cluster99/04_cluster_distributions99.R)
+    * This creates a csv of the counts of clusters of various sizes, as well as
+    a plot, for QC of clustering.
+    * Creates two files:
+        * [stats/cluster_size_distribution99.csv](./stats/cluster_size_distribution99.csv)
+        * [stats/cluster_size_distribution99.png)(./stats/cluster_size_distribtuion99.png)
+    * Doesn't need to be run under sbatch. Currently no script to do so.
+    Consider merging it with 03 above.
+5. [05_get_conseq99.R](./scripts/cluster99/05_get_conseq99.R)
+    * Gets the consensus sequences from the sequences. Not currently run under
+    sbatch because I can't get doParallel working correctly. Need to fix that
+    before this can be easily run
+    * Creates [intermed/conseqs99.csv](./conseqs99.csv)
+6. [06_cluster_counts99.R](./scripts/cluster99/06_cluster_counts99.R)
+    * Adds up the counts within a cluster within sample to make a cluster count
+    table
+    * Creates [intermed/clstab99.csv](./intermed/clstab99.csv)
+    * Is not (currently) parallelized but doesn't take super long. Needs to be
+    run under sbatch because it uses a stupid amount of RAM. The script to do
+    that is in
+    [sbatch/cluster99/06_run_cluster_counts99.sh](./sbatch/cluster99/run_cluster_counts99.sh)
+7. [07_assign_tax_clsts99.sh](./scripts/cluster99/07_assign_tax_clsts99.sh)
+    * Assigns taxonomy to the consensus sequences of the clusters.
+    * Uses enough RAM that it needs to be run under sbatch. The script to do
+    that is in
+      [sbatch/cluster99/07_run_assign_tax_99.sh](./sbatch/cluster99/07_run_assign_tax_99.sh).
+    * Creates [intermed/clstaxtab99.csv](./intermed/clstaxtab99.csv).
+
 
 ## Processing Pipeline
 

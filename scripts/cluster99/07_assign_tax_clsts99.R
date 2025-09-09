@@ -7,7 +7,6 @@ library(dplyr)
 
 indir = 'intermed'
 conseqf = 'conseqs99.csv'
-outdir = 'intermed'
 outf = 'clstaxtab99.csv'
 
 # Read in the data ####
@@ -33,6 +32,7 @@ taxtab = (taxtab
           %>% mutate(seqs = rownames(.))
           %>% full_join(conseq, by = c('seqs' = 'consensus')))
 
-outp = file.path(outd, outf)
+outp = file.path(indir, outf)
+write.csv(taxtab, outp)
 cat('\nWrite tax table')
 cat('\nDone\n')

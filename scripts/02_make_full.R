@@ -6,8 +6,11 @@ library(AfterSl1p)
 
 # Define I/O Variables ####
 
-outdir = 'cleaned'
+outdir = 'cleaned/full'
 outmat = 'full_mat.Rdata'
+asvcsv = 'full_asv.csv'
+taxcsv = 'full_tax.csv'
+mapcsv = 'full_map.csv'
 outdf = 'full_df.Rdata'
 outps = 'full_ps.Rdata'
 
@@ -144,5 +147,8 @@ map_full = data.frame(sample_data(ps_full))
 cat('\nWriting the individual tables\n')
 save(list = c('asv_full', 'tax_full', 'map_full'), 
      file = file.path(outdir, outmat))
+write.csv(asv_full, file = file.path(outdir, asvcsv), row.names = TRUE)
+write.csv(tax_full, file = file.path(outdir, taxcsv), row.names = TRUE)
+write.csv(map_full, file = file.path(outdir, mapcsv), row.names = TRUE)
 
 cat('\nDONE\n')

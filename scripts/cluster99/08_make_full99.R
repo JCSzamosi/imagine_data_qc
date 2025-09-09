@@ -11,8 +11,9 @@ library(AfterSl1p)
 intdir = 'intermed'
 datdir = 'data'
 cldir = 'cleaned'
-full = 'full'
+asvs = 'asvs'
 cl99 = 'cluster99'
+full = 'full'
 otufile = 'clstab99.csv'
 taxfile = 'clstaxtab99.csv'
 mapfile = 'full_map.csv'
@@ -30,10 +31,10 @@ outps = 'full99_ps.Rdata'
 # Import & Check Data ####
 
 cat('\nRead in the tax table\n')
-taxtab = read.csv(file.path(indir, taxtabf), row.names = 1)
+taxtab = read.csv(file.path(intdir, taxfile), row.names = 1)
 
 cat('\nRead in the otu table\n')
-otutab = read.csv(file.path(indir, otufile), row.names = 1)
+otutab = read.csv(file.path(intdir, otufile), row.names = 1)
 
 cat('\nCheck the sequences\n')
 taxtab = (taxtab
@@ -48,7 +49,7 @@ if (nrow(taxtab) != nrow(otutab)){
 }
 
 ## Read in the mapfile
-maptab = read.csv(file.path(cldir, full, mapfile), row.names = 1)
+maptab = read.csv(file.path(cldir, asvs, full, mapfile), row.names = 1)
 
 ## Check that the sample IDs match the otu table
 cat('\nCheck the sample IDs\n')

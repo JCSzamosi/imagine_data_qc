@@ -4,15 +4,26 @@ library(tidyverse)
 source('./scripts/functions.R')
 
 # Define I/O Variables ####
-outdir = 'intermed'
+
+intdir = 'intermed'
+cldir = 'cleaned'
+full = 'full'
+clstf = 'clst99.Rdata'
 clstcsv = 'clstab99.csv'
+consf = 'conseqs99.csv'
+matf = 'full_mat.Rdata'
+
+clstfile = file.path(intdir, clstf)
+outf = file.path(intdir, clscsv)
+consfile = file.path(intdir, consf)
+matfile = file.path(cldir, full, matf)
 
 # Load the input data ####
 
 cat('\nRead in the data\n')
-load('intermed/clst99.Rdata')
-load('cleaned/full_mat.Rdata')
-conseq = read.csv('intermed/conseqs99.csv', row.names = 1)
+load(clstfile)
+load(matfile)
+conseq = read.csv(consfile, row.names = 1)
 
 # Check the data ####
 
@@ -63,7 +74,6 @@ clstab = (clsdf
 cat('\nWriting output file.\n')
 
 # Write the files
-write.csv(clstab, file = file.path(outdir,clstcsv),
-          row.names = TRUE)
+write.csv(clstab, file = outf, row.names = TRUE)
 
 cat('\nDONE\n')

@@ -27,6 +27,7 @@ taxcsv = 'full99_tax.csv'
 mapcsv = 'full99_map.csv'
 outdf = 'full99_df.Rdata'
 outps = 'full99_ps.Rdata'
+outseq = 'full99_seqs.Rdata'
 
 # Import & Check Data ####
 
@@ -125,6 +126,7 @@ map99_full = data.frame(sample_data(ps99_full))
 cat('\nWriting the individual tables\n')
 save(list = c('otu99_full', 'tax99_full', 'map99_full'), 
      file = file.path(outdir, outmat))
+save(otu_seqs, file = file.path(outdir, outseq))
 write.csv(otu99_full, file = file.path(outdir, otucsv), row.names = TRUE)
 write.csv(tax99_full, file = file.path(outdir, taxcsv), row.names = TRUE)
 write.csv(map99_full, file = file.path(outdir, mapcsv), row.names = TRUE)

@@ -24,7 +24,8 @@ cat('\nThe properties of the phyloseq object are:\n')
 print(ps99_full)
 
 cat('\nRemoving negative controls\n')
-ps99_samfilt = subset_samples(ps99, startsWith(as.character(Study.ID), 'IMG'))
+ps99_samfilt = subset_samples(ps99_full, 
+						startsWith(as.character(Study.ID), 'IMG'))
 ns = nsamples(ps99_samfilt)
 cat(paste('\nRemoved negative controls. ', as.character(ns),
 			' samples remaining.\n', sep = ''))
@@ -49,6 +50,9 @@ otu_seqs_samfilt = otu_seqs[taxa_names(ps99_samfilt)]
 
 cat('\nWriting files.\n')
 
+if (!dir.exists(outdir)){
+	dir.create(outdir)
+}
 save(list = c('ps99_samfilt', 'otu_seqs_samfilt'), 
 	file = file.path(outdir, outf))
 save(otu_seqs_samfilt, file = file.path(outdir, outseq))

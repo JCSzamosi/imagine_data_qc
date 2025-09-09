@@ -1,16 +1,20 @@
-## Setup ####
+# Load Required Packages
 
 library(dada2)
 library(tidyverse)
 library(DECIPHER)
 library(doParallel)
 source('./scripts/functions.R')
-outdir = 'intermed'
+
+# Set up I/O Variables
+indir = 'intermed'
+clsf = 'clst99.Rdata'
+inf = file.path(indir, clsf)
 conseq_f = 'conseqs99.csv'
 
 ### Import Data ####
 cat('\nLoading cluster set.\n')
-load('intermed/clst99.Rdata')
+load(inf)
 
 ### Set up for parallelization
 cat('\nSetting up for parallel processing.\n')
@@ -24,7 +28,7 @@ conseq = foreach(clust = unique(clsts$cluster), .combine = rbind) %dopar% {
 }
 
 ### Write the consensus sequences to a file
-conseq_path = file.path(outdir, conseq_f)
+conseq_path = file.path(indir, conseq_f)
 cat(sprintf('\nWriting the consensus sequence file to %s.\n',
             conseq_path))
 write.csv(conseq, file = conseq_path, row.names = TRUE)

@@ -11,12 +11,16 @@ outmat = 'full_mat.Rdata'
 asvcsv = 'full_asv.csv'
 taxcsv = 'full_tax.csv'
 mapcsv = 'full_map.csv'
-outdf = 'full_df.Rdata'
 outps = 'full_ps.Rdata'
+seqf = 'full_seqs.Rdata'
+datdir = 'data'
+taxf = 'merged_taxtab.rds'
+asvf = 'merged_seqtab.rds'
+mapf = 'merged_maptab.rds'
 
-taxfile = 'data/merged_taxtab.rds'
-asvfile = 'data/merged_seqtab.rds'
-mapfile = 'data/merged_maptab.rds'
+taxfile = file.path(datdir, taxf)
+asvfile = file.path(datdir, asvf)
+mapfile = file.path(datdir, mapf)
 
 # Import & Check Data ####
 
@@ -132,7 +136,7 @@ if (!dir.exists(outdir)){
 	dir.create(outdir)
 }
 save(list = c('ps_full', 'seqs'), file = file.path(outdir, outps))
-save(seqs, file = file.path(outdir, 'full_seqs.Rdata'))
+save(seqs, file = file.path(outdir, outseq))
 
 # Create the individual matrices/data frames ###
 

@@ -1,7 +1,15 @@
+# Load packages
+
 library(DECIPHER)
 
+# Define I/O variables
+
 outdir = 'intermed'
-load('cleaned/full_seqs.Rdata')
+indir = 'cleaned'
+inseq = 'full_seqs.Rdata')
+inf = file.path(indir, inseq)
+
+load(inf)
 
 # Cluster sequences using UPGMA method (splits the difference between
 # "complete" and "single" method with a maximum between-cluster difference of

@@ -1,13 +1,19 @@
-## Setup
+# Load Packages
 
 library(tidyverse)
+
+# Set up I/O Variables
+
+indir = 'intermed'
+clsf = 'clst99.Rdata'
+inf = file.path(indir, clsf)
 outdir = 'stats'
 sizetab_f = 'cluster_size_distribution99.csv'
 sizeplt_f = 'cluster_size_distribution99.png'
 
 ### Import Data
 
-load('intermed/clst99.Rdata')
+load(inf)
 
 ### Look at the clusters
 

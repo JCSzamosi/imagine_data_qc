@@ -10,7 +10,7 @@ inf = file.path(datdir, seqfile)
 refd = 'refs'
 refdb = 'silva_nr99_v138_train_set.fa'
 ref = file.path(refd, refdb)
-outf = 'merged_taxtab.rds')
+outf = 'merged_taxtab.rds'
 
 # Load data
 
@@ -33,8 +33,19 @@ taxtab = assignTaxonomy(seqs,
                         tryRC = TRUE, multithread = 40, verbose = TRUE)
 
 # Write the tax table
-
 outp = file.path(datdir, outf)
 cat('\nWrite tax table')
 write_rds(taxtab, file = outp)
+
+# Write the tracking stats
+
+cat('\nWrite tracking stats\n')
+
+stats_df = data.frame(Step = '01_assign_tax_asvs.R',
+					Samples = NA,
+					Taxa = nrow(taxtab),
+					File = outp)
+write.csv(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, row.names = FALSE, col.names = FALSE)
+
 cat('\nDone\n')

@@ -1,0 +1,5 @@
+module load r/4.5.0
+Rscript ./scripts/01_assign_tax_asvs.R
+Loading required package: Rcpp
+Error: unexpected ')' in "outf = 'merged_taxtab.rds')"
+Execution halted

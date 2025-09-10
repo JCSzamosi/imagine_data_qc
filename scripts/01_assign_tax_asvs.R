@@ -35,7 +35,7 @@ taxtab = assignTaxonomy(seqs,
 # Write the tax table
 outp = file.path(datdir, outf)
 cat('\nWrite tax table')
-write_rds(taxtab, file = outp)
+writeRDS(taxtab, file = outp)
 
 # Write the tracking stats
 

@@ -76,4 +76,23 @@ cat('\nWriting output file.\n')
 # Write the files
 write.csv(clstab, file = outf, row.names = TRUE)
 
+cat('\nWriting track stats\n')
+
+stats_df = data.frame(Step = 'asvs/02_make_full.R',
+						Samples = c(nsamples(ps_full),NA,
+									ncol(asv_full),
+									NA,
+									nrow(map_full)),
+						Taxa = c(ntaxa(ps_full),length(seqs),
+								nrow(asv_full),
+								nrow(tax_full),
+								NA),
+						File = c(wrps,wrseq,
+								wrasv,
+								wrtax,
+								wrmap))
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)
+cat('\nDONE\n')
 cat('\nDONE\n')

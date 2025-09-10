@@ -8,7 +8,7 @@ source('./scripts/functions.R')
 
 # Set up I/O Variables
 indir = 'intermed'
-clsf = 'clst99.Rdata'
+clsf = 'clsts99.Rdata'
 inf = file.path(indir, clsf)
 conseq_f = 'conseqs99.csv'
 
@@ -32,5 +32,16 @@ conseq_path = file.path(indir, conseq_f)
 cat(sprintf('\nWriting the consensus sequence file to %s.\n',
             conseq_path))
 write.csv(conseq, file = conseq_path, row.names = TRUE)
+
+cat('\nWriting stats tracking\n')
+
+stats_df = data.frame(Step = 'cluster99/05_get_conseq99.R',
+						Samples = NA,
+						Taxa = nrow(conseq),
+						File = conseq_path)
+
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)
 
 cat('\nDONE\n')

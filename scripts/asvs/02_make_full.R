@@ -6,7 +6,7 @@ library(AfterSl1p)
 
 # Define I/O Variables ####
 
-outdir = 'cleaned/full'
+outdir = 'cleaned/asvs/full'
 outmat = 'full_mat.Rdata'
 asvcsv = 'full_asv.csv'
 taxcsv = 'full_tax.csv'

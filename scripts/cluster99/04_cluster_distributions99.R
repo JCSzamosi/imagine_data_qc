@@ -5,7 +5,7 @@ library(tidyverse)
 # Set up I/O Variables
 
 indir = 'intermed'
-clsf = 'clst99.Rdata'
+clsf = 'clsts99.Rdata'
 inf = file.path(indir, clsf)
 outdir = 'stats'
 sizetab_f = 'cluster_size_distribution99.csv'

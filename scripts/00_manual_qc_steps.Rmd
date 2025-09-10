@@ -452,12 +452,12 @@ write_rds(asvtab_fixed, file = 'data/merged_seqtab.rds')
 Start tracking sample/taxon counts
 
 ```{r}
-dim(asvtab)
+dim(asvtab_fixed)
 dim(maptab)
 
 stat_df = data.frame(Step = '00_manual_qc_steps.Rmd',
-                     Samples = c(13622, 12856),
-                     Taxa = c(NA, 101619),
+                     Samples = c(13622, 12839),
+                     Taxa = c(NA, 101609),
                      File = c('data/merged_maptab.rds', 
                               'data/merged_seqtab.rds'))
 

@@ -14,6 +14,9 @@ outdir = file.path(cld, asvs, samf)
 inf = 'full_ps.Rdata'
 outf = 'samfilt_ps.Rdata'
 outseq = 'seqs_samfilt.Rdata'
+asvcsv = 'samfilt_asv.csv'
+taxcsv = 'samfilt_tax.csv'
+mapcsv = 'samfilt_map.csv'
 
 load(file.path(indir, inf)
 
@@ -47,8 +50,54 @@ cat(paste('\nRemoved 0-count taxa. ', as.character(nt_1), ' out of ',
 			sep = ''))
 seqs_samfilt = seqs[taxa_names(ps_samfilt)]
 
-cat('\nWriting files.\n')
+## Write the phyloseq object
 
-save(list = c('ps_samfilt', 'seqs_samfilt'), 
-	file = file.path(outdir, outf))
-save(seqs_samfilt, file = file.path(outdir, outseq))
+cat('\nWriting phyloseq object files\n')
+if (!dir.exists(outdir)){
+	dir.create(outdir)
+}
+
+wrps = file.path(outdir, outf)
+wrseq = file.path(outdir, outseq)
+save(list = c('ps_samfilt', 'seqs_samfilt'), file = wrps)
+save(seqs_samfilt, file = wrseq)
+
+# Create the individual matrices/data frames ###
+
+asv_samfilt = as.matrix(otu_table(ps_samfilt))
+rownames(asv_samfilt) = seqs_samfilt[rownames(asv_samfilt)]
+tax_samfilt = as.matrix(tax_table(ps_samfilt))
+rownames(tax_samfilt) = seqs_samfilt[rownames(tax_samfilt)]
+map_samfilt = data.frame(sample_data(ps_samfilt))
+
+## Write the individual tables
+
+cat('\nWriting the individual tables\n')
+wrmat = file.path(outdir, outmat)
+save(list = c('asv_samfilt', 'tax_samfilt', 'map_samfilt'), 
+     file = wrmat)
+
+wrasv = file.path(outdir, asvcsv)
+wrtax = file.path(outdir, taxcsv)
+wrmap = file.path(outdir, mapcsv)
+write.csv(asv_samfilt, file = wrasv, row.names = TRUE)
+write.csv(tax_samfilt, file = wrtax, row.names = TRUE)
+write.csv(map_samfilt, file = wrmap, row.names = TRUE)
+
+cat('\nWriting track stats\n')
+stats_df = data.frame(Step = 'asvs/02_make_full.R',
+						Samples = c(nsamples(ps_samfilt),NA,
+									ncols(asv_samfilt),
+									NA,
+									nrows(map_samfilt)),
+						Taxa = c(ntaxa(ps_samfilt),length(seqs_samfilt)
+								nrows(asv_samfilt),
+								nrows(tax_samfilt),
+								NA),
+						File = c(wrps,wrseq,
+								wrasv,
+								wrtax,
+								wrmap)
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)

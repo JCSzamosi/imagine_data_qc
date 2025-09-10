@@ -135,8 +135,11 @@ cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
 	dir.create(outdir)
 }
-save(list = c('ps_full', 'seqs'), file = file.path(outdir, outps))
-save(seqs, file = file.path(outdir, outseq))
+
+wrps = file.path(outdir, outps)
+wrseq = file.path(outdir, seqf)
+save(list = c('ps_full', 'seqs'), file = wrps)
+save(seqs, file = wrseq)
 
 # Create the individual matrices/data frames ###
 
@@ -149,10 +152,33 @@ map_full = data.frame(sample_data(ps_full))
 ## Write the individual tables
 
 cat('\nWriting the individual tables\n')
+wrmat = file.path(outdir, outmat)
 save(list = c('asv_full', 'tax_full', 'map_full'), 
-     file = file.path(outdir, outmat))
-write.csv(asv_full, file = file.path(outdir, asvcsv), row.names = TRUE)
-write.csv(tax_full, file = file.path(outdir, taxcsv), row.names = TRUE)
-write.csv(map_full, file = file.path(outdir, mapcsv), row.names = TRUE)
+     file = wrmat)
 
+wrasv = file.path(outdir, asvcsv)
+wrtax = file.path(outdir, taxcsv)
+wrmap = file.path(outdir, mapcsv)
+write.csv(asv_full, file = wrasv, row.names = TRUE)
+write.csv(tax_full, file = wrtax, row.names = TRUE)
+write.csv(map_full, file = wrmap, row.names = TRUE)
+
+cat('\nWriting track stats\n')
+
+stats_df = data.frame(Step = 'asvs/02_make_full.R',
+						Samples = c(nsamples(ps_full),NA,
+									ncol(asv_full),
+									NA,
+									nrow(map_full)),
+						Taxa = c(ntaxa(ps_full),length(seqs),
+								nrow(asv_full),
+								nrow(tax_full),
+								NA),
+						File = c(wrps,wrseq,
+								wrasv,
+								wrtax,
+								wrmap))
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)
 cat('\nDONE\n')

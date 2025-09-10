@@ -11,5 +11,5 @@
 echo module load r/4.5.0
 module load r/4.5.0
 
-echo Rscript ./scripts/02_make_full.R
-Rscript ./scripts/02_make_full.R
+echo Rscript ./scripts/asvs/02_make_full.R
+Rscript ./scripts/asvs/02_make_full.R

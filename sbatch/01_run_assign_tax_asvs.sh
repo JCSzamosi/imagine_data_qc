@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --cpus-per-task=30
-#SBATCH --mem=30G
+#SBATCH --mem=35G
 #SBATCH --output=logs/%x_slurm_%j.log
 #SBATCH --error=logs/%x_slurm_%j.log
 #SBATCH --job-name=01_assign_tax_asvs

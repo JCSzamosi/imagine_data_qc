@@ -1,0 +1,11 @@
+module load r/4.5.0
+Rscript ./scripts/01_assign_tax_asvs.R
+Loading required package: Rcpp
+
+Read in the asv table
+Check sequences
+Start assigning taxonomyFinished processing reference fasta.
+Write tax table
+Write tracking stats
+
+Done

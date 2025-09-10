@@ -1,7 +1,0 @@
-module load r/4.5.0
-Rscript ./scripts/01_assign_tax_asvs.R
-Loading required package: Rcpp
-
-Read in the asv table
-Check sequences
-Start assigning taxonomyslurmstepd: error: *** JOB 1074591 ON c85 CANCELLED AT 2025-08-22T12:44:14 ***

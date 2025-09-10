@@ -1,66 +1,36 @@
 IMAGINE Project Data Curation
 =============================
 
-**PLEASE DON'T TOUCH THIS REPOSITORY YET**
+This is a repository for running data QC steps on the IMAGINE 16S data. If all
+you want is to _use_ the cleaned data, you can access it via symlinks in the
+`cleaned` directory in the `16S` directory above this one, or you can copy the
+files to your own project directory directly.
 
-This is a repository for running data QC steps on the IMAGINE 16S data, but Jake
-is currently refactoring it and a lot of stuff in here either doesn't work, or
-doesn't work as expected. Please no touching right now.
+If you want to suggest changes to how the cleaning is done, your best option is
+to open an issue on the github repository's [issue
+tracker](https://github.com/JCSzamosi/imagine_data_qc/issues).
+
+If you want to write code to change how cleaning is done, please clone the
+[github repository](https://github.com/JCSzamosi/imagine_data_qc) and submit a
+pull request.
 
 ## Directory Overview
 
 ### Not tracked under Git
 
-* [input/](./input/) - **READ ONLY**
-    * raw input files received from Aida or Laura that need to be QC'ed and
-      reformatted before use. These should be read-only and in general no one
-      should be touching these except occasionally to update them to more
-      current versions. That updating should be the responsibility of one person
-      and currently that person is Jake.
-* [data/](./data/) - **READ ONLY**
-    * mapfiles, tax tables, and asvfiles that have been generated from the
-      [input](./input/) files. These should be in a format that are easy to
-      bring in to R, and should be useable for analysis. They will not have been
-      cleaned or filtered except to merge duplicate samples, remove discards,
-      and deal with any missing/duplicated sample IDs.
-    * generating the files in this directory is a manual step and should be the
-      responsibility of one person. Currently that person is Jake.
-    * I will put a symlink to this directory in the [16S](../) directory so that
-      the files are accessible to everyone.
-* [intermed](./intermed/) - **IGNORE THIS**
-    * Ignore this directory. It contains intermediate files that are needed to
-      produce the files in `cleaned/`.
-* [cleaned/](./cleaned/) - **START HERE**
-    * contains a number of tables or rds/Rdata objects. Jake has, and will
-      update, scripts to produce a few different cleaned datasets, including
-      datasets that are 99% clustered, datasets that have low-read samples
-      removed, etc. These are probably the datasets you want to start with to
-      run your analyses.
-    * If you want to make different cleaned datasets than are currently
-      available, starting from the [data](./data/) files, please feel free. Just
-      make sure to give your dataset an informative and unique file name and
-      avoid overwriting existing files. All cleaned datasets should be generated
-      via scripts, and the script that produces that dataset should be listed
-      below, following the example format, so that we have a record of what
-      everything is. Scripts that produce the clean datasets should be stored in
-      the [scripts/](./scripts/) directory.
-        * **Example:** [cleaned file](./path/to/file) is created by [script
-          name](./path/to/script)
-    * If you want to play with cleaning and saving datasets without following
-      the above instructions, you are welcome to do so but please do not save
-      any output into this DataQC directory. 
-    * As with [data/](./data/), I am debating moving this directory up out of
-      the [DataQC/](./) directory and into the [16S](./16S) directory so that
-      it's more accessible.
+* [cleaned/](./cleaned/)
+    * Contains a number of tables and Rdata objects that are ready to be used
+      for downstream analysis. These files are produced from the files in the
+      `data/` directory using the scripts in the `scripts/` directory. These are
+      probably the datasets you want to start with to run your analyses.
     * All files should be contained within a subdirectory. The subdirectories
-      Jake is maintaining are `asvs/` and `cluster99`.
-    * [asvs/](./cleaned/asvs/)
-        * Contains all cleaned data objects at the ASV level (not 99%
-          clustered).
-    * [cluster99/](./cleaned/cluster99/)
-        * Contains all cleaned data objects at the 99% clustered level)
-    * Each of those contains 2 further subdirectories: `full/` and `samfilt`
-        * `full/` contains all samples, regardless of how many reads they have.
+      are currently `asvs/` and `cluster99/`:
+        * [asvs/](./cleaned/asvs/): Contains all cleaned data objects at the ASV
+          level (not 99% clustered).
+        * [cluster99/](./cleaned/cluster99/): Contains all cleaned data objects
+          with ASVs clustered at 99% similarity.
+    * Each of those contains 2 further subdirectories: `full/` and `samfilt/`:
+        * `full/`: Contains all samples, regardless of how many reads they have.
           Includes negative controls.  _Excludes_ host taxa
         * `samfilt/` contains only samples with at least 10k reads. Any taxa
           that were 0 everywhere after low-read-count samples were removed are
@@ -69,33 +39,61 @@ doesn't work as expected. Please no touching right now.
       taxa that are 0 everywhere after some samples are removed, because I
       believe this should happen _after_ samples are subset for specific
       analysis, and the choice of whether/how to filter will vary depending on
-      the scientific question and also which samples are used.
+      the scientific question and also which and how many samples are used.
+* [data/](./data/)
+    * Merged mapfile, tax table, and asvfile that have been generated from the
+      `input` files. Specifically, any samples that were sequenced repeatedly
+      have been merged, and any samples that have been labelled as "discard"
+      have been removed. 
+    * These are in .csv format, so that they can be easily read into R, but they
+      are not clean enough to use. May contain duplicate sample IDs due to data
+      entry errors upstream that we are working on addressing. Contain all
+      samples, including low-read-count and negative control. Contain all ASVs
+      including host taxa.
+    * Generating the files in this directory is a manual step and should be the
+      responsibility of one person. Currently that person is Jake.
+* [input/](./input/)
+    * Raw input files received from Aida or Laura that need to be QC'ed and
+      reformatted before use. These should be read-only and in general no one
+      should be touching these except occasionally to update them to more
+      current versions. Updating them should be the responsibility of one person
+      and currently that person is Jake.
+* [intermed](./intermed/) - **IGNORE THIS**
+    * Ignore this directory. It contains intermediate files that are needed to
+      produce the files in `cleaned/`.
 
 ### Tracked under Git
 
 * [scripts/](./scripts/)
-    * contains all the scripts used to generate the files in [data/](./data/)
-      and [cleaned/](./cleaned/). Ideally, all scripts should be controlled by a
-      Makefile (or, later on, a Nextflow pipeline), but if you are not
-      comfortable using Make, that is okay. 
+    * contains all the scripts used to generate the files in `data/`
+      and `cleaned/`. Ideally, all scripts should be controlled by a
+      Makefile (or, later on, a Nextflow pipeline), but right now we are sort of
+      between pipelines so they are being run manually. They are numbered and
+      should always be run in order.
     * **analysis scripts do not belong in this directory.** This directory is
       only for cleaning and QCing the data before analysis. If you want to
       conduct analysis, please create a different directory in the [16S/](../)
-      directory and then symlink to the [cleaned](./cleaned/) or [data](./data/)
-      directory from there to bring in the data you need for your analysis.
+      directory and then symlink to the `cleaned` or `data` directory from there
+      to bring in the data you need for your analysis.
 * [logs/](./logs/)
     * A place for log files. I like to log anything that I run
       non-interactively, so I can see what got written to standard error and
       standard out. I do this one of two ways, depending on how a script is run.
-        * If a script is run under tmux, I use the [pretty user-friend logging
-          extension](https://github.com/tmux-plugins/tmux-logging) to capture
-          all the output to the terminal.
+        * If a script is run under tmux, I use the pretty user-friendly logging
+          extension [tmux-logging](https://github.com/tmux-plugins/tmux-logging)
+          to capture all the output to a log file.
         * If I am running something via slurm, I create log files in the sbatch
           scripts which allow stderr and stdout to be written to a single file.
           Look in any script in `sbatch/` for an example.
 * [sbatch/](./sbatch/)
-    * contains all the shell scripts passed to `sbatch` for running things under
+    * Contains all the shell scripts passed to `sbatch` for running things under
       `slurm`
+* [stats](./stats/)
+    * Contains very basic summary statistic (think: number of samples, number of
+      taxa) as data move through the pipeline so we can track it and make sure
+      nothing is being lost.
+    * This is **not** a place for statistical analysis. That should go in a
+      different project directory.
 
 ## Directory Details
 
@@ -114,7 +112,7 @@ files in the [input/](./input/) directory that are symlinks to the
 followed by a description of what they are. When the input files get updated (we
 get a new IMAGINE metadata sheet or mergetab or something), the process is to
 move the exiting files from [input/current/](./input/current/) to
-[input/obsolute](./input/obsolete), put the new files in
+[input/obsolete](./input/obsolete), put the new files in
 [input/current/](./input/current/), and update the symlinks in
 [input/](./input/). Scripts should only ever point to the symlinks, not to the
 actual files, so that they don't need to be updated when the files change.
@@ -122,9 +120,7 @@ actual files, so that they don't need to be updated when the files change.
 The files in [input/](./input/) should never be edited. These are our raw input
 data files. Any filtering, QC, etc, happens upstream of these files, and
 filtered datasets should be written to [data/](./data/) or
-[cleaned/](./cleaned/).  Nothing should get written to [data/](./data/) or
-[cleaned/](./cleaned/) manually, but only ever via the scripts in
-[scripts/](./scripts/).
+[cleaned/](./cleaned/).  
 
 The files in [input/](./input/) are not to be tracked under version control
 because they are too big, and because they contain sensitive information that

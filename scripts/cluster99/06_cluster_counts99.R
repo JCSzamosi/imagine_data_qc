@@ -7,22 +7,23 @@ source('./scripts/functions.R')
 
 intdir = 'intermed'
 cldir = 'cleaned'
+asvs = 'asvs'
 full = 'full'
-clstf = 'clst99.Rdata'
+clstf = 'clsts99.Rdata'
 clstcsv = 'clstab99.csv'
 consf = 'conseqs99.csv'
-matf = 'full_mat.Rdata'
+matf = 'full_asv.csv'
 
 clstfile = file.path(intdir, clstf)
-outf = file.path(intdir, clscsv)
+outf = file.path(intdir, clstcsv)
 consfile = file.path(intdir, consf)
-matfile = file.path(cldir, full, matf)
+matfile = file.path(cldir, asvs, full, matf)
 
 # Load the input data ####
 
 cat('\nRead in the data\n')
 load(clstfile)
-load(matfile)
+asv_full = read.csv(matfile, row.names = 1)
 conseq = read.csv(consfile, row.names = 1)
 
 # Check the data ####
@@ -78,21 +79,12 @@ write.csv(clstab, file = outf, row.names = TRUE)
 
 cat('\nWriting track stats\n')
 
-stats_df = data.frame(Step = 'asvs/02_make_full.R',
-						Samples = c(nsamples(ps_full),NA,
-									ncol(asv_full),
-									NA,
-									nrow(map_full)),
-						Taxa = c(ntaxa(ps_full),length(seqs),
-								nrow(asv_full),
-								nrow(tax_full),
-								NA),
-						File = c(wrps,wrseq,
-								wrasv,
-								wrtax,
-								wrmap))
+stats_df = data.frame(Step = 'asvs/06_cluster_counts.R',
+						Samples = c(ncol(clstab)),
+						Taxa = c(nrow(clstab)),
+						File = c(outf))
 write.table(stats_df, file = 'stats/track_counts.csv',
 			append = TRUE, quote = TRUE, sep = ',',
 			row.names = FALSE, col.names = FALSE)
-cat('\nDONE\n')
+
 cat('\nDONE\n')

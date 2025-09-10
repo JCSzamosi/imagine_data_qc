@@ -108,10 +108,13 @@ otu_seqs = otu_seqs[taxa_names(ps99_full)]
 
 cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
-	dir.create(outdir)
+	dir.create(outdir, recursive = TRUE)
 }
-save(list = c('ps99_full', 'otu_seqs'), file = file.path(outdir, outps))
-save(otu_seqs, file = file.path(outdir, 'full99_seqs.Rdata'))
+
+wrps = file.path(outdir, outps)
+save(list = c('ps99_full', 'otu_seqs'), file = wrps)
+wrseq = file.path(outdir, outseq)
+save(otu_seqs, file = wrseq)
 
 # Create the individual matrices/data frames ###
 
@@ -124,11 +127,34 @@ map99_full = data.frame(sample_data(ps99_full))
 ## Write the individual tables
 
 cat('\nWriting the individual tables\n')
+wrmat = file.path(outdir, outmat)
 save(list = c('otu99_full', 'tax99_full', 'map99_full'), 
-     file = file.path(outdir, outmat))
-save(otu_seqs, file = file.path(outdir, outseq))
-write.csv(otu99_full, file = file.path(outdir, otucsv), row.names = TRUE)
-write.csv(tax99_full, file = file.path(outdir, taxcsv), row.names = TRUE)
-write.csv(map99_full, file = file.path(outdir, mapcsv), row.names = TRUE)
+     file = wrmat)
+
+wrotu = file.path(outdir, otucsv)
+wrtax = file.path(outdir, taxcsv)
+wrmap = file.path(outdir, mapcsv)
+write.csv(otu99_full, file = wrotu, row.names = TRUE)
+write.csv(tax99_full, file = wrtax, row.names = TRUE)
+write.csv(map99_full, file = wrmap, row.names = TRUE)
+
+cat('\nWriting track stats\n')
+
+stats_df = data.frame(Step = 'cluster99/08_make_full99.R',
+						Samples = c(nsamples(ps99_full),NA,
+									ncol(otu99_full),
+									NA,
+									nrow(map99_full)),
+						Taxa = c(ntaxa(ps99_full),length(otu_seqs),
+								nrow(otu99_full),
+								nrow(tax99_full),
+								NA),
+						File = c(wrps,wrseq,
+								wrotu,
+								wrtax,
+								wrmap))
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)
 
 cat('\nDONE\n')

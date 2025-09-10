@@ -1,0 +1,36 @@
+./  Rscript ./scripts/09  cluster99/09_make_samfilt_99.R 
+[?2004lFailed to query server: Could not activate remote peer.
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+The distribution of read depths is:
+[?25h   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0   28114   42273   49609   61420  664092 
+[?25h
+The properties of the phyloseq object are:
+[?25hphyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 23906 taxa and 12838 samples ]
+sample_data() Sample Data:       [ 12838 samples by 10 sample variables ]
+tax_table()   Taxonomy Table:    [ 23906 taxa by 7 taxonomic ranks ]
+[?25h
+Removing negative controls
+[?25h[?25h[?25h
+Removed negative controls. 12770 samples remaining.
+[?25h
+Removing samples with < 10,000 reads.
+[?25h[?25h[?25h
+Removed low-read samples. 12739 out of 12770 samples remaining, or 99.76%.
+[?25h
+Removing taxa with 0 counts.
+[?25h[?25h[?25h[?25h
+Removed 0-count taxa. 23901 out of 23906 taxa remaining, or 99.98%.
+[?25h[?25h
+Writing phyloseq object files
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+Writing the individual tables
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+Writing track stats
+[?25h[?25h[?25h
+DONE
+[?25h[?25h[?2004h[szamosjc@l5.nibi DataQC]$ ∫P 

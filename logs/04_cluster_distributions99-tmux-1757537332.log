@@ -1,0 +1,29 @@
+Rscript ./scripts/cluster99/04_cluster_distributions99.R 
+[?2004lFailed to query server: Could not activate remote peer.
+-- Attaching core tidyverse packages ---------------------------------------------- tidyverse 2.0.0 --
+v dplyr     1.1.4     v readr     2.1.5
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.5.2     v tibble    3.3.0
+v lubridate 1.9.4     v tidyr     1.3.1
+v purrr     1.1.0     
+-- Conflicts ---------------------------------------------------------------- tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+Warning message:
+In system("timedatectl", intern = TRUE) :
+  running command 'timedatectl' had status 1
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+There were 99,715 ASVs before clustering.
+[?25h[?25h
+There are 23,929 clusters at 99% clustering.
+[?25h[?25h
+The largest cluster has 726 ASVs[?25h
+The smallest cluster size is 1, and there are 13,267 clusters of that size.
+[?25h[?25h
+Printing cluster size info to stats/cluster_size_distribution99.csv.
+[?25h[?25h[?25h[?25h[?25h
+Printing cluster size graph to stats/cluster_size_distribution99.png.
+[?25h[?25h
+DONE
+[?25h[?25h[?2004h[szamosjc@l5.nibi DataQC]$ 

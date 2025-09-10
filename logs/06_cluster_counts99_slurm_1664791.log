@@ -1,0 +1,30 @@
+module load r/4.5.0
+Rscript ./scripts/cluster99/06_cluster_counts99.R
+-- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+v dplyr     1.1.4     v readr     2.1.5
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   3.5.2     v tibble    3.3.0
+v lubridate 1.9.4     v tidyr     1.3.1
+v purrr     1.1.0     
+-- Conflicts ------------------------------------------ tidyverse_conflicts() --
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+Read in the data
+
+Check the inputs are good
+[1] TRUE
+[1] TRUE
+
+Join the inputs into one table
+
+Start summing the taxa together within cluster
+
+Finish summing taxa. Cleaning up data table.
+
+Writing output file.
+
+Writing track stats
+
+DONE

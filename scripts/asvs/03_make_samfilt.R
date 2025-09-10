@@ -55,7 +55,7 @@ seqs_samfilt = seqs[taxa_names(ps_samfilt)]
 
 cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
-	dir.create(outdir)
+	dir.create(outdir, recursive = TRUE)
 }
 
 wrps = file.path(outdir, outf)

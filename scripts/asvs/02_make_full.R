@@ -133,7 +133,7 @@ cat(sprintf('\nThe phyloseq object has %i taxa after removing host.\n',
 
 cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
-	dir.create(outdir)
+	dir.create(outdir, recursive = TRUE)
 }
 
 wrps = file.path(outdir, outps)

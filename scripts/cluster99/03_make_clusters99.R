@@ -38,7 +38,7 @@ clsts$seqs = seqs[rownames(clsts)]
 cat('\nWriting the cluster data frame\n')
 
 if (!dir.exists(outdir)){
-	dir.create(outdir)
+	dir.create(outdir, recursive = TRUE)
 }
 save('clsts', file = outf)
 

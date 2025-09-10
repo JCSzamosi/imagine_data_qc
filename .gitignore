@@ -8,8 +8,6 @@ cleaned/*
 !cleaned/.gitkeep
 refs/*
 !refs/.gitkeep
-stats/*
-!stats/.gitkeep
 Holding/*
 .Rproj.user
 .Rhistory

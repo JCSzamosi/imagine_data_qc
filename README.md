@@ -459,7 +459,7 @@ control that are in this directory and are pretty self-explanatory. They are:
 * [asvs/](./sbatch/asvs/)
     * [02_run_make_full.sh](./sbatch/asvs/02_run_make_full.sh)
     * [03_run_make_samfilt.sh](./sbatch/asvs/03_run_make_samfilt.sh)
-* [cluster99](./sbatch/cluster99/)
+* [cluster99/](./sbatch/cluster99/)
     * [03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
     * [06_run_cluster_counts99.sh](./sbatch/cluster99/06_run_cluster_counts99.sh)
     * [07_run_assign_tax_99.sh](./sbatch/cluster99/07_run_assign_tax_99.sh)

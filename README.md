@@ -354,7 +354,8 @@ or similar.
 
 Everything downstream of this is either in the `asvs` or `cluster99` directory.
 
-* [asvs/](./scripts/asvs)
+#### [asvs/](./scripts/asvs)
+
     2. [02_make_full.R](./scripts/asvs/02_make_ps_full.R)
         * **Input files:**
             * [data/merged_taxtab.rds](./data/merged_taxtab.rds)
@@ -386,7 +387,8 @@ Everything downstream of this is either in the `asvs` or `cluster99` directory.
         * Filters out negative controls and any samples with &lt; 10k reads.
           Removes any taxa that are 0 everywhere once those samples have been
           removed.
-* [cluster99/](./scripts/cluster99/)
+#### [cluster99/](./scripts/cluster99/)
+
     3. [03_make_clusters99.R](./scripts/cluster99/03_make_clusters99.R)
         * **Input file:**
             * [cleaned/full_seqs.Rdata'](./cleaned/full_seqs.Rdata)

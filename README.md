@@ -455,4 +455,12 @@ Scripts that require more RAM or cores than a login node provides, or that just
 take a long time, need to be run under `slurm` using `sbatch`. The scripts that
 control that are in this directory and are pretty self-explanatory. They are:
 
+* [01_run_assign_tax_asvs.sh](./sbatch/01_run_assign_tax_asvs.sh)
+* (./sbatch/asvs/)
+    * [02_run_make_full.sh](./sbatch/asvs/02_run_make_full.sh)
+    * [03_run_make_samfilt.sh](./sbatch/asvs/03_run_make_samfilt.sh)
+* (./sbatch/cluster99/)
+    * [03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
+    * [06_run_cluster_counts99.sh](./sbatch/cluster99/06_run_cluster_counts99.sh)
+    * [07_run_assign_tax_99.sh](./sbatch/cluster99/07_run_assign_tax_99.sh)
 

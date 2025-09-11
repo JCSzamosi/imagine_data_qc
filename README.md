@@ -88,7 +88,7 @@ pull request.
 * [sbatch/](./sbatch/)
     * Contains all the shell scripts passed to `sbatch` for running things under
       `slurm`
-* [stats](./stats/)
+* [stats/](./stats/)
     * Contains very basic summary statistic (think: number of samples, number of
       taxa) as data move through the pipeline so we can track it and make sure
       nothing is being lost.
@@ -158,7 +158,7 @@ folder; however, if you want to do your own data cleaning you should start in
 the [data/](./data/) directory. There are three files in this directory, on
 which very minimal cleaning has been done. These files serve as input for the
 data cleaning steps in [scripts/asvs/](./scripts/asvs/) and
-[scripts/cluster99](./scripts/cluster99).
+[scripts/cluster99/](./scripts/cluster99/).
 
 1. [merged_maptab.csv](./data/merged_maptab.csv)
     * This is the mapfile with all the sample metadata from both the IMAGINE
@@ -456,10 +456,10 @@ take a long time, need to be run under `slurm` using `sbatch`. The scripts that
 control that are in this directory and are pretty self-explanatory. They are:
 
 * [01_run_assign_tax_asvs.sh](./sbatch/01_run_assign_tax_asvs.sh)
-* (./sbatch/asvs/)
+* [asvs/](./sbatch/asvs/)
     * [02_run_make_full.sh](./sbatch/asvs/02_run_make_full.sh)
     * [03_run_make_samfilt.sh](./sbatch/asvs/03_run_make_samfilt.sh)
-* (./sbatch/cluster99/)
+* [cluster99](./sbatch/cluster99/)
     * [03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
     * [06_run_cluster_counts99.sh](./sbatch/cluster99/06_run_cluster_counts99.sh)
     * [07_run_assign_tax_99.sh](./sbatch/cluster99/07_run_assign_tax_99.sh)

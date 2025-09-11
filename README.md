@@ -356,124 +356,122 @@ Everything downstream of this is either in the `asvs` or `cluster99` directory.
 
 #### [asvs/](./scripts/asvs)
 
-    2. [02_make_full.R](./scripts/asvs/02_make_ps_full.R)
-        * **Input files:**
-            * [data/merged_taxtab.rds](./data/merged_taxtab.rds)
-            * [data/merged_seqtab.rds](./data/merged_seqtab.rds)
-            * [data/merged_maptab.rds](./data/merged_maptab.rds)
-        * **Output files:**
-            * [cleaned/full/full_ps.Rdata](./cleaned/full/full_ps.Rdata)
-            * [cleaned/full/full_seqs.Rdata](./cleaned/full/full_seqs.Rdata)
-            * [cleaned/full/full_mat.Rdata](./cleaned/full/full_mat.Rdata)
-            * [cleaned/full/full_asv.Rdata](./cleaned/full/full_asv.Rdata)
-            * [cleaned/full/full_tax.Rdata](./cleaned/full/full_tax.Rdata)
-            * [cleaned/full/full_map.Rdata](./cleaned/full/full_map.Rdata)
-        * This takes all three files in `data/` as input and produces a
-          phyloseq object and corresponding named vector of sequences in an
-          RData file as output. This script removes host ASVs and any samples
-          that have duplicate sample IDs, but does no other read depth,
-          abundance, or prevalence filtering and does not remove negative
-          controls.
-        * The file produced in the [cleaned/](./cleaned/) directory is
-        * This needs to be run under `sbatch` because it uses more RAM than Nibi
-          gives the login nodes. The script to do that is in
-          [sbatch/asvs/02_run_make_full.sh](./sbatch/asvs/02_run_make_full.sh).
-    3. [03_make_ps_samfilt.R](./scripts/asvs/03_make_ps_samfilt.R)
-        * **Input file:**
-            * [cleaned/asvs/full/full_ps.Rdata](./cleaned/asvs/full/full_ps.Rdata)
-        * **Output files:**
-            * [cleaned/asvs/samfilt/samfilt_ps.Rdata](./cleaned/asvs/samfilt/samfilt_ps.Rdata)
-            * [cleaned/asvs/samfilt/seqs_samfilt.Rdata](./cleaned/asvs/samfilt/seqs_samfilt.Rdata)
-        * Filters out negative controls and any samples with &lt; 10k reads.
-          Removes any taxa that are 0 everywhere once those samples have been
-          removed.
+2. [02_make_full.R](./scripts/asvs/02_make_ps_full.R)
+    * **Input files:**
+        * [data/merged_taxtab.rds](./data/merged_taxtab.rds)
+        * [data/merged_seqtab.rds](./data/merged_seqtab.rds)
+        * [data/merged_maptab.rds](./data/merged_maptab.rds)
+    * **Output files:**
+        * [cleaned/full/full_ps.Rdata](./cleaned/full/full_ps.Rdata)
+        * [cleaned/full/full_seqs.Rdata](./cleaned/full/full_seqs.Rdata)
+        * [cleaned/full/full_mat.Rdata](./cleaned/full/full_mat.Rdata)
+        * [cleaned/full/full_asv.Rdata](./cleaned/full/full_asv.Rdata)
+        * [cleaned/full/full_tax.Rdata](./cleaned/full/full_tax.Rdata)
+        * [cleaned/full/full_map.Rdata](./cleaned/full/full_map.Rdata)
+    * This takes all three files in `data/` as input and produces a phyloseq
+      object and corresponding named vector of sequences in an RData file as
+      output. This script removes host ASVs and any samples that have duplicate
+      sample IDs, but does no other read depth, abundance, or prevalence
+      filtering and does not remove negative controls.
+    * The file produced in the [cleaned/](./cleaned/) directory is
+    * This needs to be run under `sbatch` because it uses more RAM than Nibi
+      gives the login nodes. The script to do that is in
+      [sbatch/asvs/02_run_make_full.sh](./sbatch/asvs/02_run_make_full.sh).
+3. [03_make_ps_samfilt.R](./scripts/asvs/03_make_ps_samfilt.R)
+    * **Input file:**
+        * [cleaned/asvs/full/full_ps.Rdata](./cleaned/asvs/full/full_ps.Rdata)
+    * **Output files:**
+        * [cleaned/asvs/samfilt/samfilt_ps.Rdata](./cleaned/asvs/samfilt/samfilt_ps.Rdata)
+        * [cleaned/asvs/samfilt/seqs_samfilt.Rdata](./cleaned/asvs/samfilt/seqs_samfilt.Rdata)
+    * Filters out negative controls and any samples with &lt; 10k reads.
+      Removes any taxa that are 0 everywhere once those samples have been
+      removed.
+
 #### [cluster99/](./scripts/cluster99/)
 
-    3. [03_make_clusters99.R](./scripts/cluster99/03_make_clusters99.R)
-        * **Input file:**
-            * [cleaned/full_seqs.Rdata'](./cleaned/full_seqs.Rdata)
-        * **Output file:**
-            * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
-        * This takes just the sequence vector (`full_seqs.Rdata`) and runs the
-          99% clustering on it. It returns a table of clusters that can then be
-          used to create a new OTU table. This step is separated out into its
-          own script because it takes forever and the next steps can be
-          error-prone.
-        * Can be run under sbatch, but does not have to be. The more cores you
-          can give it, the faster it runs, but it doesn't take much RAM. The
-          script to run it under sbatch is at
-          [sbatch/cluster99/03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
-    4. [04_cluster_distributions99.R](./scripts/cluster99/04_cluster_distributions99.R)
-        * **Input file:**
-            * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
-        * **Output files:**
-            * [stats/cluster_size_distribution99.csv](./stats/cluster_size_distribution99.csv)
-            * [stats/cluster_size_distribution99.png](./stats/cluster_size_distribution99.png)
-        * This creates a csv of the counts of clusters of various sizes, as well
-          as a plot, for QC of clustering.
-        * Doesn't need to be run under sbatch. Currently no script to do so.
-    5. [05_get_conseq99.R](./scripts/cluster99/05_get_conseq99.R)
-        * **Input file:**
-           * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
-        * **Output file:**
-           * [intermed/conseqs99.csv](./intermed/conseqs99.csv)
-        * **Requires:**
-            * [scripts/functions.R](./scripts/functions.R)
-        * Gets the consensus sequence for each 99% cluster from its member
-          sequences. Not currently run under sbatch because I can't get
-          doParallel working correctly. Need to fix that before this can be
-          easily run
-    6. [06_cluster_counts99.R](./scripts/cluster99/06_cluster_counts99.R)
-        * **Input files:**
-            * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
-            * [intermed/conseqs9.csv](./intermed/conseqs9.csv)
-            * [cleaned/full/full_mat.Rdata](./cleaned/full/full_mat.Rdata)
-        * **Output file:**
-            * [intermed/clstab99.csv](./intermed/clstab99.csv)
-        * **Requires:**
-            * [scripts/functions.R](./scripts/functions.R)
-        * Adds up the counts within a cluster within sample to make a cluster
-          count table
-        * Is not (currently) parallelized but doesn't take super long. Needs to
-          be run under sbatch because it uses a stupid amount of RAM. The script
-          to do that is in
-          [sbatch/cluster99/06_run_cluster_counts99.sh](./sbatch/cluster99/run_cluster_counts99.sh)
-    7. [07_assign_tax_clsts99.sh](./scripts/cluster99/07_assign_tax_clsts99.sh)
-        * **Input file:**
-            * [intermed/conseqs99.csv](./intermed/conseqs99.csv)
-        * **Output file:**
-            * [intermed/clstaxtab99.csv](./intermed/clstaxtab99.csv)
-        * **Requires:**
-            * [scripts/functions.R](./scripts/functions.R)
-        * Assigns taxonomy to the consensus sequences of the clusters.
-        * Doesn't need to be run under sbatch. Currently no script to do so.
-    8. [08_make_full99.R](./scripts/cluster9/08_make_full99.R)
-        * **Input files:**
-            * [intermed/clstaxtab99.csv](./intermed/clstaxtab99.csv)
-            * [intermed/clstab99.csv](./intermed/clstab99.csv)
-            * [cleaned/asvs/full/full_map.csv](./cleaned/asvs/full/full_map.csv)
-        * **Output files:**
-            * [cleaned/cluster99/full/full99_ps.Rdata](./cleaned/cluster99/full/full99_ps.Rdata)
-            * [cleaned/cluster99/full/full99_seqs.Rdata](./cleaned/cluster99/full/full99_seqs.Rdata)
-            * [cleaned/cluster99/full/full99_mat.Rdata](./cleaned/cluster99/full/full99_mat.Rdata)
-            * [cleaned/cluster99/full/full99_otu.Rdata](./cleaned/cluster99/full/full99_otu.Rdata)
-            * [cleaned/cluster99/full/full99_tax.Rdata](./cleaned/cluster99/full/full99_tax.Rdata)
-            * [cleaned/cluster99/full/full99_map.Rdata](./cleaned/cluster99/full/full99_map.Rdata)
-        * This takes the clustered count and tax tables in `intermed/` and the
-          cleaned mapfile from `cleaned/asvs/full/full_map.csv` and creates a
-          phyloseq object and corresponding named vector of sequences in an
-          RData file as output. This script removes host OTUs and any samples
-          that have duplicate sample IDs, but does no other read depth,
-          abundance, or prevalence filtering and does not remove negative
-          controls.
-        * This does not need to be run under `sbatch` and there is currently no
-          script to do so.
-    9. [09_make_samfilt_99.R](./scripts/cluster99/09_make_samfilt_99.R)
-        * **Input file:**
-            * [cleaned/cluster99/full/full99_ps.Rdata](./cleaned/cluster99/full/full99_ps.Rdata)
-        * **Output files:**
-            * [cleaned/cluster99/samfilt/samfilt99_ps.Rdata](./cleaned/cluster99/samfilt/samfilt99_ps.Rdata)
-            * [cleaned/cluster99/samfilt/otu99_seqs_samfilt.Rdata](./cleaned/cluster99/samfilt/otu99_seqs_samfilt.Rdata)
-        * Filters out negative controls and any samples with &lt; 10k reads.
-          Removes any taxa that are 0 everywhere once those samples have been
-          removed.
+3. [03_make_clusters99.R](./scripts/cluster99/03_make_clusters99.R)
+    * **Input file:**
+        * [cleaned/full_seqs.Rdata'](./cleaned/full_seqs.Rdata)
+    * **Output file:**
+        * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
+    * This takes just the sequence vector (`full_seqs.Rdata`) and runs the 99%
+      clustering on it. It returns a table of clusters that can then be used to
+      create a new OTU table. This step is separated out into its own script
+      because it takes forever and the next steps can be error-prone.
+    * Can be run under sbatch, but does not have to be. The more cores you can
+      give it, the faster it runs, but it doesn't take much RAM. The script to
+      run it under sbatch is at
+      [sbatch/cluster99/03_run_make_clusters99.sh](./sbatch/cluster99/03_run_make_clusters99.sh)
+4.
+[04_cluster_distributions99.R](./scripts/cluster99/04_cluster_distributions99.R)
+    * **Input file:**
+        * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
+    * **Output files:**
+        * [stats/cluster_size_distribution99.csv](./stats/cluster_size_distribution99.csv)
+        * [stats/cluster_size_distribution99.png](./stats/cluster_size_distribution99.png)
+    * This creates a csv of the counts of clusters of various sizes, as well as
+      a plot, for QC of clustering.
+    * Doesn't need to be run under sbatch. Currently no script to do so.
+5. [05_get_conseq99.R](./scripts/cluster99/05_get_conseq99.R)
+    * **Input file:**
+       * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
+    * **Output file:**
+       * [intermed/conseqs99.csv](./intermed/conseqs99.csv)
+    * **Requires:**
+        * [scripts/functions.R](./scripts/functions.R)
+    * Gets the consensus sequence for each 99% cluster from its member
+      sequences. Not currently run under sbatch because I can't get doParallel
+      working correctly. Need to fix that before this can be easily run
+6. [06_cluster_counts99.R](./scripts/cluster99/06_cluster_counts99.R)
+    * **Input files:**
+        * [intermed/clst99.Rdata](./intermed/clst99.Rdata)
+        * [intermed/conseqs9.csv](./intermed/conseqs9.csv)
+        * [cleaned/full/full_mat.Rdata](./cleaned/full/full_mat.Rdata)
+    * **Output file:**
+        * [intermed/clstab99.csv](./intermed/clstab99.csv)
+    * **Requires:**
+        * [scripts/functions.R](./scripts/functions.R)
+    * Adds up the counts within a cluster within sample to make a cluster count
+      table
+    * Is not (currently) parallelized but doesn't take super long. Needs to be
+      run under sbatch because it uses a stupid amount of RAM. The script to do
+      that is in
+      [sbatch/cluster99/06_run_cluster_counts99.sh](./sbatch/cluster99/run_cluster_counts99.sh)
+7. [07_assign_tax_clsts99.sh](./scripts/cluster99/07_assign_tax_clsts99.sh)
+    * **Input file:**
+        * [intermed/conseqs99.csv](./intermed/conseqs99.csv)
+    * **Output file:**
+        * [intermed/clstaxtab99.csv](./intermed/clstaxtab99.csv)
+    * **Requires:**
+        * [scripts/functions.R](./scripts/functions.R)
+    * Assigns taxonomy to the consensus sequences of the clusters.
+    * Doesn't need to be run under sbatch. Currently no script to do so.
+8. [08_make_full99.R](./scripts/cluster9/08_make_full99.R)
+    * **Input files:**
+        * [intermed/clstaxtab99.csv](./intermed/clstaxtab99.csv)
+        * [intermed/clstab99.csv](./intermed/clstab99.csv)
+        * [cleaned/asvs/full/full_map.csv](./cleaned/asvs/full/full_map.csv)
+    * **Output files:**
+        * [cleaned/cluster99/full/full99_ps.Rdata](./cleaned/cluster99/full/full99_ps.Rdata)
+        * [cleaned/cluster99/full/full99_seqs.Rdata](./cleaned/cluster99/full/full99_seqs.Rdata)
+        * [cleaned/cluster99/full/full99_mat.Rdata](./cleaned/cluster99/full/full99_mat.Rdata)
+        * [cleaned/cluster99/full/full99_otu.Rdata](./cleaned/cluster99/full/full99_otu.Rdata)
+        * [cleaned/cluster99/full/full99_tax.Rdata](./cleaned/cluster99/full/full99_tax.Rdata)
+        * [cleaned/cluster99/full/full99_map.Rdata](./cleaned/cluster99/full/full99_map.Rdata)
+    * This takes the clustered count and tax tables in `intermed/` and the
+      cleaned mapfile from `cleaned/asvs/full/full_map.csv` and creates a
+      phyloseq object and corresponding named vector of sequences in an RData
+      file as output. This script removes host OTUs and any samples that have
+      duplicate sample IDs, but does no other read depth, abundance, or
+      prevalence filtering and does not remove negative controls.
+    * This does not need to be run under `sbatch` and there is currently no
+      script to do so.
+9. [09_make_samfilt_99.R](./scripts/cluster99/09_make_samfilt_99.R)
+    * **Input file:**
+        * [cleaned/cluster99/full/full99_ps.Rdata](./cleaned/cluster99/full/full99_ps.Rdata)
+    * **Output files:**
+        * [cleaned/cluster99/samfilt/samfilt99_ps.Rdata](./cleaned/cluster99/samfilt/samfilt99_ps.Rdata)
+        * [cleaned/cluster99/samfilt/otu99_seqs_samfilt.Rdata](./cleaned/cluster99/samfilt/otu99_seqs_samfilt.Rdata)
+    * Filters out negative controls and any samples with &lt; 10k reads.
+      Removes any taxa that are 0 everywhere once those samples have been
+      removed.

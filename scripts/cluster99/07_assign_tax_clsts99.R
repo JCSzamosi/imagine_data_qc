@@ -42,7 +42,7 @@ write.csv(taxtab, outp)
 
 cat('\nWriting track stats\n')
 
-stats_df = data.frame(Step = 'asvs/07_assign_tax_clsts99.R',
+stats_df = data.frame(Step = 'cluster99/07_assign_tax_clsts99.R',
 						Samples = NA,
 						Taxa = c(nrow(taxtab)),
 						File = c(outp))

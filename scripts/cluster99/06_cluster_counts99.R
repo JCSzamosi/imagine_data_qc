@@ -79,7 +79,7 @@ write.csv(clstab, file = outf, row.names = TRUE)
 
 cat('\nWriting track stats\n')
 
-stats_df = data.frame(Step = 'asvs/06_cluster_counts.R',
+stats_df = data.frame(Step = 'cluster99/06_cluster_counts.R',
 						Samples = c(ncol(clstab)),
 						Taxa = c(nrow(clstab)),
 						File = c(outf))

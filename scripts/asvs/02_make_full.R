@@ -17,6 +17,7 @@ datdir = 'data'
 taxf = 'merged_taxtab.rds'
 asvf = 'merged_seqtab.rds'
 mapf = 'merged_maptab.rds'
+tots = 'asv_sample_totals.Rdata'
 
 taxfile = file.path(datdir, taxf)
 asvfile = file.path(datdir, asvf)
@@ -46,16 +47,28 @@ maptab = readRDS(mapfile)
 
 ## Check for duplicated sample/study IDs
 cat('\nChecking for duplicates\n')
+na_samp = (maptab
+           %>% filter(is.na(Sample.ID)))
+cat(sprintf('\nThere are %i rows that are missing Sample IDs. Continuing.\n',
+            nrow(na_samp)))
 dup_samp = (maptab
 			%>% count(Sample.ID)
 			%>% filter(n > 1)
 			%>% pull(Sample.ID))
 dup_samp = dup_samp[!is.na(dup_samp)]
+na_stud = (maptab
+           %>% filter(is.na(Study.ID)))
+if (nrow(na_stud) >  0){
+    cat(sprintf('\nThere are %i rows that are missing Study IDs. Removing them.',
+                nrow(na_stud)))
+    maptab = (maptab
+              %>% filter(!is.na(Study.ID)))
+}
+
 dup_stud = (maptab
 			%>% count(Study.ID)
 			%>% filter(n > 1)
 			%>% pull(Study.ID))
-dup_stud = dup_stud[!is.na(dup_stud)]
 
 ## Remove them if there are any
 if (length(c(dup_samp, dup_stud)) > 0){
@@ -143,10 +156,14 @@ save(seqs, file = wrseq)
 
 # Create the individual matrices/data frames ###
 
-asv_full = as.matrix(otu_table(ps_full))
+asv_full = matrix(otu_table(ps_full), nrow = ntaxa(ps_full),
+                  ncol = nsamples(ps_full))
 rownames(asv_full) = seqs[rownames(asv_full)]
-tax_full = as.matrix(tax_table(ps_full))
+colnames(asv_full) = sample_names(ps_full)
+tax_full = matrix(tax_table(ps_full), nrow = ntaxa(ps_full),
+                  ncol = ncol(tax_table(ps_full)))
 rownames(tax_full) = seqs[rownames(tax_full)]
+colnames(tax_full) = colnames(tax_table(ps_full))
 map_full = data.frame(sample_data(ps_full))
 
 ## Write the individual tables
@@ -162,6 +179,17 @@ wrmap = file.path(outdir, mapcsv)
 write.csv(asv_full, file = wrasv, row.names = TRUE)
 write.csv(tax_full, file = wrtax, row.names = TRUE)
 write.csv(map_full, file = wrmap, row.names = TRUE)
+
+## Write some totals in case I want/need them later
+
+cat('\nWriting count totals\n')
+taxsums = taxa_sums(ps_full)
+names(taxsums) = seqs[names(taxsums)]
+
+samsums = sample_sums(ps_full)
+
+wrtots = file.path(outdir, tots)
+save(taxsums, samsums, file = wrtots)
 
 cat('\nWriting track stats\n')
 

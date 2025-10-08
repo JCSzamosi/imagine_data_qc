@@ -18,6 +18,7 @@ outseq = 'samfilt_seqs.Rdata'
 asvcsv = 'samfilt_asv.csv'
 taxcsv = 'samfilt_tax.csv'
 mapcsv = 'samfilt_map.csv'
+tots = 'samfilt_asv_sample_totals.Rdata'
 
 load(file.path(indir, inf))
 
@@ -84,6 +85,15 @@ wrmap = file.path(outdir, mapcsv)
 write.csv(asv_samfilt, file = wrasv, row.names = TRUE)
 write.csv(tax_samfilt, file = wrtax, row.names = TRUE)
 write.csv(map_samfilt, file = wrmap, row.names = TRUE)
+
+cat('\nWriting count totals\n')
+taxsums = taxa_sums(ps_samfilt)
+names(taxsums) = seqs[names(taxsums)]
+
+samsums = sample_sums(ps_samfilt)
+
+wrtots = file.path(outdir, tots)
+save(taxsums, samsums, file = wrtots)
 
 cat('\nWriting track stats\n')
 stats_df = data.frame(Step = 'asvs/03_make_samfilt.R',

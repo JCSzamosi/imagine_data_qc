@@ -73,4 +73,15 @@ cat(sprintf('\nWriting the consensus sequence file to %s.\n',
             conseq_path))
 write.csv(conseq, file = conseq_path, row.names = TRUE)
 
+cat('\nWriting stats tracking\n')
+
+stats_df = data.frame(Step = 'cluster99/05_get_conseq99.R',
+						Samples = NA,
+						Taxa = nrow(conseq),
+						File = conseq_path)
+
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)
+
 cat('\nDONE\n')

@@ -1,127 +1,0 @@
-make cleaned/seqtab_cleaned.csv 
-make: *** No rule to make target 'data/current/seqtab_nochim_transposed_IMG1-April2024_v34.csv', needed by 'cleaned/seqtab_cleaned.csv'.  Stop.
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ ls -l [Kh data/
-total 20K
-lrwxrwxrwx 1 jcszamosi jcszamosi   93 Mar 22 10:59 [0m[01;36mactive_IMAGINE_metadata_wide.csv[0m -> current/IMAGINE_StoolSpecimenCollectionIDListing_20230628_Surette_Revised_20240318_sheet1.csv
-lrwxrwxrwx 1 jcszamosi jcszamosi   32 Apr  5 10:18 [01;36mactive_Rossi_info_datasheet.csv[0m -> current/IMGinfosheet_Apr2024.csv
-lrwxrwxrwx 1 jcszamosi jcszamosi   60 Apr  5 10:18 [01;36mactive_seqtab_nochim.csv[0m -> current/seqtab_nochim_transposed_IMG1-5525-April2024_v34.csv
-lrwxrwxrwx 1 jcszamosi jcszamosi   49 Apr  5 13:44 [01;36mactive_taxtab_silva138wsp.rds[0m -> current/taxtab_nochim_IMG1-5525-April2024_v34.rds
-drwxrwxr-x 2 jcszamosi jcszamosi 4.0K Apr  5 14:09 [01;34mcurrent[0m
-drwxrwxr-x 2 jcszamosi jcszamosi 4.0K Apr  5 10:17 [01;34mobsolete[0m
-lrwxrwxrwx 1 jcszamosi jcszamosi   76 Apr  5 10:49 [01;36msilva_nr99_v138_wSpecies_train_set.fa[0m -> /home/jcszamosi/Disk2/CommonData/SILVA/silva_nr99_v138_wSpecies_train_set.fa
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ ls -lh data/make cleaned/seqtab_cleaned.csv 
-make: 'cleaned/seqtab_cleaned.csv' is up to date.
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ [K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ touch scripts/make_seq[K[K[K
-make_aln.R            make_dmat.R           make_ps_99_samfilt.R  
-make_clean_seqtab.R   make_mapfile.R        make_ps_full.R        
-make_clst.R           make_ps_99.R          make_ps_samfilt.R     
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ touch scripts/make_clean_seqtab.R 
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ make s[Kcls[Keaned/seqtab_cleaned.csv 
-Rscript scripts/make_clean_seqtab.R
-── [1mAttaching core tidyverse packages[22m ────────────────────────────────────── tidyverse 2.0.0 ──
-[32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-[32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-[32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-[32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-[32m✔[39m [34mpurrr    [39m 1.0.1     
-── [1mConflicts[22m ──────────────────────────────────────────────────────── tidyverse_conflicts() ──
-[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-[36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
-[?25h[?25h[1] 59874  5366
-[?25h[1] "IMG100" "IMG101" "IMG102" "IMG103" "IMG104" "IMG105"
-[?25h[?25h[?25h[?25h[1] 59874  5347
-[?25h[?25h [1] "IMG176A" "IMG177A" "IMG178A" "IMG179A" "IMG180A" "IMG181A" "IMG182A"
- [8] "IMG265A" "IMG266A" "IMG267A" "IMG268A" "IMG269A" "IMG270A" "IMG271A"
-[15] "IMG272A" "IMG273A" "IMG358A" "IMG359A" "IMG360A" "IMG361A" "IMG362A"
-[22] "IMG363A" "IMG364A" "IMG85A"  "IMG86A"  "IMG87A"  "IMG88A"  "IMG89A" 
-[29] "IMG90A"  "IMG91A"  "IMG129B" "IMG184B" "IMG256B" "IMG259B" "IMG262B"
-[36] "IMG26B"  "IMG2B"   "IMG373B" "IMG40B"  "IMG41B"  "IMG481B" "IMG7B"  
-[?25h[?25h[?25h [1] "IMG176" "IMG177" "IMG178" "IMG179" "IMG180" "IMG181" "IMG182" "IMG265"
- [9] "IMG266" "IMG267" "IMG268" "IMG269" "IMG270" "IMG271" "IMG272" "IMG273"
-[17] "IMG358" "IMG359" "IMG360" "IMG361" "IMG362" "IMG363" "IMG364" "IMG85" 
-[25] "IMG86"  "IMG87"  "IMG88"  "IMG89"  "IMG90"  "IMG91"  "IMG129" "IMG184"
-[33] "IMG256" "IMG259" "IMG262" "IMG26"  "IMG2"   "IMG373" "IMG40"  "IMG41" 
-[41] "IMG481" "IMG7"  
-[?25h[?25h[?25h   IMG129    IMG184    IMG256    IMG259    IMG262     IMG26      IMG2    IMG373 
-"IMG129B" "IMG184B" "IMG256B" "IMG259B" "IMG262B"  "IMG26B"   "IMG2B" "IMG373B" 
-    IMG40     IMG41    IMG481      IMG7 
- "IMG40B"  "IMG41B" "IMG481B"   "IMG7B" 
-[?25h[?25h  IMG129B IMG184B IMG256B IMG259B IMG262B IMG26B IMG2B IMG373B IMG40B IMG41B
-1    7599      32    1308    2041    7174    895   589     294   1876    132
-2     372    1179      83    1537   15662    165   851       0    504      0
-3     256       0    1162       0       0      0  1076    1350  10526    509
-4      24       0     535    1779      81      0  1644       0    121      0
-5    8871     227     104     676    1772      0  1257      34    279     51
-6    2395       0     336     554     990    483  1673     169     19     28
-  IMG481B IMG7B IMG129 IMG184 IMG256 IMG259 IMG262 IMG26 IMG2 IMG373 IMG40
-1    2768   707    808      0     98    294    472    63  102     56     0
-2    6052  3057     40    519      0    225   1054    14  148      0     0
-3    1039   899     24      7     96      0      0     0  256    210     0
-4   12983  2180      0      0     52    394      0     0  276      0     4
-5      79   121    807     40     12     74    126     0  190      0     0
-6    1405   431    231      0     20     79     94    40  338     40     0
-  IMG41 IMG481 IMG7
-1     0     99   66
-2     0    152  208
-3     0     23   67
-4     0    233  178
-5     0      0   21
-6     0     43   28
-[?25h[?25h[?25h     sum_df samp_col samp_col samp_col samp_col samp_col samp_col samp_col
-[1,]     NA     8407       32     1406     2335     7646      958      691
-[2,]     NA      412     1698       83     1762    16716      179      999
-[3,]     NA      280        7     1258        0        0        0     1332
-[4,]     NA       24        0      587     2173       81        0     1920
-[5,]     NA     9678      267      116      750     1898        0     1447
-[6,]     NA     2626        0      356      633     1084      523     2011
-     samp_col samp_col samp_col samp_col samp_col
-[1,]      350     1876      132     2867      773
-[2,]        0      504        0     6204     3265
-[3,]     1560    10526      509     1062      966
-[4,]        0      125        0    13216     2358
-[5,]       34      279       51       79      142
-[6,]      209       19       28     1448      459
-[?25h[?25h[?25h  IMG129 IMG184 IMG256 IMG259 IMG262 IMG26 IMG2 IMG373 IMG40 IMG41 IMG481 IMG7
-1   8407     32   1406   2335   7646   958  691    350  1876   132   2867  773
-2    412   1698     83   1762  16716   179  999      0   504     0   6204 3265
-3    280      7   1258      0      0     0 1332   1560 10526   509   1062  966
-4     24      0    587   2173     81     0 1920      0   125     0  13216 2358
-5   9678    267    116    750   1898     0 1447     34   279    51     79  142
-6   2626      0    356    633   1084   523 2011    209    19    28   1448  459
-[?25h[?25h[?25h   IMG176    IMG177    IMG178    IMG179    IMG180    IMG181    IMG182    IMG265 
-"IMG176A" "IMG177A" "IMG178A" "IMG179A" "IMG180A" "IMG181A" "IMG182A" "IMG265A" 
-   IMG266    IMG267    IMG268    IMG269    IMG270    IMG271    IMG272    IMG273 
-"IMG266A" "IMG267A" "IMG268A" "IMG269A" "IMG270A" "IMG271A" "IMG272A" "IMG273A" 
-   IMG358    IMG359    IMG360    IMG361    IMG362    IMG363    IMG364     IMG85 
-"IMG358A" "IMG359A" "IMG360A" "IMG361A" "IMG362A" "IMG363A" "IMG364A"  "IMG85A" 
-    IMG86     IMG87     IMG88     IMG89     IMG90     IMG91    IMG129    IMG184 
- "IMG86A"  "IMG87A"  "IMG88A"  "IMG89A"  "IMG90A"  "IMG91A" "IMG129B" "IMG184B" 
-   IMG256    IMG259    IMG262     IMG26      IMG2    IMG373     IMG40     IMG41 
-"IMG256B" "IMG259B" "IMG262B"  "IMG26B"   "IMG2B" "IMG373B"  "IMG40B"  "IMG41B" 
-   IMG481      IMG7 
-"IMG481B"   "IMG7B" 
-[?25h   IMG129    IMG184    IMG256    IMG259    IMG262     IMG26      IMG2    IMG373 
-"IMG129B" "IMG184B" "IMG256B" "IMG259B" "IMG262B"  "IMG26B"   "IMG2B" "IMG373B" 
-    IMG40     IMG41    IMG481      IMG7 
- "IMG40B"  "IMG41B" "IMG481B"   "IMG7B" 
-[?25h[?25h   IMG176    IMG177    IMG178    IMG179    IMG180    IMG181    IMG182    IMG265 
-"IMG176A" "IMG177A" "IMG178A" "IMG179A" "IMG180A" "IMG181A" "IMG182A" "IMG265A" 
-   IMG266    IMG267    IMG268    IMG269    IMG270    IMG271    IMG272    IMG273 
-"IMG266A" "IMG267A" "IMG268A" "IMG269A" "IMG270A" "IMG271A" "IMG272A" "IMG273A" 
-   IMG358    IMG359    IMG360    IMG361    IMG362    IMG363    IMG364     IMG85 
-"IMG358A" "IMG359A" "IMG360A" "IMG361A" "IMG362A" "IMG363A" "IMG364A"  "IMG85A" 
-    IMG86     IMG87     IMG88     IMG89     IMG90     IMG91 
- "IMG86A"  "IMG87A"  "IMG88A"  "IMG89A"  "IMG90A"  "IMG91A" 
-[?25h[?25h[?25h IMG176A  IMG177A  IMG178A  IMG179A  IMG180A  IMG181A  IMG182A  IMG265A 
-"IMG176" "IMG177" "IMG178" "IMG179" "IMG180" "IMG181" "IMG182" "IMG265" 
- IMG266A  IMG267A  IMG268A  IMG269A  IMG270A  IMG271A  IMG272A  IMG273A 
-"IMG266" "IMG267" "IMG268" "IMG269" "IMG270" "IMG271" "IMG272" "IMG273" 
- IMG358A  IMG359A  IMG360A  IMG361A  IMG362A  IMG363A  IMG364A   IMG85A 
-"IMG358" "IMG359" "IMG360" "IMG361" "IMG362" "IMG363" "IMG364"  "IMG85" 
-  IMG86A   IMG87A   IMG88A   IMG89A   IMG90A   IMG91A 
- "IMG86"  "IMG87"  "IMG88"  "IMG89"  "IMG90"  "IMG91" 
-[?25h[?25h[1] 10517  6210  1386  2461  2443  1563
-[?25h[1] 10517  6210  1386  2461  2443  1563
-[?25h[1] 59874  5335
-[?25h[?25h[?25h[?25h(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ 

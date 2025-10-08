@@ -11,5 +11,5 @@
 echo module load r/4.5.0
 module load r/4.5.0
 
-echo Rscript ./scripts/03_make_clusters99.R
-Rscript ./scripts/03_make_clusters99.R
+echo Rscript ./scripts/cluster99/03_make_clusters99.R
+Rscript ./scripts/cluster99/03_make_clusters99.R

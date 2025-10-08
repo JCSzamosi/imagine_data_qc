@@ -1,225 +1,0 @@
-make cleaned/ps_full.Rdata 
-make: *** No rule to make target 'data/active_taxtab_silva138.csv', needed by 'cleaned/ps_full.Rdata'.  Stop.
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ ls data/
-[0m[01;36mactive_IMAGINE_metadata_wide.csv[0m  [01;36mactive_seqtab_nochim.csv[0m       [01;34mcurrent[0m
-[01;36mactive_Rossi_info_datasheet.csv[0m   [01;36mactive_taxtab_silva138wsp.csv[0m  [01;34mobsolete[0m
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ ls data/make cleaned/ps_full.Rdata 
-Rscript scripts/make_ps_full.R
-[?25h── [1mAttaching core tidyverse packages[22m ───────────────────────── tidyverse 2.0.0 ──
-[32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-[32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-[32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-[32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-[32m✔[39m [34mpurrr    [39m 1.0.1     
-── [1mConflicts[22m ─────────────────────────────────────────── tidyverse_conflicts() ──
-[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-[36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
-[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1m[33mError[39m in `column_to_rownames()`:[22m
-[1m[22m[33m![39m Can't find column `Study.ID..` in `.data`.
-Backtrace:
-[90m     [39m▆
-[90m  1. [39m├─maptab %>% column_to_rownames("Study.ID..") %>% ...
-[90m  2. [39m├─[1mdplyr[22m::mutate_at(...)
-[90m  3. [39m│ └─dplyr:::manip_at(...)
-[90m  4. [39m│   └─dplyr:::tbl_at_syms(...)
-[90m  5. [39m│     └─dplyr:::tbl_at_vars(...)
-[90m  6. [39m│       └─dplyr::tbl_vars(tbl)
-[90m  7. [39m│         ├─dplyr:::new_sel_vars(tbl_vars_dispatch(x), group_vars(x))
-[90m  8. [39m│         │ └─[1mbase[22m::structure(...)
-[90m  9. [39m│         └─[1mdplyr[22m:::tbl_vars_dispatch(x)
-[90m 10. [39m└─[1m[94mtibble::column_to_rownames([39m[22m., "Study.ID.."[1m[94m)[39m[22m
-[90m 11. [39m  └─tibble:::abort_unknown_column_names(var)
-[90m 12. [39m    └─tibble:::tibble_abort(...)
-[90m 13. [39m      └─[1mrlang[22m::abort(x, class, ..., call = call, parent = parent, use_cli_format = TRUE)
-Execution halted
-[?25hmake: *** [Makefile:5: cleaned/ps_full.Rdata] Error 1
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ make cleaned/ps_full.Rdata 
-Rscript scripts/make_ps_full.R
-[?25h── [1mAttaching core tidyverse packages[22m ───────────────────────── tidyverse 2.0.0 ──
-[32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-[32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-[32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-[32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-[32m✔[39m [34mpurrr    [39m 1.0.1     
-── [1mConflicts[22m ─────────────────────────────────────────── tidyverse_conflicts() ──
-[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-[36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
-[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1m[33mError[39m in `tbl_at_vars()`:[22m
-[33m![39m Can't subset columns that don't exist.
-[31m✖[39m Column `Study` doesn't exist.
-Backtrace:
-[90m     [39m▆
-[90m  1. [39m├─maptab %>% column_to_rownames("Study.ID") %>% ...
-[90m  2. [39m├─[1mdplyr[22m::mutate_at(...)
-[90m  3. [39m│ └─dplyr:::manip_at(...)
-[90m  4. [39m│   └─dplyr:::tbl_at_syms(...)
-[90m  5. [39m│     └─[1m[94mdplyr:::tbl_at_vars([39m[22mtbl, vars, .include_group_vars = .include_group_vars, error_call = error_call[1m[94m)[39m[22m
-[90m  6. [39m│       └─[1mtidyselect[22m::vars_select(tibble_vars, !!!vars)
-[90m  7. [39m│         └─tidyselect:::eval_select_impl(...)
-[90m  8. [39m│           ├─tidyselect:::with_subscript_errors(...)
-[90m  9. [39m│           │ └─[1mrlang[22m::try_fetch(...)
-[90m 10. [39m│           │   └─[1mbase[22m::withCallingHandlers(...)
-[90m 11. [39m│           └─[1mtidyselect[22m:::vars_select_eval(...)
-[90m 12. [39m│             └─tidyselect:::walk_data_tree(expr, data_mask, context_mask)
-[90m 13. [39m│               └─tidyselect:::eval_c(expr, data_mask, context_mask)
-[90m 14. [39m│                 └─tidyselect:::reduce_sels(node, data_mask, context_mask, init = init)
-[90m 15. [39m│                   └─tidyselect:::walk_data_tree(new, data_mask, context_mask)
-[90m 16. [39m│                     └─tidyselect:::as_indices_sel_impl(...)
-[90m 17. [39m│                       └─tidyselect:::as_indices_impl(...)
-[90m 18. [39m│                         └─tidyselect:::chr_as_locations(x, vars, call = call, arg = arg)
-[90m 19. [39m│                           └─[1mvctrs[22m::vec_as_location(...)
-[90m 20. [39m└─vctrs (local) `<fn>`()
-[90m 21. [39m  └─vctrs:::stop_subscript_oob(...)
-[90m 22. [39m    └─vctrs:::stop_subscript(...)
-[90m 23. [39m      └─[1mrlang[22m::abort(...)
-Execution halted
-[?25hmake: *** [Makefile:5: cleaned/ps_full.Rdata] Error 1
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ make cleaned/ps_full.Rdata 
-Rscript scripts/make_ps_full.R
-[?25h── [1mAttaching core tidyverse packages[22m ───────────────────────── tidyverse 2.0.0 ──
-[32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-[32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-[32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-[32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-[32m✔[39m [34mpurrr    [39m 1.0.1     
-── [1mConflicts[22m ─────────────────────────────────────────── tidyverse_conflicts() ──
-[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-[36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
-[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1m[22mJoining with `by = join_by(Kingdom, Phylum, Class, Order, Family, Genus)`
-[?25h[?25h[?25h[?25h[?25h(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ make cleaned/pp[Ks_full.Rdata 
-Rscript scripts/make_ps_full.R
-[?25h── [1mAttaching core tidyverse packages[22m ───────────────────────── tidyverse 2.0.0 ──
-[32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-[32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-[32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-[32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-[32m✔[39m [34mpurrr    [39m 1.0.1     
-── [1mConflicts[22m ─────────────────────────────────────────── tidyverse_conflicts() ──
-[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-[36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
-[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1m[22mJoining with `by = join_by(Kingdom, Phylum, Class, Order, Family, Genus)`
-[?25h[?25h[?25h[?25h[?25h[?25h(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git st
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	[31mmodified:   logs/make_ps_full.screenlog[m
-
-no changes added to commit (use "git add" and/or "git commit -a")
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git add logs/
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git st
-On branch main
-Your branch is up to date with 'origin/main'.
-
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-	[32mmodified:   logs/make_ps_full.screenlog[m
-
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git ct -m "regenerate ps_full"
-[main 14f9608] regenerate ps_full
- 1 file changed, 14 insertions(+), 1 deletion(-)
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ git po
-Enumerating objects: 7, done.
-Counting objects:  14% (1/7)Counting objects:  28% (2/7)Counting objects:  42% (3/7)Counting objects:  57% (4/7)Counting objects:  71% (5/7)Counting objects:  85% (6/7)Counting objects: 100% (7/7)Counting objects: 100% (7/7), done.
-Delta compression using up to 12 threads
-Compressing objects:  25% (1/4)Compressing objects:  50% (2/4)Compressing objects:  75% (3/4)Compressing objects: 100% (4/4)Compressing objects: 100% (4/4), done.
-Writing objects:  25% (1/4)Writing objects:  50% (2/4)Writing objects:  75% (3/4)Writing objects: 100% (4/4)Writing objects: 100% (4/4), 397 bytes | 397.00 KiB/s, done.
-Total 4 (delta 3), reused 0 (delta 0)
-remote: Resolving deltas:   0% (0/3)[Kremote: Resolving deltas:  33% (1/3)[Kremote: Resolving deltas:  66% (2/3)[Kremote: Resolving deltas: 100% (3/3)[Kremote: Resolving deltas: 100% (3/3), completed with 3 local objects.[K
-To github.com:JCSzamosi/imagine_data_qc.git
-   cf6fd4a..14f9608  main -> main
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ ssh alpsr4.[K[K[K[K[K[Ks[K[Kszamosjc@mcmaster.ca[K[K[K[K[K[K[K[K[K[K[Kalpsr4.mcmaster. a[K[Kca
-szamosjc@alpsr4.mcmaster.ca's password: 
-Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.4.0-91-generic x86_64)
-
- * Documentation:  https://help.ubuntu.com
- * Management:     https://landscape.canonical.com
- * Support:        https://ubuntu.com/pro
-
-  System information as of Wed 27 Mar 2024 10:10:01 AM EDT
-
-  System load:  3.1                 Processes:                 1356
-  Usage of /:   37.1% of 273.21GB   Users logged in:           2
-  Memory usage: 5%                  IPv4 address for docker0:  172.17.0.1
-  Swap usage:   0%                  IPv4 address for enp5s0f0: 130.113.77.131
-  Temperature:  8.3 C
-
- * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
-   just raised the bar for easy, resilient and secure K8s cluster deployment.
-
-   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
-
-Expanded Security Maintenance for Applications is not enabled.
-
-0 updates can be applied immediately.
-
-18 additional security updates can be applied with ESM Apps.
-Learn more about enabling ESM Apps service at https://ubuntu.com/esm
-
-New release '22.04.3 LTS' available.
-Run 'do-release-upgrade' to upgrade to it.
-
-
-*** System restart required ***
-Last login: Tue Mar 26 12:10:35 2024 from 130.113.160.92
-(base) [01;32mszamosjc@alpsr4[00m:[01;34m~[00m$ ls[K[Kcd IMAGINE/DataQC/
-(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ ls
-[0m[01;34mcleaned[0m  [01;34mdata[0m  [01;34mintermed[0m  [01;34mlogs[0m  Makefile  Notes.Rmd  [01;34mscripts[0m
-(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ git pull origin
-remote: Enumerating objects: 7, done.[K
-remote: Counting objects:  14% (1/7)[Kremote: Counting objects:  28% (2/7)[Kremote: Counting objects:  42% (3/7)[Kremote: Counting objects:  57% (4/7)[Kremote: Counting objects:  71% (5/7)[Kremote: Counting objects:  85% (6/7)[Kremote: Counting objects: 100% (7/7)[Kremote: Counting objects: 100% (7/7), done.[K
-remote: Compressing objects: 100% (1/1)[Kremote: Compressing objects: 100% (1/1), done.[K
-remote: Total 4 (delta 3), reused 4 (delta 3), pack-reused 0[K
-Unpacking objects:  25% (1/4)Unpacking objects:  50% (2/4)Unpacking objects:  75% (3/4)Unpacking objects: 100% (4/4)Unpacking objects: 100% (4/4), 377 bytes | 11.00 KiB/s, done.
-From github.com:JCSzamosi/imagine_data_qc
-   cf6fd4a..14f9608  main       -> origin/main
-Updating cf6fd4a..14f9608
-Fast-forward
- logs/make_ps_full.screenlog | 15 [32m++++++++++++++[m[31m-[m
- 1 file changed, 14 insertions(+), 1 deletion(-)
-(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ ls [K[K[Kscreen -ls
-There are screens on:
-	189722.RNASeqInstall	(02/13/2024 04:02:14 PM)	(Detached)
-	3073095.ucfmt	(02/05/2024 03:09:19 PM)	(Detached)
-2 Sockets in /run/screen/S-szamosjc.
-(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ screen -S imagine
-[!p[?3;4l[4l>[?1049h[22;0;0t[4l[?1h=[0m(B[1;52r[H[2J[H[2J(base) szamosjc@alpsr4:~/IMAGINE/DataQC$ [?5h[?5lxit[K[K[Kexit
-exit
-[?1l>[52;1H
-[?1049l[23;0;0t[screen is terminating]
-(base) [01;32mszamosjc@alpsr4[00m:[01;34mDataQC[00m$ exit
-logout
-Connection to alpsr4.mcmaster.ca closed.
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ cd [K[K[K[K(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ 
-Makefile:10: target 'cleaned/mapfile_sequenced.csv' given more than once in the same rule
-make: *** No rule to make target 'data/active_taxtab_silva138wsp.csv', needed by 'cleaned/ps_full.Rdata'.  Stop.
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ cd data/
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mdata[00m$ ls
-[0m[01;36mactive_IMAGINE_metadata_wide.csv[0m  [01;34mcurrent[0m
-[01;36mactive_Rossi_info_datasheet.csv[0m   [01;34mobsolete[0m
-[01;36mactive_seqtab_nochim.csv[0m          [01;36msilva_nr99_v138_wSpecies_train_set.fa[0m
-[01;36mactive_taxtab_silva138wsp.rds[0m
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mdata[00m$ ln -s ac[K[K[K[K[K[K[K[Kcd ../
-(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ cd ../[4Plscd data/make cleaned/ps_full.Rdata 
-Makefile:10: target 'cleaned/mapfile_sequenced.csv' given more than once in the same rule
-Rscript scripts/make_ps_full.R
-[?25h── [1mAttaching core tidyverse packages[22m ────────────────────────────────────── tidyverse 2.0.0 ──
-[32m✔[39m [34mdplyr    [39m 1.1.2     [32m✔[39m [34mreadr    [39m 2.1.4
-[32m✔[39m [34mforcats  [39m 1.0.0     [32m✔[39m [34mstringr  [39m 1.5.0
-[32m✔[39m [34mggplot2  [39m 3.4.2     [32m✔[39m [34mtibble   [39m 3.2.1
-[32m✔[39m [34mlubridate[39m 1.9.2     [32m✔[39m [34mtidyr    [39m 1.3.0
-[32m✔[39m [34mpurrr    [39m 1.0.1     
-── [1mConflicts[22m ──────────────────────────────────────────────────────── tidyverse_conflicts() ──
-[31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-[31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-[36mℹ[39m Use the conflicted package ([3m[34m<http://conflicted.r-lib.org/>[39m[23m) to force all conflicts to become errors
-[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[1] FALSE
-[?25h[1] TRUE
-[?25h[?25h[?25h[?25h[?25h[?25h[1m[22mJoining with `by = join_by(Kingdom, Phylum, Class, Order, Family, Genus)`
-[?25h[?25h[?25h[?25h[?25h[?25h(base) [01;32mjcszamosi@bioinformation[00m:[01;34mDataQC[00m$ 

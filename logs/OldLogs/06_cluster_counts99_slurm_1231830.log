@@ -1,4 +1,0 @@
-module load r/4.5.0
-Rscript ./scripts/cluster99/06_cluster_counts99.R
-Error in library(doParallel) : there is no package called ‘doParallel’
-Execution halted

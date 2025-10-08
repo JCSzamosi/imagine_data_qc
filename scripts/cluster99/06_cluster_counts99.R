@@ -8,7 +8,7 @@ source('./scripts/functions.R')
 intdir = 'intermed'
 cldir = 'cleaned'
 full = 'full'
-clstf = 'clst99.Rdata'
+clstf = 'clsts99.Rdata'
 clstcsv = 'clstab99.csv'
 consf = 'conseqs99.csv'
 matf = 'full_mat.Rdata'

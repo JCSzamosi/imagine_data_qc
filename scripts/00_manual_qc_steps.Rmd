@@ -8,7 +8,7 @@ library(tidyverse)
 
 ## IMAGINE metadata
 
-Reading in the IMAGINE metadata sheet I received from Jehane on 2025-08-18
+Reading in the IMAGINE metadata sheet I received from Aida, 2025-09-29.
 
 ```{r}
 list.files('input/')
@@ -16,11 +16,8 @@ img_meta = read.csv(file = 'input/active_IMAGINE_metadata_wide.csv',
                     strip.white = TRUE)
 head(img_meta)
 
-colnames(img_meta) = str_replace(colnames(img_meta), 
-                                 fixed('.Stool.Specimen.ID'), '')
-
 meta_long = (img_meta
-             %>% pivot_longer(Baseline:X4.Year, names_to = 'Timepoint',
+             %>% pivot_longer(Baseline:Y4, names_to = 'Timepoint',
                               values_to = 'Sample.ID'))
 
 head(meta_long)
@@ -29,16 +26,14 @@ meta_long = filter(meta_long,!is.na(Sample.ID))
 dim(meta_long)
 ```
 
-This file has 13,486 samples in it. I'm going to clean it up a bit:
+This file has 13,509 samples in it. I'm going to clean it up a bit:
 
 ```{r}
 head(meta_long)
 summary(meta_long)
 
 meta_long = (meta_long
-             %>% mutate(IBD.Classification = str_replace_all(IBD.Classification,
-                                                             '"',''),
-                    IBD.Classification = case_when(Disease.Type %in% c('IBS',
+             %>% mutate(IBD.Classification = case_when(Disease.Type %in% c('IBS',
                                                                'Healthy') ~ 
                                                        Disease.Type,
                                                    TRUE ~ IBD.Classification),
@@ -46,10 +41,6 @@ meta_long = (meta_long
                                                 levels = c('CD', 'UC',
                                                            'IBD unclassified',
                                                           'IBS', 'Healthy','')),
-                    Timepoint = case_when(Timepoint == 'Baseline' ~ Timepoint,
-                                          TRUE ~ paste('Y',
-                                                       substr(Timepoint,2,2),
-                                                       sep = '')),
                     Timepoint = factor(Timepoint, levels = c('Baseline',
                                                              'Y1','Y2','Y3',
                                                              'Y4')),
@@ -60,7 +51,7 @@ meta_long = (meta_long
 summary(meta_long)
 ```
 
-I can see immediately that some sample IDs are duplicated. Let's look at that.
+It doesn't look like there are any duplicate sample IDs. Let's make sure:
 
 ```{r}
 meta_dup = (meta_long
@@ -71,13 +62,9 @@ dim(meta_dup)
 meta_dup
 ```
 
-There are 5 repeated sample IDs. They are all from site 21, and I can't find
-any of them in my previous lists of duplicate/problem IDs. I will check with the
-IMAGINE people if there's any chance they are data entry errors. For now I'll
-write them to a file:
-
+No need to write anything to a file
 ```{r}
-write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_2025-08-22.csv')
+# write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_YYYY-MM-DD.csv')
 ```
 
 ## Surette Lab Sample Info Sheet
@@ -90,7 +77,7 @@ samp_inf = read.csv(file = 'input/active_Surette_sample_info_sheet.csv',
 dim(samp_inf)
 ```
 
-This is 13,526 samples. That is 40 more samples than in the IMAGINE metadata
+This is 13,526 samples. That is 27 more samples than in the IMAGINE metadata
 sheet. My guess is that these will be the negative controls. Before I check, I
 will clean this up and remove any columns I don't need:
 
@@ -104,7 +91,7 @@ samp_inf = (samp_inf
             %>% rename(Date.Received = Date.Received.YYYY.MM.DD)
             %>% mutate(across(c(Sample.ID, Study.ID, Illumina.Plate.Number),
                               factor),
-                       Date.Received = mdy_hm(Date.Received)))
+                       Date.Received = dmy_hm(Date.Received)))
 summary(samp_inf)
 ```
 
@@ -142,17 +129,13 @@ samp_inf %>% count(Study.ID) %>% filter(n > 1)
 
 Nope, none. Excellent!
 
-Are the duplicates in the IMAGINE sheet present in the Surette sheet?
+This step compares duplicates between sheets, but is not necessary because there
+are no duplicates.
 
 ```{r}
-any(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
-all(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
+# any(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
+# all(meta_dup$Sample.ID %in% samp_inf$Sample.ID)
 ```
-
-All of the duplicated IDs from IMAGINE are present in the sample info sheet, but
-they are only present once. This suggests that there was a data entry error when
-the metadata sheet was produced, but that the samples had different (correct?)
-IDs when they were delivered here.
 
 ## Compare the two sheets
 
@@ -164,15 +147,15 @@ meta_only = filter(meta_long, !(Sample.ID %in% samp_inf$Sample.ID))
 dim(meta_only)
 ```
 
-Since fixing duplicates with Laura on August 22, 2025, there remain 23 samples
-in the IMAGINE datasheet that are absent from the Surette sample info sheet.
+There are two sample IDs in the IMAGINE metadata sheet that are absent from the
+Surette lab sheet:
 
 ```{r}
 data.frame(meta_only)
 ```
 
-Most of these are from sites 21 and 25, and one is from site 30. have emailed
-Aida about this and am waiting to hear back.
+I need to look at the emails to see what's up. For now, I will write it to a
+file.
 
 ```{r}
 write.csv(meta_only, 
@@ -188,23 +171,29 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-As of August 22, 2025, there are 68 samples in the Surette sample data sheet
+As of September 30, 2025, there are 19 samples in the Surette sample data sheet
 that are missing from the IMAGINE sheet.
 
 ```{r}
 samp_only
-samp_only %>% filter(grepl('D', Study.ID))
+samp_only %>% filter(grepl('D', Study.ID) |
+                         grepl('discard', Notes, ignore.case = TRUE) |
+                         grepl('ineligible', Notes, ignore.case = TRUE) |
+                         grepl('dispose', Notes, ignore.case = TRUE))
 ```
 
-5 of these are discards, leaving 63:
+9 of these are discards, leaving 10:
 
 ```{r}
 samp_only = (samp_only 
-              %>% filter(!grepl('D', Study.ID)))
+              %>% filter(!grepl('D', Study.ID), 
+                         !grepl('discard', Notes, ignore.case = TRUE),
+                         !grepl('ineligible', Notes, ignore.case = TRUE)))
 samp_only
 ```
 
-I have emailed Aida about these and am waiting to hear back.
+I need to check the email thread with Tania. For now I am writing these to a
+file.
 
 ```{r}
 write.csv(samp_only, 
@@ -232,7 +221,7 @@ length(t1)
 t1
 ```
 
-There are 68 negative controls. I will partition them off for now
+There are 70 negative controls. I will partition them off for now
 
 ```{r}
 neg_ctl = asvtab[,t1]
@@ -241,7 +230,7 @@ asvtab_no_neg = asvtab[,seq_rem]
 dim(asvtab_no_neg)
 ```
 
-This leaves 12,784 samples. Now let's look for any IMG ids that are missing from
+This leaves 13,055 samples. Now let's look for any IMG ids that are missing from
 the sample data sheet
 
 ```{r}
@@ -250,7 +239,7 @@ length(t2)
 sort(t2)
 ```
 
-There are 43 samples that start with IMG but are missing from the sample info
+There are 47 samples that start with IMG but are missing from the sample info
 sheet. Most of these end in A or B, which means they are re-sequenced samples,
 but a couple don't. Let's look at those:
 
@@ -258,10 +247,13 @@ but a couple don't. Let's look at those:
 asv_missing = t2[!grepl('[AB]$',t2)]
 length(asv_missing)
 asv_missing
+
+
 ```
 
-There is one sequenced sample missing from the sample info sheet. It is listed
-in the sample info sheet as discarded, so I will remove it from the final table.
+There are five sequenced samples missing from the sample info sheet. They are
+all listed in the sample info sheet as discard/DNP, so I will remove them from the
+final table.
 
 Now I'm going to check that all the duplicated samples are present in their
 original forms in the asv table
@@ -285,7 +277,7 @@ Nope! Some are missing!
 sum(dup_origs %in% seq_rem)
 ```
 
-Only 12 are in there???
+Only 12 are in there.
 
 ```{r}
 dup_origs[dup_origs %in% colnames(asvtab)]
@@ -388,16 +380,16 @@ missing = missing[!(missing %in% t1)]
 missing
 ```
 
-Just the one that should be discarded. I'll discard it now.
+Just the five that should be discarded. I'll discard them now.
 
 ```{r}
 dim(asvtab_fixed)
-asvtab_fixed = asvtab_fixed[,colnames(asvtab_fixed)[!(colnames(asvtab_fixed) ==
+asvtab_fixed = asvtab_fixed[,colnames(asvtab_fixed)[!(colnames(asvtab_fixed) %in% 
                                                           missing)]]
 dim(asvtab_fixed)
 ```
 
-Removed exactly one sample.
+Removed five samples.
 
 Removing a sample may bring some ASVs down to 0 everywhere. Let's check and
 remove them if necessary:
@@ -409,7 +401,7 @@ asvtab_fixed = asvtab_fixed[rowSums(asvtab_fixed) > 0,]
 dim(asvtab_fixed)
 ```
 
-There were 10 ASVs with 0s everywhere. They have been removed.
+There were 37 ASVs with 0s everywhere. They have been removed.
 
 # Write Fixed Tables
 

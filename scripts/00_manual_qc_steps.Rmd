@@ -26,7 +26,7 @@ meta_long = filter(meta_long,!is.na(Sample.ID))
 dim(meta_long)
 ```
 
-This file has 13,509 samples in it. I'm going to clean it up a bit:
+This file has 13,516 samples in it. I'm going to clean it up a bit:
 
 ```{r}
 head(meta_long)
@@ -48,6 +48,19 @@ meta_long = (meta_long
                                                                    'IBS','IBD',
                                                                    '')),
                     across(c(Site.Number, Participant.ID, Sample.ID), factor)))
+```
+
+Laura confirmed by email that sample 203664 was destroyed, so it should be
+removed from the listing to prevent confusion during reconciliation:
+
+```{r}
+meta_long = filter(meta_long, Sample.ID != 203664)
+dim(meta_long)
+```
+
+Now we have 13,515 samples.
+
+```{r}
 summary(meta_long)
 ```
 
@@ -77,9 +90,8 @@ samp_inf = read.csv(file = 'input/active_Surette_sample_info_sheet.csv',
 dim(samp_inf)
 ```
 
-This is 13,526 samples. That is 27 more samples than in the IMAGINE metadata
-sheet. My guess is that these will be the negative controls. Before I check, I
-will clean this up and remove any columns I don't need:
+This is 13,526 samples. That is 11 more samples than in the IMAGINE metadata
+sheet. I will clean this up and remove any columns I don't need:
 
 ```{r}
 summary(samp_inf)
@@ -92,6 +104,20 @@ samp_inf = (samp_inf
             %>% mutate(across(c(Sample.ID, Study.ID, Illumina.Plate.Number),
                               factor),
                        Date.Received = dmy_hm(Date.Received)))
+```
+
+Tania confirmed by email that sample 101246 should be removed from analysis,
+since it cannot be associated with a patient/timepoint. We are also removing
+sample 200510 because it is a duplicate of 100785.
+
+```{r}
+samp_inf = filter(samp_inf, !(Sample.ID %in% c(101246, 200510)))
+dim(samp_inf)
+```
+
+There are now 13,524 samples, 9 more than IMAGINE.
+
+```{r}
 summary(samp_inf)
 ```
 
@@ -147,15 +173,16 @@ meta_only = filter(meta_long, !(Sample.ID %in% samp_inf$Sample.ID))
 dim(meta_only)
 ```
 
-There are two sample IDs in the IMAGINE metadata sheet that are absent from the
+There is one sample ID in the IMAGINE metadata sheet that is absent from the
 Surette lab sheet:
 
 ```{r}
 data.frame(meta_only)
 ```
 
-I need to look at the emails to see what's up. For now, I will write it to a
-file.
+This is sample 100446. I wrote to the team to ask about it on October 17, 2025,
+and followed up on December 5, 2025. I am wondering if 100446 is a typo for
+101246, which would mean we could re-include that sample.
 
 ```{r}
 write.csv(meta_only, 
@@ -171,7 +198,7 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-As of September 30, 2025, there are 19 samples in the Surette sample data sheet
+As of December 5, 2025, there are 10 samples in the Surette sample data sheet
 that are missing from the IMAGINE sheet.
 
 ```{r}
@@ -182,7 +209,7 @@ samp_only %>% filter(grepl('D', Study.ID) |
                          grepl('dispose', Notes, ignore.case = TRUE))
 ```
 
-9 of these are discards, leaving 10:
+9 of these are discards, leaving 1:
 
 ```{r}
 samp_only = (samp_only 
@@ -192,8 +219,7 @@ samp_only = (samp_only
 samp_only
 ```
 
-I need to check the email thread with Tania. For now I am writing these to a
-file.
+We are waiting to hear back about this one from Paul.
 
 ```{r}
 write.csv(samp_only, 
@@ -211,21 +237,21 @@ asvtab = t(asvtab)
 dim(asvtab)
 ```
 
-There are 12,852 samples sequenced.
+There are 13,125 samples sequenced.
 
 ```{r}
 seq_ids = colnames(asvtab)
 head(seq_ids)
-t1 = seq_ids[!startsWith(seq_ids, 'IMG')]
-length(t1)
-t1
+negs = seq_ids[!startsWith(seq_ids, 'IMG')]
+length(negs)
+negs
 ```
 
 There are 70 negative controls. I will partition them off for now
 
 ```{r}
-neg_ctl = asvtab[,t1]
-seq_rem = seq_ids[!(seq_ids %in% t1)]
+neg_ctl = asvtab[,negs]
+seq_rem = seq_ids[!(seq_ids %in% negs)]
 asvtab_no_neg = asvtab[,seq_rem]
 dim(asvtab_no_neg)
 ```
@@ -234,32 +260,37 @@ This leaves 13,055 samples. Now let's look for any IMG ids that are missing from
 the sample data sheet
 
 ```{r}
-t2 = seq_rem[!(seq_rem %in% samp_inf$Study.ID)]
-length(t2)
-sort(t2)
+seq_only = seq_rem[!(seq_rem %in% samp_inf$Study.ID)]
+length(seq_only)
+sort(seq_only)
 ```
 
-There are 47 samples that start with IMG but are missing from the sample info
+There are 49 samples that start with IMG but are missing from the sample info
 sheet. Most of these end in A or B, which means they are re-sequenced samples,
 but a couple don't. Let's look at those:
 
 ```{r}
-asv_missing = t2[!grepl('[AB]$',t2)]
+asv_missing = seq_only[!grepl('[AB]$',seq_only)]
 length(asv_missing)
 asv_missing
 
-
+samp_inf %>% filter(grepl('D', Study.ID) |
+                         grepl('discard', Notes, ignore.case = TRUE) |
+                         grepl('ineligible', Notes, ignore.case = TRUE) |
+                         grepl('dispose', Notes, ignore.case = TRUE))
 ```
 
-There are five sequenced samples missing from the sample info sheet. They are
-all listed in the sample info sheet as discard/DNP, so I will remove them from the
-final table.
+There are 7 sequenced samples missing from the sample info sheet. All of these
+are listed in the sample info sheet as discard/DNP, so I will remove them from
+the final table. This includes IMG8674, which is not currently listed in the
+sample info sheet as a discard, but which Tania and Laura have confirmed should
+be discarded, as well as IMG3919, which is sample 200510 and is a duplicate.
 
 Now I'm going to check that all the duplicated samples are present in their
 original forms in the asv table
 
 ```{r}
-dups = t2[grepl('[AB]$', t2)]
+dups = seq_only[grepl('[AB]$', seq_only)]
 length(dups)
 dups
 
@@ -376,11 +407,11 @@ head(samp_ids)
 tail(samp_ids)
 head(samp_inf)
 missing = samp_ids[!(samp_ids %in% c(samp_inf$Study.ID))]
-missing = missing[!(missing %in% t1)]
+missing = missing[!(missing %in% negs)]
 missing
 ```
 
-Just the five that should be discarded. I'll discard them now.
+Just the 7 that should be discarded. I'll discard them now.
 
 ```{r}
 dim(asvtab_fixed)
@@ -389,7 +420,7 @@ asvtab_fixed = asvtab_fixed[,colnames(asvtab_fixed)[!(colnames(asvtab_fixed) %in
 dim(asvtab_fixed)
 ```
 
-Removed five samples.
+Removed 7 samples.
 
 Removing a sample may bring some ASVs down to 0 everywhere. Let's check and
 remove them if necessary:
@@ -401,7 +432,8 @@ asvtab_fixed = asvtab_fixed[rowSums(asvtab_fixed) > 0,]
 dim(asvtab_fixed)
 ```
 
-There were 37 ASVs with 0s everywhere. They have been removed.
+There were 43 ASVs with 0s everywhere. They have been removed, leaving us with 
+103,096 ASVs in 13,106 samples.
 
 # Write Fixed Tables
 
@@ -416,14 +448,14 @@ dim(maptab)
 
 The negative controls aren't in the maptab, which means they will be removed
 from everything downstream of this once we start using phyloseq. I'll put them
-back in.
+in.
 
 ```{r}
 head(maptab)
-plate = unlist(strsplit(t1, 'n'))[(1:length(t1)) * 2 -1]
+plate = unlist(strsplit(negs, 'n'))[(1:length(negs)) * 2 -1]
 plate
 neg_map = data.frame(Sample.ID = NA,
-                     Study.ID = t1,
+                     Study.ID = negs,
                      Date.Received = NA,
                      Illumina.Plate.Number = plate,
                      Notes = 'negative control',
@@ -436,6 +468,9 @@ maptab = rbind(maptab, neg_map)
 dim(maptab)
 ```
 
+Including negative controls, that leaves us with 13,595 samples in the maptab,
+of which 13,106 are present in the ASV table I currently have.
+
 ```{r}
 write_rds(maptab, file = 'data/merged_maptab.rds')
 write_rds(asvtab_fixed, file = 'data/merged_seqtab.rds')
@@ -444,12 +479,12 @@ write_rds(asvtab_fixed, file = 'data/merged_seqtab.rds')
 Start tracking sample/taxon counts
 
 ```{r}
-dim(asvtab_fixed)
 dim(maptab)
+dim(asvtab_fixed)
 
 stat_df = data.frame(Step = '00_manual_qc_steps.Rmd',
-                     Samples = c(13622, 12839),
-                     Taxa = c(NA, 101609),
+                     Samples = c(nrow(maptab), ncol(asvtab_fixed)),
+                     Taxa = c(NA, ncol(asvtab_fixed)),
                      File = c('data/merged_maptab.rds', 
                               'data/merged_seqtab.rds'))
 

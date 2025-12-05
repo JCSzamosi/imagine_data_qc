@@ -5,7 +5,7 @@
 #SBATCH --output=logs/%x_slurm_%j.log
 #SBATCH --error=logs/%x_slurm_%j.log
 #SBATCH --job-name=03_make_clusters99.R
-#SBATCH --time=02:00:00
+#SBATCH --time=01:00:00
 #SBATCH --account=rrg-surette
 
 echo module load r/4.5.0

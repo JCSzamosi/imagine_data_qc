@@ -26,6 +26,8 @@ cat('\nStart clustering sequences\n')
 clsts = Clusterize(DNAStringSet(seqs), cutoff = 0.01,
                    includeTerminalGaps = TRUE,
 									 processors = 40)
+
+cat('\nStart second clustering\n')
 clsts2 = Clusterize(DNAStringSet(seqs), cutoff = 0.01,
                    includeTerminalGaps = TRUE,
                    penalizeGapLetterMatches = TRUE,

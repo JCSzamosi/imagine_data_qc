@@ -1,0 +1,34 @@
+module load r/4.5.0
+Rscript ./scripts/asvs/03_make_samfilt.R
+
+The distribution of read depths is:
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+      0   28186   42322   49704   61474  664096 
+
+The properties of the phyloseq object are:
+phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 101182 taxa and 13108 samples ]
+sample_data() Sample Data:       [ 13108 samples by 10 sample variables ]
+tax_table()   Taxonomy Table:    [ 101182 taxa by 7 taxonomic ranks ]
+
+Removing negative controls
+
+Removed negative controls. 13038 samples remaining.
+
+Removing samples with < 10,000 reads.
+
+Removed low-read samples. 13018 out of 13038 samples remaining, or 99.85%.
+
+Removing taxa with 0 counts.
+
+Removed 0-count taxa. 101154 out of 101182 taxa remaining, or 99.97%.
+
+Writing phyloseq object files
+
+Writing the individual tables
+
+Writing count totals
+
+Writing track stats
+
+DONE

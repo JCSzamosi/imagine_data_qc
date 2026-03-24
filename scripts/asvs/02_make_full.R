@@ -9,24 +9,28 @@ library(AfterSl1p)
 outdir = 'cleaned/asvs/full'
 outmat = 'full_mat.Rdata'
 asvcsv = 'full_asv.csv'
-taxcsv = 'full_tax.csv'
+taxcsv_g = 'full_tax_g.csv'
+taxcsv_s = 'full_tax_s.csv'
 mapcsv = 'full_map.csv'
 outps = 'full_ps.Rdata'
 seqf = 'full_seqs.Rdata'
 datdir = 'data'
-taxf = 'merged_taxtab.rds'
+taxf_g = 'merged_taxtab_gg.rds'
+taxf_s = 'merged_taxtab_silva.rds'
 asvf = 'merged_seqtab.rds'
 mapf = 'merged_maptab.rds'
 tots = 'asv_sample_totals.Rdata'
 
-taxfile = file.path(datdir, taxf)
+taxfile_g = file.path(datdir, taxf_g)
+taxfile_s = file.path(datdir, taxf_s)
 asvfile = file.path(datdir, asvf)
 mapfile = file.path(datdir, mapf)
 
 # Import & Check Data ####
 
 cat('\nReading in tax table\n')
-taxtab = readRDS(taxfile)
+taxtab_g = readRDS(taxfile_g)
+taxtab_s = readRDS(taxfile_s)
 
 ## Read in the asv table
 cat('\nReading in asv table\n')
@@ -34,12 +38,16 @@ asvtab = readRDS(asvfile)
 
 ## Check the rows
 cat('\nChecking the rownames match\n')
-seqs = rownames(taxtab)
+if (!all(rownames(taxtab_g) == rownames(taxtab_s))){
+    msg = 'The two taxtab rownames don\'t match'
+    stop(msg)
+}
+seqs = rownames(taxtab_g)
 if (!all(seqs == rownames(asvtab))){
 	msg = 'The taxtab and asvtab rownames don\'t match'
 	stop(msg)
 }
-rownames(taxtab) = rownames(asvtab) = NULL
+rownames(taxtab_g) = rownames(taxtab_s) = rownames(asvtab) = NULL
 
 ## Read in the mapfile
 cat('\nReading in the mapfile\n')
@@ -102,7 +110,8 @@ rownames(maptab) = maptab$Study.ID
 
 ## Make matrices
 asvtab = as.matrix(asvtab)
-taxtab = as.matrix(taxtab)
+taxtab_g = as.matrix(taxtab_g)
+taxtab_s = as.matrix(taxtab_s)
 
 
 # Create the phyloseq & seqs objects ####
@@ -110,11 +119,11 @@ taxtab = as.matrix(taxtab)
 ## Create the phyloseq object
 cat('\nCreating the phyloseq object\n')
 ps_full = phyloseq(otu_table(asvtab, taxa_are_rows = TRUE),
-              tax_table(taxtab),
               sample_data(maptab))
 
-## Name the sequence data
-names(seqs) = taxa_names(ps_full)
+## Name the sequence data & tax tables
+rownames(taxtab_g) = rownames(taxtab_s) = names(seqs) = taxa_names(ps_full)
+taxtab_g = sub('^[a-z]__', '', taxtab_g)
 
 ## Check the phyloseq object
 
@@ -128,16 +137,37 @@ cat(sprintf(paste('\nThe phyloseq object has %i samples and %i taxa',
 					'before removing host\n'), 
 			nsamples(ps_full), ntaxa(ps_full)))
 
-## Remove host sequences
+cat('\nUpdating the stats track table')
+stats_df = data.frame(Step = 'Merge map and asv tables before removing host',
+					Samples = nsamples(ps_full),
+					Taxa = ntaxa(ps_full),
+					File = NA)
+write.table(stats_df, file = 'stats/track_counts.csv',
+			append = TRUE, quote = TRUE, sep = ',',
+			row.names = FALSE, col.names = FALSE)
+
+## Remove host sequences (removing anything that is host by either DB)
 cat('\nPropagating taxon IDs down the levels\n')
-ps_full = prop_tax_down(ps_full, indic = FALSE)
+tax_propped_g = prop_tax_down(tax_table(taxtab_g), indic = FALSE)
+tax_propped_s = prop_tax_down(tax_table(taxtab_s), indic = FALSE)
+not_host_g = with(data.frame(tax_propped_g),
+                  Kingdom %in% c('Bacteria','Archaea') &
+                      !startsWith(as.character(Phylum), 'k_') &
+                      Family != 'Mitochondria' &
+                      Order != 'Chloroplast',
+                  Class != 'Chloroplast')
+not_host_s = with(data.frame(tax_propped_s),
+                  Kingdom %in% c('Bacteria','Archaea') &
+                      !startsWith(as.character(Phylum), 'k_') &
+                      Family != 'Mitochondria' &
+                      Order != 'Chloroplast',
+                  Class != 'Chloroplast')
+not_host = not_host_g & not_host_s
 cat('\nRemoving host ASVs\n')
-ps_full = subset_taxa(ps_full,
-                        Kingdom %in% c('Bacteria','Archaea') &
-                            !startsWith(as.character(Phylum), 'k_') &
-                            Family != 'Mitochondria' &
-                            Order != 'Chloroplast')
+ps_full = prune_taxa(not_host, ps_full)
 seqs = seqs[taxa_names(ps_full)]
+tax_full_g = tax_propped_g[taxa_names(ps_full),]
+tax_full_s = tax_propped_s[taxa_names(ps_full),]
 
 cat(sprintf('\nThe phyloseq object has %i taxa after removing host.\n',
 			ntaxa(ps_full)))
@@ -160,8 +190,6 @@ asv_full = matrix(otu_table(ps_full), nrow = ntaxa(ps_full),
                   ncol = nsamples(ps_full))
 rownames(asv_full) = seqs[rownames(asv_full)]
 colnames(asv_full) = sample_names(ps_full)
-tax_full = matrix(tax_table(ps_full), nrow = ntaxa(ps_full),
-                  ncol = ncol(tax_table(ps_full)))
 rownames(tax_full) = seqs[rownames(tax_full)]
 colnames(tax_full) = colnames(tax_table(ps_full))
 map_full = data.frame(sample_data(ps_full))
@@ -174,10 +202,12 @@ save(list = c('asv_full', 'tax_full', 'map_full'),
      file = wrmat)
 
 wrasv = file.path(outdir, asvcsv)
-wrtax = file.path(outdir, taxcsv)
+wrtax_g = file.path(outdir, taxcsv_g)
+wrtax_s = file.path(outdir, taxcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(asv_full, file = wrasv, row.names = TRUE)
-write.csv(tax_full, file = wrtax, row.names = TRUE)
+write.csv(tax_full_g, file = wrtax_g, row.names = TRUE)
+write.csv(tax_full_s, file = wrtax_s, row.names = TRUE)
 write.csv(map_full, file = wrmap, row.names = TRUE)
 
 ## Write some totals in case I want/need them later

@@ -3,3 +3,13 @@
 "00_manual_qc_steps.Rmd",13581,13581,"data/merged_seqtab.rds"
 "01_assign_tax_asvs.R: silva",NA,100225,"data/merged_taxtab_silva.rds"
 "01_assign_tax_asvs.R: gg",NA,100225,"data/merged_taxtab_gg.rds"
+"Merge map and asv tables before removing host",13581,100225,NA
+"Merge map and asv tables before removing host",13581,100225,NA
+"Merge map and asv tables before removing host",13581,100225,NA
+"Merge map and asv tables before removing host",13581,100225,NA
+"asvs/02_make_full.R",13581,96686,"cleaned/asvs/full/full_ps.Rdata"
+"asvs/02_make_full.R",NA,96686,"cleaned/asvs/full/full_seqs.Rdata"
+"asvs/02_make_full.R",13581,96686,"cleaned/asvs/full/full_asv.csv"
+"asvs/02_make_full.R",NA,96686,"cleaned/asvs/full/full_tax_g.csv"
+"asvs/02_make_full.R",NA,96686,"cleaned/asvs/full/full_tax_s.csv"
+"asvs/02_make_full.R",13581,NA,"cleaned/asvs/full/full_map.csv"

@@ -190,15 +190,13 @@ asv_full = matrix(otu_table(ps_full), nrow = ntaxa(ps_full),
                   ncol = nsamples(ps_full))
 rownames(asv_full) = seqs[rownames(asv_full)]
 colnames(asv_full) = sample_names(ps_full)
-rownames(tax_full) = seqs[rownames(tax_full)]
-colnames(tax_full) = colnames(tax_table(ps_full))
 map_full = data.frame(sample_data(ps_full))
 
 ## Write the individual tables
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('asv_full', 'tax_full', 'map_full'), 
+save(list = c('asv_full', 'tax_full_g', 'tax_full_s', 'map_full'), 
      file = wrmat)
 
 wrasv = file.path(outdir, asvcsv)
@@ -227,14 +225,17 @@ stats_df = data.frame(Step = 'asvs/02_make_full.R',
 						Samples = c(nsamples(ps_full),NA,
 									ncol(asv_full),
 									NA,
+									NA,
 									nrow(map_full)),
 						Taxa = c(ntaxa(ps_full),length(seqs),
 								nrow(asv_full),
-								nrow(tax_full),
+								nrow(tax_full_g),
+								nrow(tax_full_s),
 								NA),
 						File = c(wrps,wrseq,
 								wrasv,
-								wrtax,
+								wrtax_g,
+								wrtax_s,
 								wrmap))
 write.table(stats_df, file = 'stats/track_counts.csv',
 			append = TRUE, quote = TRUE, sep = ',',

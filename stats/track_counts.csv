@@ -1,3 +1,32 @@
 "Step","Samples","Taxa","File"
 "00_manual_qc_steps.Rmd",13585,NA,"data/merged_maptab.rds"
 "00_manual_qc_steps.Rmd",13585,100234,"data/merged_seqtab.rds"
+"01_assign_tax_asvs.R: silva",NA,100225,"data/merged_taxtab_silva.rds"
+"01_assign_tax_asvs.R: gg",NA,100225,"data/merged_taxtab_gg.rds"
+"Merge map and asv tables before removing host",13581,100225,NA
+"Merge map and asv tables before removing host",13581,100225,NA
+"Merge map and asv tables before removing host",13581,100225,NA
+"Merge map and asv tables before removing host",13581,100225,NA
+"asvs/02_make_full.R",13581,96686,"cleaned/asvs/full/full_ps.Rdata"
+"asvs/02_make_full.R",NA,96686,"cleaned/asvs/full/full_seqs.Rdata"
+"asvs/02_make_full.R",13581,96686,"cleaned/asvs/full/full_asv.csv"
+"asvs/02_make_full.R",NA,96686,"cleaned/asvs/full/full_tax_g.csv"
+"asvs/02_make_full.R",NA,96686,"cleaned/asvs/full/full_tax_s.csv"
+"asvs/02_make_full.R",13581,NA,"cleaned/asvs/full/full_map.csv"
+"cluster99/03_make_clusters.R",NA,"96686"
+"cluster99/03_make_clusters.R",NA,"22143"
+"cluster99/03_make_clusters.R",NA,"intermed/clsts99.Rdata - ASVs"
+"cluster99/03_make_clusters.R",NA,"intermed/clsts99.Rdata - clusters"
+"01_assign_tax_asvs.R: silva",NA,100234,"data/merged_taxtab_silva.rds"
+"01_assign_tax_asvs.R: gg",NA,100234,"data/merged_taxtab_gg.rds"
+"Merge map and asv tables before removing host",13585,100234,NA
+"asvs/02_make_full.R",13585,96695,"cleaned/asvs/full/full_ps.Rdata"
+"asvs/02_make_full.R",NA,96695,"cleaned/asvs/full/full_seqs.Rdata"
+"asvs/02_make_full.R",13585,96695,"cleaned/asvs/full/full_asv.csv"
+"asvs/02_make_full.R",NA,96695,"cleaned/asvs/full/full_tax_g.csv"
+"asvs/02_make_full.R",NA,96695,"cleaned/asvs/full/full_tax_s.csv"
+"asvs/02_make_full.R",13585,NA,"cleaned/asvs/full/full_map.csv"
+"cluster99/03_make_clusters.R",NA,"96695"
+"cluster99/03_make_clusters.R",NA,"22207"
+"cluster99/03_make_clusters.R",NA,"intermed/clsts99.Rdata - ASVs"
+"cluster99/03_make_clusters.R",NA,"intermed/clsts99.Rdata - clusters"

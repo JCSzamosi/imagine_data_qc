@@ -535,7 +535,7 @@ dim(asvtab_fixed)
 
 stat_df = data.frame(Step = '00_manual_qc_steps.Rmd',
                      Samples = c(nrow(maptab), ncol(asvtab_fixed)),
-                     Taxa = c(NA, ncol(asvtab_fixed)),
+                     Taxa = c(NA, nrow(asvtab_fixed)),
                      File = c('data/merged_maptab.rds', 
                               'data/merged_seqtab.rds'))
 

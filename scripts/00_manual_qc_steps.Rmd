@@ -58,7 +58,7 @@ meta_long = filter(meta_long, Sample.ID != 203664)
 dim(meta_long)
 ```
 
-Now we have 13,515 samples.
+Now we have 13,515 samples in the IMAGINE metadata file.
 
 ```{r}
 summary(meta_long)
@@ -75,7 +75,7 @@ dim(meta_dup)
 meta_dup
 ```
 
-No need to write anything to a file
+No duplicates; no need to write anything to a file
 ```{r}
 # write.csv(meta_dup,'intermed/IMAGINE_duplicate_IDs_YYYY-MM-DD.csv')
 ```
@@ -120,7 +120,8 @@ samp_inf = filter(samp_inf, !(Sample.ID %in% c(101246, 200510)))
 dim(samp_inf)
 ```
 
-There are now 13,524 samples, 9 more than IMAGINE.
+There are now 13,524 samples in the Surette sample info sheet, 9 more than
+IMAGINE.
 
 ```{r}
 summary(samp_inf)
@@ -248,7 +249,7 @@ asvtab = t(asvtab)
 dim(asvtab)
 ```
 
-There are 13,599 samples sequenced.
+There are 13,600 samples sequenced.
 
 ```{r}
 seq_ids = colnames(asvtab)
@@ -267,7 +268,7 @@ asvtab_no_neg = asvtab[,seq_rem]
 dim(asvtab_no_neg)
 ```
 
-This leaves 13,526 samples. Now let's look for any IMG ids that are missing from
+This leaves 13,527 samples. Now let's look for any IMG ids that are missing from
 the sample data sheet
 
 ```{r}
@@ -447,7 +448,7 @@ ncol(asvtab_fixed) - nrow(samp_inf)
 ```
 
 There were 25 ASVs with 0s everywhere. They have been removed, leaving us with 
-100,225 ASVs in 13,581 samples.
+100,226 ASVs in 13,582 samples.
 
 There are more columns in asvtab_fixed than in samp_inf
 
@@ -465,9 +466,8 @@ colnames(asvtab_fixed)[!colnames(asvtab_fixed) %in% samp_inf$Study.ID]
 ```
 
 All the samples in the ASV table, but absent from the sample info sheet, are
-negative controls. There are four samples in the sample info sheet that are
-missing from the ASV table for no reason that I can find. I asked Laura about
-them on March 24, 2026 and am waiting to hear back.
+negative controls. There are no samples in the sample info sheet that are
+missing from the ASV table for no reason. All of them are DNPs.
 
 # Write Fixed Tables
 
@@ -504,7 +504,7 @@ dim(asvtab_fixed)
 ```
 
 Including negative controls, that leaves us with 13,596 samples in the maptab.
-There are 13,581 in the ASV table.
+There are 13,585 in the ASV table.
 
 ```{r}
 all(maptab$Study.ID %in% colnames(asvtab_fixed))
@@ -520,7 +520,7 @@ map_only
 ```
 
 Some of these are DNPs. Removing them gives us 13,585 samples in the maptab and
-13,581 in the asv table. The missing 4 are the ones I identified above.
+13,585 in the asv table, and they are the same 13,585! We did it!
 
 ```{r}
 write_rds(maptab, file = 'data/merged_maptab.rds')

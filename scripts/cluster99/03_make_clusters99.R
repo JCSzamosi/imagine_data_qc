@@ -6,7 +6,6 @@ library(DECIPHER)
 
 outdir = 'intermed'
 outfnm = 'clsts99.Rdata'
-outfnm2 = 'clsts99_notail.Rdata'
 indir = 'cleaned/asvs/full/'
 inseq = 'full_seqs.Rdata'
 inf = file.path(indir, inseq)

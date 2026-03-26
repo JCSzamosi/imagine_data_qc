@@ -153,15 +153,15 @@ tax_propped_g = prop_tax_down(tax_table(taxtab_g), indic = FALSE)
 tax_propped_s = prop_tax_down(tax_table(taxtab_s), indic = FALSE)
 not_host_g = with(data.frame(tax_propped_g),
                   Kingdom %in% c('Bacteria','Archaea') &
-                      !startsWith(as.character(Phylum), 'k_') &
-                      Family != 'Mitochondria' &
-                      Order != 'Chloroplast',
+                    !startsWith(as.character(Phylum), 'k_') &
+                    Family != 'Mitochondria' &
+                    Order != 'Chloroplast',
                   Class != 'Chloroplast')
 not_host_s = with(data.frame(tax_propped_s),
                   Kingdom %in% c('Bacteria','Archaea') &
-                      !startsWith(as.character(Phylum), 'k_') &
-                      Family != 'Mitochondria' &
-                      Order != 'Chloroplast',
+                    !startsWith(as.character(Phylum), 'k_') &
+                    Family != 'Mitochondria' &
+                    Order != 'Chloroplast',
                   Class != 'Chloroplast')
 not_host = not_host_g & not_host_s
 cat('\nRemoving host ASVs\n')

@@ -158,7 +158,7 @@ map99_full = data.frame(sample_data(ps99_full))
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('otu99_full', 'tax99_full', 'map99_full'), 
+save(list = c('otu99_full', 'tax99_full_g', 'tax99_full_s', 'map99_full'), 
      file = wrmat)
 
 wrotu = file.path(outdir, otucsv)
@@ -166,7 +166,8 @@ wrtax_g = file.path(outdir, taxcsv_g)
 wrtax_s = file.path(outdir, taxcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(otu99_full, file = wrotu, row.names = TRUE)
-write.csv(tax99_full, file = wrtax, row.names = TRUE)
+write.csv(tax99_full_g, file = wrtax_g, row.names = TRUE)
+write.csv(tax99_full_s, file = wrtax_s, row.names = TRUE)
 write.csv(map99_full, file = wrmap, row.names = TRUE)
 
 cat('\nWriting track stats\n')

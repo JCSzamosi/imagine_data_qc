@@ -74,7 +74,7 @@ map_samfilt = data.frame(sample_data(ps_samfilt))
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('asv_samfilt', 'tax_samfilt', 'map_samfilt'), 
+save(list = c('asv_samfilt', 'tax_samfilt_g', 'tax_samfilt_s', 'map_samfilt'), 
      file = wrmat)
 
 wrasv = file.path(outdir, asvcsv)

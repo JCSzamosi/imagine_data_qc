@@ -19,3 +19,4 @@
 "asvs/03_make_samfilt.R",NA,96539,"cleaned/asvs/samfilt/samfilt_tax_s.csv"
 "asvs/03_make_samfilt.R",13421,NA,"cleaned/asvs/samfilt/samfilt_map.csv"
 "cluster99/05_get_conseq99.R",NA,22156,"intermed/conseqs99.csv"
+"cluster99/06_cluster_counts.R",13588,22156,"intermed/clstab99.csv"

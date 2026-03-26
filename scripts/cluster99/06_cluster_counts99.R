@@ -68,7 +68,7 @@ cat('\nFinish summing taxa. Cleaning up data table.\n')
 
 clsdf = left_join(clsdf, conseq, by = 'cluster')
 clstab = (clsdf
-          %>% column_to_rownames('consensus')
+          %>% column_to_rownames('conseq')
           %>% select(-cluster)
           %>% as.matrix())
 

@@ -48,9 +48,9 @@ cat('\nWriting Track Stats\n')
 stats_df = data.frame(Step = rep('cluster99/03_make_clusters.R',2),
 						Samples = rep(NA,2),
 						Taxa = c(nrow(clsts),
-								length(unique(clsts$cluster)),
+								length(unique(clsts$cluster))),
 						File = c(paste(outf,'- ASVs'),
-								paste(outf, '- clusters'))))
+								paste(outf, '- clusters')))
 
 write.table(stats_df, file = 'stats/track_counts.csv',
 			append = TRUE, quote = TRUE, sep = ',',

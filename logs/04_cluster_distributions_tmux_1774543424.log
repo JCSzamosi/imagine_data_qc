@@ -1,0 +1,26 @@
+module load r/4.5.0
+[?2004l[?2004h[szamosjc@l5.nibi DataQC]$ Rscript --vanilla scripts/cluster99/04_cluster_distributions99.R 
+[?2004l── Attaching core tidyverse packages ────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.2     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.1.0     
+── Conflicts ──────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+There were 96,660 ASVs before clustering.
+[?25h[?25h
+There are 22,156 clusters at 99% clustering.
+[?25h[?25h
+The largest cluster has 886 ASVs[?25h
+The smallest cluster size is 1, and there are 11,565 clusters of that size.
+[?25h[?25h
+Printing cluster size info to stats/cluster_size_distribution99.csv.
+[?25h[?25h[?25h[?25h
+Printing cluster size graph to stats/cluster_size_distribution99.png.
+[?25h[?25h
+DONE
+[?25h[?25h[?2004h[szamosjc@l5.nibi DataQC]$ 

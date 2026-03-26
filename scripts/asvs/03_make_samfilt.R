@@ -34,16 +34,13 @@ print(ps_full)
 cat('\nRemoving negative controls\n')
 ps_samfilt = subset_samples(ps_full, startsWith(as.character(Study.ID), 'IMG'))
 ns = nsamples(ps_samfilt)
-cat(paste('\nRemoved negative controls. ', as.character(ns),
-			' samples remaining.\n', sep = ''))
+cat(sprintf('\nRemoved negative controls. %i samples remaining.\n', ns))
 
 cat('\nRemoving samples with < 9,000 reads.\n')
 ps_samfilt = prune_samples(sample_sums(ps_samfilt) >= 9000, ps_samfilt)
 ns1 = nsamples(ps_samfilt)
-cat(paste('\nRemoved low-read samples. ', as.character(ns1),
-			' out of ', as.character(ns), ' samples remaining, or ',
-			as.character(round(ns1/ns, 4) * 100), '%.\n',
-			sep = ''))
+cat(sprintf('\nRemoved low-read samples. %i out of %i samples remaining, or %.2f%%.\n',
+            ns1, ns, (ns1/ns)*100))
 
 cat('\nRemoving taxa with 0 counts.\n')
 nt = ntaxa(ps_samfilt)

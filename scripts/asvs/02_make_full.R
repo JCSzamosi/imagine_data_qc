@@ -122,7 +122,8 @@ ps_full = phyloseq(otu_table(asvtab, taxa_are_rows = TRUE),
               sample_data(maptab))
 
 ## Name the sequence data & tax tables
-rownames(taxtab_g) = rownames(taxtab_s) = names(seqs) = taxa_names(ps_full)
+rownames(asvtab) = rownames(taxtab_g) = rownames(taxtab_s) = 
+  names(seqs) = taxa_names(ps_full)
 taxtab_g = sub('^[a-z]__', '', taxtab_g)
 
 ## Check the phyloseq object
@@ -168,6 +169,7 @@ ps_full = prune_taxa(not_host, ps_full)
 seqs = seqs[taxa_names(ps_full)]
 tax_full_g = tax_propped_g[taxa_names(ps_full),]
 tax_full_s = tax_propped_s[taxa_names(ps_full),]
+asv_full = asvtab[taxa_names(ps_full),]
 
 cat(sprintf('\nThe phyloseq object has %i taxa after removing host.\n',
 			ntaxa(ps_full)))
@@ -186,10 +188,7 @@ save(seqs, file = wrseq)
 
 # Create the individual matrices/data frames ###
 
-asv_full = matrix(otu_table(ps_full), nrow = ntaxa(ps_full),
-                  ncol = nsamples(ps_full))
 rownames(asv_full) = seqs[rownames(asv_full)]
-colnames(asv_full) = sample_names(ps_full)
 map_full = data.frame(sample_data(ps_full))
 
 ## Write the individual tables

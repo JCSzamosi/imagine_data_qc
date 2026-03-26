@@ -52,30 +52,6 @@ conseq = (clsts
 head(conseq)
 summary(conseq)
 
-conseq[which.max(conseq$max),]
-
-### Set up for parallelization
-# cat('\nSetting up for parallel processing.\n')
-# ncores = 10
-# registerDoParallel(cores = ncores)
-
-### Get the most common sequence in each cluster
-
-conseq = (clsts
-          %>% count(cluster, seqs)
-          %>% group_by(cluster)
-          %>% summarize(conseq = seqs[which.max(n)]))
-dim(conseq)
-head(conseq)
-
-
-
-### Actually get the consensus sequences
-cat('\nGet the consensus sequences for the clusters...\n')
-conseq = foreach(clust = unique(clsts$cluster), .combine = rbind) %dopar% {
-    get_conseq_par(clsts, clust)   
-}
-
 ### Write the consensus sequences to a file
 conseq_path = file.path(indir, conseq_f)
 cat(sprintf('\nWriting the consensus sequence file to %s.\n',

@@ -3,7 +3,7 @@
 library(dada2)
 library(tidyverse)
 library(DECIPHER)
-library(doParallel)
+# library(doParallel)
 source('./scripts/functions.R')
 
 # Set up I/O Variables
@@ -21,9 +21,18 @@ load(inf)
 cat('\nLoading counts\n')
 load(cts)
 
-dim(asv_full)
-dim(clsts)
+cat(sprintf('\nThere are %i ASVs in %i samples', 
+            nrow(asv_full), ncol(asv_full)))
+cat(sprintf('\n%i ASVs were assigned to clusters', nrow(clsts)))
+
+check = nrow(asv_full) == nrow(clsts)
+if (!check){
+    msg = 'The number of ASVs doesn\'t match in the ASV and cluster tables.'
+    stop(msg)
+}
+
 full_cts = rowSums(asv_full)
+names(full_cts) = rownames(asv_full)
 head(full_cts)
 
 full_cts = data.frame(total = full_cts,

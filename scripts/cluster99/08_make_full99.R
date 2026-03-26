@@ -15,7 +15,8 @@ asvs = 'asvs'
 cl99 = 'cluster99'
 full = 'full'
 otufile = 'clstab99.csv'
-taxfile = 'clstaxtab99.csv'
+taxfile_g = 'clstaxtab99_gg.csv'
+taxfile_s = 'clstaxtab99_silva.csv'
 mapfile = 'full_map.csv'
 
 ## output
@@ -23,7 +24,8 @@ mapfile = 'full_map.csv'
 outdir = file.path(cldir, cl99, full)
 outmat = 'full99_mat.Rdata'
 otucsv = 'full99_otu.csv'
-taxcsv = 'full99_tax.csv'
+taxcsv_g = 'full99_tax_g.csv'
+taxcsv_s = 'full99_tax_s.csv'
 mapcsv = 'full99_map.csv'
 outdf = 'full99_df.Rdata'
 outps = 'full99_ps.Rdata'
@@ -32,16 +34,24 @@ outseq = 'full99_seqs.Rdata'
 # Import & Check Data ####
 
 cat('\nRead in the tax table\n')
-taxtab = read.csv(file.path(intdir, taxfile), row.names = 1)
+taxtab_g = read.csv(file.path(intdir, taxfile_g), row.names = 1)
+taxtab_s = read.csv(file.path(intdir, taxfile_s), row.names = 1)
 
 cat('\nRead in the otu table\n')
 otutab = read.csv(file.path(intdir, otufile), row.names = 1)
 
 cat('\nCheck the sequences\n')
-taxtab = (taxtab
+taxtab_g = (taxtab_g
 			%>% column_to_rownames('seqs')
 			%>% select(-cluster))
-if (nrow(taxtab) != nrow(otutab)){
+taxtab_s = (taxtab_s
+			%>% column_to_rownames('seqs')
+			%>% select(-cluster))
+if (nrow(taxtab_g) != nrow(taxtab_s)){
+  msg = 'The two taxonomy tables have different numbers of taxa'
+  stop(msg)
+}
+if (nrow(taxtab_g) != nrow(otutab)){
 	msg = 'Counts table and tax table have different numbers of taxa'
 	stop(msg)
 } else if (!all(rownames(taxtab) %in% rownames(otutab))){
@@ -64,21 +74,30 @@ if (nrow(maptab) != ncol(otutab)){
 
 cat('\nReorder the tax table to match the otu table\n')
 
-taxtab = taxtab[rownames(otutab),]
-otu_seqs = rownames(taxtab)
-rownames(taxtab) = rownames(otutab) = NULL
+if (!all(rownames(taxtab_g) == rownames(taxtab_s))){
+  msg = 'The tax table rownames don\'t match each other.'
+  stop(msg)
+} 
+
+if (!all(rownames(taxtab_g) == rownames(otutab))){
+  msg = 'The tax and otu table rownames don\'t match.'
+  stop(msg)
+}
+otu_seqs = rownames(taxtab_g)
+rownames(taxtab_g) = rownames(taxtab_s) = rownames(otutab) = NULL
 
 ## Make matrices
 otutab = as.matrix(otutab)
-taxtab = as.matrix(taxtab)
-
+taxtab_g = as.matrix(taxtab_g)
+taxtab_s = as.matrix(taxtab_s)
+taxtab_g = sub('^[a-z]__', '', taxtab_g)
 
 ps99_full = phyloseq(otu_table(otutab, taxa_are_rows = TRUE),
-				tax_table(taxtab),
 				sample_data(maptab))
-
 ## Name the sequence data
-names(otu_seqs) = taxa_names(ps99_full)
+rownames(otutab) = rownames(taxtab_g) = rownames(taxtab_s) = 
+  names(otu_seqs) = taxa_names(ps99_full)
+
 
 ## Check the phyloseq object
 
@@ -95,14 +114,29 @@ cat(sprintf(paste('\nThe phyloseq object has %i samples and %i taxa',
 
 ## Remove host sequences
 cat('\nPropagating taxon IDs down the levels\n')
-ps99_full = prop_tax_down(ps99_full, indic = FALSE)
+tax_propped_g = prop_tax_down(tax_table(taxtab_g), indic = FALSE)
+tax_propped_s = prop_tax_down(tax_table(taxtab_s), indic = FALSE)
 cat('\nRemoving host ASVs\n')
-ps99_full = subset_taxa(ps99_full,
-                        Kingdom %in% c('Bacteria','Archaea') &
-                            !startsWith(as.character(Phylum), 'k_') &
-                            Family != 'Mitochondria' &
-                            Order != 'Chloroplast')
-otu_seqs = otu_seqs[taxa_names(ps99_full)]
+not_host_g = with(data.frame(tax_propped_g),
+                  Kingdom %in% c('Bacteria','Archaea') &
+                    !startsWith(as.character(Phylum), 'k_') &
+                    Family != 'Mitochondria' &
+                    Order != 'Chloroplast',
+                  Class != 'Chloroplast')
+not_host_s = with(data.frame(tax_propped_s),
+                  Kingdom %in% c('Bacteria','Archaea') &
+                    !startsWith(as.character(Phylum), 'k_') &
+                    Family != 'Mitochondria' &
+                    Order != 'Chloroplast',
+                  Class != 'Chloroplast')
+
+not_host = not_host_g & not_host_s
+ps99_full = prune_taxa(not_host, ps99_full)
+
+otu99_seqs = otu_seqs[taxa_names(ps99_full)]
+tax99_full_g = tax_propped_g[taxa_names(ps99_full),]
+tax99_full_s = tax_propped_s[taxa_names(ps99_full),]
+otu99_full = otutab[taxa_names(ps99_full),]
 
 ## Write the phyloseq object
 
@@ -118,10 +152,6 @@ save(otu_seqs, file = wrseq)
 
 # Create the individual matrices/data frames ###
 
-otu99_full = as.matrix(otu_table(ps99_full))
-rownames(otu99_full) = otu_seqs[rownames(otu99_full)]
-tax99_full = as.matrix(tax_table(ps99_full))
-rownames(tax99_full) = otu_seqs[rownames(tax99_full)]
 map99_full = data.frame(sample_data(ps99_full))
 
 ## Write the individual tables
@@ -132,7 +162,8 @@ save(list = c('otu99_full', 'tax99_full', 'map99_full'),
      file = wrmat)
 
 wrotu = file.path(outdir, otucsv)
-wrtax = file.path(outdir, taxcsv)
+wrtax_g = file.path(outdir, taxcsv_g)
+wrtax_s = file.path(outdir, taxcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(otu99_full, file = wrotu, row.names = TRUE)
 write.csv(tax99_full, file = wrtax, row.names = TRUE)
@@ -143,15 +174,16 @@ cat('\nWriting track stats\n')
 stats_df = data.frame(Step = 'cluster99/08_make_full99.R',
 						Samples = c(nsamples(ps99_full),NA,
 									ncol(otu99_full),
-									NA,
+									NA,NA,
 									nrow(map99_full)),
 						Taxa = c(ntaxa(ps99_full),length(otu_seqs),
 								nrow(otu99_full),
-								nrow(tax99_full),
+								nrow(tax99_full_g),
+								nrow(tax99_full_s),
 								NA),
 						File = c(wrps,wrseq,
 								wrotu,
-								wrtax,
+								wrtax_g, wrtax_s,
 								wrmap))
 write.table(stats_df, file = 'stats/track_counts.csv',
 			append = TRUE, quote = TRUE, sep = ',',

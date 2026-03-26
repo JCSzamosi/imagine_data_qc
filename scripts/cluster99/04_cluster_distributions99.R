@@ -52,7 +52,7 @@ size_plt = ggplot(size_tab, aes(size, count)) +
     scale_y_sqrt() +
     scale_x_sqrt() +
     theme_bw()
-size_plt
+# size_plt
 
 sp_path = file.path(outdir, sizeplt_f)
 cat(sprintf('\nPrinting cluster size graph to %s.\n', sp_path))

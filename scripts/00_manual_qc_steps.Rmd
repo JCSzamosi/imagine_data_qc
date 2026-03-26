@@ -249,7 +249,7 @@ asvtab = t(asvtab)
 dim(asvtab)
 ```
 
-There are 13,600 samples sequenced.
+There are 100,259 ASVs in 13,600 samples sequenced.
 
 ```{r}
 seq_ids = colnames(asvtab)
@@ -259,7 +259,7 @@ length(negs)
 negs
 ```
 
-There are 73 negative controls. I will partition them off for now
+There are 73 negative controls. I will partition them off for now.
 
 ```{r}
 neg_ctl = asvtab[,negs]
@@ -414,9 +414,9 @@ How many of the samples are missing from the sample info sheet?
 
 ```{r}
 samp_ids = colnames(asvtab_fixed)
-head(samp_ids)
-tail(samp_ids)
-head(samp_inf)
+# head(samp_ids)
+# tail(samp_ids)
+# head(samp_inf)
 missing = samp_ids[!(samp_ids %in% c(samp_inf$Study.ID))]
 missing = missing[!(missing %in% negs)]
 missing
@@ -448,7 +448,7 @@ ncol(asvtab_fixed) - nrow(samp_inf)
 ```
 
 There were 25 ASVs with 0s everywhere. They have been removed, leaving us with 
-100,226 ASVs in 13,582 samples.
+100,234 ASVs in 13,585 samples.
 
 There are more columns in asvtab_fixed than in samp_inf
 
@@ -523,6 +523,10 @@ Some of these are DNPs. Removing them gives us 13,585 samples in the maptab and
 13,585 in the asv table, and they are the same 13,585! We did it!
 
 ```{r}
+if (!dir.exists('data/')){
+  dir.create('data', recursive = TRUE)
+}
+
 write_rds(maptab, file = 'data/merged_maptab.rds')
 write_rds(asvtab_fixed, file = 'data/merged_seqtab.rds')
 ```
@@ -538,7 +542,7 @@ stat_df = data.frame(Step = '00_manual_qc_steps.Rmd',
                      Taxa = c(NA, nrow(asvtab_fixed)),
                      File = c('data/merged_maptab.rds', 
                               'data/merged_seqtab.rds'))
-
+stat_df
 if (!dir.exists('stats')){
     dir.create('stats')
 }

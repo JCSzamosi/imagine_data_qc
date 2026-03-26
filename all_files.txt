@@ -1,4 +1,7 @@
 all_files.txt
+data
+data/merged_maptab.rds
+data/merged_seqtab.rds
 input
 input/active_mergetab_nochim.rds
 input/current

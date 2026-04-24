@@ -205,7 +205,7 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-As of March 24, 2026, there are 10 samples in the Surette sample data sheet
+As of April 24, 2026, there are 10 samples in the Surette sample data sheet
 that are missing from the IMAGINE sheet.
 
 ```{r}
@@ -268,7 +268,7 @@ asvtab_no_neg = asvtab[,seq_rem]
 dim(asvtab_no_neg)
 ```
 
-This leaves 13,527 samples. Now let's look for any IMG ids that are missing from
+This leaves 13,531 samples. Now let's look for any IMG ids that are missing from
 the sample data sheet
 
 ```{r}
@@ -277,9 +277,9 @@ length(seq_only)
 sort(seq_only)
 ```
 
-There are 48 samples that start with IMG but are missing from the sample info
-sheet. Most of these end in A or B, which means they are re-sequenced samples,
-but a couple don't. Let's look at those:
+As of April 24, 2026, there are 49 samples that start with IMG but are missing
+from the sample info sheet. Most of these end in A or B, which means they are
+re-sequenced samples, but a couple don't. Let's look at those:
 
 ```{r}
 asv_missing = seq_only[!grepl('[AB]$',seq_only)]
@@ -297,7 +297,7 @@ samp_inf_rm
 There are 6 sequenced samples missing from the sample info sheet. All of these
 are marked DNP or otherwise removed.
 
-Let's look at just the 42 that are duplicates, and make sure they all have
+Let's look at just the 43 that are duplicates, and make sure they all have
 corresponding originals:
 
 ```{r}
@@ -319,7 +319,7 @@ Nope! Some are missing!
 sum(dup_origs %in% seq_rem)
 ```
 
-Only 12 are in there.
+Only 13 are in there.
 
 ```{r}
 dup_origs[dup_origs %in% colnames(asvtab)]
@@ -407,7 +407,7 @@ dim(asvtab_fixed)
 length(dups)
 ```
 
-The rowsums are the same and there are 12 samples fewer in the fixed table than
+The rowsums are the same and there are 13 samples fewer in the fixed table than
 the original table, which is the right number of duplicates. 
 
 How many of the samples are missing from the sample info sheet?
@@ -448,9 +448,9 @@ ncol(asvtab_fixed) - nrow(samp_inf)
 ```
 
 There were 25 ASVs with 0s everywhere. They have been removed, leaving us with 
-100,234 ASVs in 13,585 samples.
+100,277 ASVs in 13,585 samples.
 
-There are more columns in asvtab_fixed than in samp_inf
+There are 62 more columns in asvtab_fixed than in samp_inf
 
 ```{r}
 all(samp_inf$Study.ID %in% colnames(asvtab_fixed))

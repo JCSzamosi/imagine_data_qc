@@ -23,9 +23,9 @@ load(inf)
 cat('\nStart clustering sequences\n')
 
 set.seed(sd)
-clsts = Clusterize(DNAStringSet(seqs), cutoff = 0.01,
+clsts = Clusterize(DNAStringSet(seqs[1:1000]), cutoff = 0.01,
                    includeTerminalGaps = TRUE,
-									 processors = 40)
+									 processors = 10)
 
 	# Each sequence has its own row, in the order they were originally listed in
 	# The cluster number that each sequence belongs to is listed in its row in

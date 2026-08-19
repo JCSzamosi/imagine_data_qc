@@ -49,16 +49,15 @@ if (length(unique(seqs))/length(seqs) != 1){
     msg = 'The consensus sequences are not all unique'
     stop(msg)
 }
-cat('\nStart assigning taxonomy\n')
-taxtab = assignTaxonomy(seqs,
-                        refFasta = ref,
-                        tryRC = TRUE, multithread = 40, verbose = TRUE)
+cat('\nGet the taxonomy from the ASV tax table\n')
+
+clstax = taxtab[seqs,]
 
 cat('\nFinished assigning taxonomy\n')
 
-taxtab = (taxtab
+tst = (clstax
           %>% data.frame()
-          %>% mutate(seqs = rownames(.))
+       %>% mutate(seqs = rownames(.))
           %>% full_join(conseq, by = c('seqs' = 'conseq'))
           %>% select(-max, -min, -size))
 

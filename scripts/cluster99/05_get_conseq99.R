@@ -40,12 +40,14 @@ full_cts = data.frame(total = full_cts,
 head(full_cts)
 
 clsts = (clsts
+          %>% rownames_to_column('ASVid')
          %>% full_join(full_cts, by = 'seqs'))
 head(clsts)
 
 conseq = (clsts
           %>% group_by(cluster)
           %>% summarize(conseq = seqs[which.max(total)],
+                        ASVid = ASVid[which.max(total)],
                         max = max(total),
                         min = min(total),
                         size = length(total)))

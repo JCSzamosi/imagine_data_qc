@@ -1,6 +1,5 @@
 # Load Packages ####
 
-library(dada2)
 library(dplyr)
 library(optparse)
 
@@ -16,15 +15,15 @@ opt_parser <- OptionParser(option_list = opts)
 opt <- parse_args(opt_parser)
 db = opt$db
 
-refd = 'refs'
+datd = 'data'
 if (db == 'silva'){
-    refdb = 'silva_nr99_v138_train_set.fa'
+    taxf = 'merged_taxtab_silva.rds'
 } else if (db == 'gg'){
-    refdb = 'gg2_2024_09_toGenus_trainset.fa'
+    taxf = 'merged_taxtab_gg.rds'
 } else {
     stop('Database must be one of "silva" or "gg".')
 }
-ref = file.path(refd, refdb)
+ref = file.path(datd, taxf)
 indir = 'intermed'
 conseqf = 'conseqs99.csv'
 outf = sprintf('clstaxtab99_%s.csv', db)
@@ -37,6 +36,13 @@ conseq = read.csv(file = file.path(indir, conseqf),
                   row.names = 1, header = TRUE)
 
 seqs = conseq$conseq
+
+taxtab = readRDS(ref)
+
+if (!all(seqs %in% rownames(taxtab))){
+  msg = 'Some reference sequences are missing from the tax table'
+  stop(msg)
+}
 
 cat('\nCheck sequences\n')
 if (length(unique(seqs))/length(seqs) != 1){

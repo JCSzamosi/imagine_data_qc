@@ -10,6 +10,7 @@ indir = 'cleaned/asvs/full/'
 inseq = 'full_seqs.Rdata'
 inf = file.path(indir, inseq)
 outf = file.path(outdir, outfnm)
+sd = 4
 
 cat('\nLoad the sequences\n')
 
@@ -21,6 +22,7 @@ load(inf)
 
 cat('\nStart clustering sequences\n')
 
+set.seed(sd)
 clsts = Clusterize(DNAStringSet(seqs), cutoff = 0.01,
                    includeTerminalGaps = TRUE,
 									 processors = 40)

@@ -1,0 +1,34 @@
+IMAGINE Database Listing Version Reconciliation
+===============================================
+
+```{r}
+library(tidyverse)
+```
+
+
+Primary version (currently used in DataQC pipeline)
+
+```{r}
+old_img = read.csv('input/current/IMAGINE_StoolSpecimenCollectionIDListing_20251009_reformatted.csv',
+                   strip.white = TRUE)
+head(old_img)
+```
+
+The very latest version (March 2026)
+
+```{r}
+new_img = read.csv('input/current/IMAGINE_StoolSpecimenCollectionIDListing_20260326.csv',
+                   strip.white = TRUE)
+head(new_img)
+```
+
+If they are identical this is trivial:
+
+```{r}
+all.equal(new_img, old_img)
+
+old_img$Participant.ID[!(old_img$Participant.ID %in% new_img$Participant.ID)]
+filter(old_img, !(Participant.ID %in% new_img$Participant.ID))
+```
+
+

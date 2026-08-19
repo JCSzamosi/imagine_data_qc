@@ -26,7 +26,7 @@ meta_long = filter(meta_long,!is.na(Sample.ID))
 dim(meta_long)
 ```
 
-This file has 13,516 samples in it. I'm going to clean it up a bit:
+This file has 13,513 samples in it. I'm going to clean it up a bit:
 
 ```{r}
 head(meta_long)
@@ -53,12 +53,15 @@ meta_long = (meta_long
 Laura confirmed by email that sample 203664 was destroyed, so it should be
 removed from the listing to prevent confusion during reconciliation:
 
+This step is no longer needed as of Aug 2026. This listing was removed from the
+IMAGINE listing on their end.
+
 ```{r}
-meta_long = filter(meta_long, Sample.ID != 203664)
-dim(meta_long)
+# meta_long = filter(meta_long, Sample.ID != 203664)
+# dim(meta_long)
 ```
 
-Now we have 13,515 samples in the IMAGINE metadata file.
+Now we have 13,513 samples in the IMAGINE metadata file.
 
 ```{r}
 summary(meta_long)
@@ -90,7 +93,7 @@ samp_inf = read.csv(file = 'input/active_Surette_sample_info_sheet.csv',
 dim(samp_inf)
 ```
 
-This is 13,526 samples. That is 11 more samples than in the IMAGINE metadata
+This is 13,526 samples. That is 13 more samples than in the IMAGINE metadata
 sheet. I will clean this up and remove any columns I don't need:
 
 ```{r}
@@ -120,7 +123,7 @@ samp_inf = filter(samp_inf, !(Sample.ID %in% c(101246, 200510)))
 dim(samp_inf)
 ```
 
-There are now 13,524 samples in the Surette sample info sheet, 9 more than
+There are now 13,524 samples in the Surette sample info sheet, 11 more than
 IMAGINE.
 
 ```{r}
@@ -179,7 +182,7 @@ meta_only = filter(meta_long, !(Sample.ID %in% samp_inf$Sample.ID))
 dim(meta_only)
 ```
 
-There is one sample in the IMAGINE sheet that is absent from the Surette lab
+There are no samples in the IMAGINE sheet that are absent from the Surette lab
 sheet
 
 ```{r}
@@ -194,7 +197,7 @@ meta_long = filter(meta_long, Sample.ID != '100446')
 dim(meta_long)
 ```
 
-This leaves us with 13,514 samples in the IMAGINE metadata.
+This leaves us with 13,513 samples in the IMAGINE metadata. Nothing removed.
 
 Okay, what about the other way around? What is in the sample info sheet but
 missing from the IMAGINE metadata?
@@ -205,7 +208,7 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-As of April 24, 2026, there are 10 samples in the Surette sample data sheet
+As of April 24, 2026, there are 11 samples in the Surette sample data sheet
 that are missing from the IMAGINE sheet.
 
 ```{r}
@@ -216,7 +219,7 @@ samp_only %>% filter(grepl('D', Study.ID) |
                          grepl('dispose', Notes, ignore.case = TRUE))
 ```
 
-9 of these are discards, leaving 1:
+10 of these are discards, leaving 1:
 
 ```{r}
 samp_only = (samp_only 
@@ -249,7 +252,7 @@ asvtab = t(asvtab)
 dim(asvtab)
 ```
 
-There are 100,259 ASVs in 13,600 samples sequenced.
+There are 100,302 ASVs in 13,604 samples sequenced.
 
 ```{r}
 seq_ids = colnames(asvtab)

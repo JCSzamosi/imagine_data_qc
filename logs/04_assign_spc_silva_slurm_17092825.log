@@ -1,0 +1,8 @@
+module load r/4.5.0
+Rscript ./scripts/01_assign_tax_asvs.R -d silva
+Loading required package: Rcpp
+
+Reading in the sequences
+Assigning species...
+/var/spool/slurmd/job17092825/slurm_script: line 15: 368546 Killed                  Rscript ./scripts/04_assign_species.R -d silva
+slurmstepd: error: Detected 1 oom_kill event in StepId=17092825.batch. Some of the step tasks have been OOM Killed.

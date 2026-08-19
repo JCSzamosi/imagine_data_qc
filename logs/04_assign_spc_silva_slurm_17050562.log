@@ -1,0 +1,7 @@
+module load r/4.5.0
+Rscript ./scripts/01_assign_tax_asvs.R -d silva
+Loading required package: Rcpp
+
+Reading in the sequences
+Assigning species...
+slurmstepd: error: *** JOB 17050562 ON c44 CANCELLED AT 2026-07-01T14:44:37 DUE TO TIME LIMIT ***

@@ -1,0 +1,6 @@
+module load r/4.5.0
+Rscript ./scripts/01_assign_tax_asvs.R -d silva
+Loading required package: Rcpp
+Error in make_option(c("-d", "--db"), type = "character", default = "silva",  : 
+  could not find function "make_option"
+Execution halted

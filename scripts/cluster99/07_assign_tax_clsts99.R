@@ -55,7 +55,7 @@ clstax = taxtab[seqs,]
 
 cat('\nFinished assigning taxonomy\n')
 
-tst = (clstax
+clstax = (clstax
           %>% data.frame()
        %>% mutate(seqs = rownames(.))
           %>% full_join(conseq, by = c('seqs' = 'conseq'))
@@ -64,7 +64,7 @@ tst = (clstax
 cat('\nWrite tax table')
 
 outp = file.path(indir, outf)
-write.csv(taxtab, outp)
+write.csv(clstax, outp)
 
 cat('\nWriting track stats\n')
 

@@ -8,6 +8,7 @@ source('./scripts/functions.R')
 
 # Set up I/O Variables
 indir = 'intermed'
+clstcsv = 'clstab99.csv'
 clsf = 'clsts99.Rdata'
 inf = file.path(indir, clsf)
 conseq_f = 'conseqs99.csv'

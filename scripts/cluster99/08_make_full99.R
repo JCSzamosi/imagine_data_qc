@@ -54,10 +54,26 @@ if (nrow(taxtab_g) != nrow(taxtab_s)){
 if (nrow(taxtab_g) != nrow(otutab)){
 	msg = 'Counts table and tax table have different numbers of taxa'
 	stop(msg)
-} else if (!all(rownames(taxtab) %in% rownames(otutab))){
+} else if (!all(rownames(taxtab_g) %in% rownames(otutab))){
 	msg = 'The tax and counts tables do not have the same sequences'
 	stop(msg)
+} else if (!all(rownames(taxtab_s) %in% rownames(otutab))) {
+	msg = 'The tax and counts tables do not have the same sequences'
+	stop(msg)
+} else if (!all(taxtab_g$ASVid == taxtab_s$ASVid)){
+  msg = 'The tax table and counts table ASVid columns don\'t match.'
+} else if (!all(taxtab_s$ASVid == taxtab_s$ASVid)){
+  msg = 'The tax table and counts table ASVid columns don\'t match.'
 }
+
+otu_seqs = rownames(taxtab_g)
+names(otu_seqs) = taxtab_g$ASVid
+rownames(taxtab_g) = rownames(taxtab_s) = rownames(otutab) = taxtab_g$ASVid
+
+taxtab_g = select(taxtab_g, -ASVid)
+taxtab_s = select(taxtab_s, -ASVid)
+otutab = select(otutab, -ASVid)
+
 
 ## Read in the mapfile
 maptab = read.csv(file.path(cldir, asvs, full, mapfile), row.names = 1)
@@ -83,8 +99,6 @@ if (!all(rownames(taxtab_g) == rownames(otutab))){
   msg = 'The tax and otu table rownames don\'t match.'
   stop(msg)
 }
-otu_seqs = rownames(taxtab_g)
-rownames(taxtab_g) = rownames(taxtab_s) = rownames(otutab) = NULL
 
 ## Make matrices
 otutab = as.matrix(otutab)
@@ -94,10 +108,6 @@ taxtab_g = sub('^[a-z]__', '', taxtab_g)
 
 ps99_full = phyloseq(otu_table(otutab, taxa_are_rows = TRUE),
 				sample_data(maptab))
-## Name the sequence data
-rownames(otutab) = rownames(taxtab_g) = rownames(taxtab_s) = 
-  names(otu_seqs) = taxa_names(ps99_full)
-
 
 ## Check the phyloseq object
 
@@ -107,33 +117,15 @@ cat(sprintf('\nThe original OTU table had %i samples and %i OTUs\n',
 cat(sprintf('\nThe original map table had %i rows after removing duplicates.\n',
 			nrow(maptab)))
 
-cat(sprintf(paste('\nThe phyloseq object has %i samples and %i taxa',
-					'before removing host\n'), 
+cat(sprintf('\nThe phyloseq object has %i samples and %i taxa\n',
 			nsamples(ps99_full), ntaxa(ps99_full)))
 
 
-## Remove host sequences
+## Prop tax down
 cat('\nPropagating taxon IDs down the levels\n')
 tax_propped_g = prop_tax_down(tax_table(taxtab_g), indic = FALSE)
 tax_propped_s = prop_tax_down(tax_table(taxtab_s), indic = FALSE)
-cat('\nRemoving host ASVs\n')
-not_host_g = with(data.frame(tax_propped_g),
-                  Kingdom %in% c('Bacteria','Archaea') &
-                    !startsWith(as.character(Phylum), 'k_') &
-                    Family != 'Mitochondria' &
-                    Order != 'Chloroplast',
-                  Class != 'Chloroplast')
-not_host_s = with(data.frame(tax_propped_s),
-                  Kingdom %in% c('Bacteria','Archaea') &
-                    !startsWith(as.character(Phylum), 'k_') &
-                    Family != 'Mitochondria' &
-                    Order != 'Chloroplast',
-                  Class != 'Chloroplast')
 
-not_host = not_host_g & not_host_s
-ps99_full = prune_taxa(not_host, ps99_full)
-
-otu99_seqs = otu_seqs[taxa_names(ps99_full)]
 tax99_full_g = tax_propped_g[taxa_names(ps99_full),]
 tax99_full_s = tax_propped_s[taxa_names(ps99_full),]
 otu99_full = otutab[taxa_names(ps99_full),]

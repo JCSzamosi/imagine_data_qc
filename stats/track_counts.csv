@@ -16,3 +16,7 @@
 "cluster99/03_make_clusters.R",NA,22093,"intermed/clsts99.Rdata - clusters"
 "cluster99/05_get_conseq99.R",NA,22093,"intermed/conseqs99.csv"
 "cluster99/07_assign_tax_clsts99.R",NA,100277,"intermed/clstaxtab99_silva.csv"
+"cluster99/07_assign_tax_clsts99.R",NA,100277,"intermed/clstaxtab99_gg.csv"
+"cluster99/07_assign_tax_clsts99.R",NA,100277,"intermed/clstaxtab99_silva.csv"
+"cluster99/07_assign_tax_clsts99.R",NA,100277,"intermed/clstaxtab99_gg.csv"
+"cluster99/07_assign_tax_clsts99.R",NA,100277,"intermed/clstaxtab99_silva.csv"

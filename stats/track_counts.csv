@@ -1,0 +1,3 @@
+"Step","Samples","Taxa","File"
+"00_manual_qc_steps.Rmd",13585,NA,"data/merged_maptab.rds"
+"00_manual_qc_steps.Rmd",13585,100277,"data/merged_seqtab.rds"

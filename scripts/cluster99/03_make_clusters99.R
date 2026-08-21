@@ -23,7 +23,7 @@ load(inf)
 cat('\nStart clustering sequences\n')
 
 set.seed(sd)
-clsts = Clusterize(DNAStringSet(seqs[1:1000]), cutoff = 0.01,
+clsts = Clusterize(DNAStringSet(seqs), cutoff = 0.01,
                    includeTerminalGaps = TRUE,
 									 processors = 10)
 

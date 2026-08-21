@@ -1,5 +1,5 @@
 module load r/4.5.0
-Rscript ./scripts/asvs/02_make_full.R
+Rscript ./scripts/cluster99/08_make_full99.R
 ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
 ✔ dplyr     1.1.4     ✔ readr     2.1.5
 ✔ forcats   1.0.0     ✔ stringr   1.5.1
@@ -11,45 +11,28 @@ Rscript ./scripts/asvs/02_make_full.R
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
 
-Reading in tax table
+Read in the tax table
 
-Reading in asv table
+Read in the otu table
 
-Checking the rownames match
+Check the sequences
 
-Reading in the mapfile
+Check the sample IDs
 
-Checking for duplicates
+Reorder the tax table to match the otu table
 
-There are 73 rows that are missing Sample IDs. Continuing.
-
-No duplicates found
-
-Checking for missing samples.
-
-Cleaning up the mapfile
-
-Creating the phyloseq object
-
-The original ASV table had 13585 samples and 100277 ASVs
+The original OTU table had 13585 samples and 22284 OTUs
 
 The original map table had 13585 rows after removing duplicates.
 
-The phyloseq object has 13585 samples and 100277 taxa before removing host
+The phyloseq object has 13585 samples and 22284 taxa
 
-Updating the stats track table
 Propagating taxon IDs down the levels
 Joining with `by = join_by(Kingdom, Phylum, Class, Order, Family, Genus)`
-
-Removing host ASVs
-
-The phyloseq object has 96683 taxa after removing host.
 
 Writing phyloseq object files
 
 Writing the individual tables
-
-Writing count totals
 
 Writing track stats
 

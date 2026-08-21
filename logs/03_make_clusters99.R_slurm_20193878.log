@@ -57,17 +57,17 @@ Start clustering sequences
 Partitioning sequences by 9-mer similarity:
 ================================================================================
 
-Time difference of 43.4 secs
+Time difference of 43.62 secs
 
-Sorting by relatedness within 749 groups:
-iteration 50 of up to 2000 (100.0% stability) 
+Sorting by relatedness within 805 groups:
+iteration 51 of up to 2000 (100.0% stability) 
 
-Time difference of 130.59 secs
+Time difference of 14.97 secs
 
 Clustering sequences by 9-mer to 10-mer similarity:
 ================================================================================
 
-Time difference of 267.46 secs
+Time difference of 277.7 secs
 
 Clusters via relatedness sorting: 97.8% (0% exclusively)
 Clusters via rare 9-mers: 100% (2.2% exclusively)

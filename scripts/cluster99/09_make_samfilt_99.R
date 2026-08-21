@@ -44,8 +44,8 @@ ns = nsamples(ps99_samfilt)
 cat(paste('\nRemoved negative controls. ', as.character(ns),
 			' samples remaining.\n', sep = ''))
 
-cat('\nRemoving samples with < 10,000 reads.\n')
-ps99_samfilt = prune_samples(sample_sums(ps99_samfilt) >= 10000, ps99_samfilt)
+cat('\nRemoving samples with < 9,000 reads.\n')
+ps99_samfilt = prune_samples(sample_sums(ps99_samfilt) >= 9000, ps99_samfilt)
 ns1 = nsamples(ps99_samfilt)
 cat(sprintf('\nRemoved low-read samples. %i out of %i samples remaining, or %.2f%%.\n',
             ns1, ns, (ns1/ns)*100))

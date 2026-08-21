@@ -7,20 +7,20 @@ The distribution of read depths is:
 
 The properties of the phyloseq object are:
 phyloseq-class experiment-level object
-otu_table()   OTU Table:         [ 22284 taxa and 13585 samples ]
+otu_table()   OTU Table:         [ 22274 taxa and 13585 samples ]
 sample_data() Sample Data:       [ 13585 samples by 10 sample variables ]
 
 Removing negative controls
 
 Removed negative controls. 13512 samples remaining.
 
-Removing samples with < 10,000 reads.
+Removing samples with < 9,000 reads.
 
-Removed low-read samples. 13383 out of 13512 samples remaining, or 99.05%.
+Removed low-read samples. 13424 out of 13512 samples remaining, or 99.35%.
 
 Removing taxa with 0 counts.
 
-Removed 0-count taxa. 22252 out of 22284 taxa remaining, or 99.86%.
+Removed 0-count taxa. 22252 out of 22274 taxa remaining, or 99.90%.
 
 Writing phyloseq object files
 

@@ -3,6 +3,7 @@
 library(dada2)
 library(readr)
 library(optparse)
+source('scripts/functions.R')
 
 # Define I/O Variables
 
@@ -23,13 +24,14 @@ refd = 'refs'
 if (db == 'silva'){
     refdb = 'silva_nr99_v138_train_set.fa'
 } else if (db == 'gg'){
-    refdb = 'gg2_2024_09_toGenus_trainset.fa'
+    refdb = 'gg2_2024_09_toSpecies_trainset.fa'
 } else {
     stop('Database must be one of "silva" or "gg".')
 }
 
 ref = file.path(refd, refdb)
 outf = sprintf('merged_taxtab_%s.rds', db)
+outb = sprintf('merged_taxboot_%s.rds', db)
 
 # Load data
 
@@ -47,14 +49,29 @@ if (!length(unique(seqs))/length(seqs) == 1){
 
 # Assign taxonomy
 cat('\nStart assigning taxonomy\n')
-taxtab = assignTaxonomy(seqs,
+tax_lst = assignTaxonomy(seqs[1:1000],
                         refFasta = ref,
-                        tryRC = TRUE, multithread = 40, verbose = TRUE)
+                        outputBootstraps = TRUE,
+                        # tryRC = TRUE, multithread = 40, verbose = TRUE)
+                        tryRC = TRUE, multithread = 10, verbose = TRUE)
+
+taxboot = tax_lst$boot
+
+
+test_monot = apply(taxboot, 1, check_monot)
+
+if (any(!test_monot)){
+  cat('\n==== Taxon Bootstraps Are Not Monotonic! ====\n')
+}
+
+taxtab = tax_lst$tax
 
 # Write the tax table
 outp = file.path(datdir, outf)
 cat('\nWrite tax table\n')
 write_rds(taxtab, file = outp)
+outp = file.path(datdir, outb)
+write_rds(taxboot, file = outp)
 
 # Write the tracking stats
 

@@ -29,3 +29,15 @@ sum_asv_clusters = function(mat, clust){
     names(sum_row)[1] = 'cluster'
     return(sum_row)
 }
+
+check_monot = function(x){
+  check = TRUE
+  for (i in 2:length(x)){
+    upone = x[i-1]
+    thisone = x[i]
+    if (upone < thisone){
+      check = FALSE
+    }
+  }
+  return(check)
+}

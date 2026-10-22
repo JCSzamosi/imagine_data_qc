@@ -208,7 +208,7 @@ samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)
 ```
 
-As of April 24, 2026, there are 11 samples in the Surette sample data sheet
+As of October 22, 2026, there are 11 samples in the Surette sample data sheet
 that are missing from the IMAGINE sheet.
 
 ```{r}
@@ -252,7 +252,7 @@ asvtab = t(asvtab)
 dim(asvtab)
 ```
 
-There are 100,302 ASVs in 13,604 samples sequenced.
+There are 100,681 ASVs in 13,604 samples sequenced.
 
 ```{r}
 seq_ids = colnames(asvtab)
@@ -280,7 +280,7 @@ length(seq_only)
 sort(seq_only)
 ```
 
-As of April 24, 2026, there are 49 samples that start with IMG but are missing
+As of October 22, 2026, there are 49 samples that start with IMG but are missing
 from the sample info sheet. Most of these end in A or B, which means they are
 re-sequenced samples, but a couple don't. Let's look at those:
 
@@ -453,7 +453,7 @@ ncol(asvtab_fixed) - nrow(samp_inf)
 There were 25 ASVs with 0s everywhere. They have been removed, leaving us with 
 100,277 ASVs in 13,585 samples.
 
-There are 62 more columns in asvtab_fixed than in samp_inf
+There are 62 more samples in asvtab_fixed than in samp_inf
 
 ```{r}
 all(samp_inf$Study.ID %in% colnames(asvtab_fixed))

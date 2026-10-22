@@ -671,8 +671,8 @@ sheet but missing from the IMAGINE metadata?</p>
 <pre class="r"><code>samp_only = filter(samp_inf, !(Sample.ID %in% meta_long$Sample.ID))
 dim(samp_only)</code></pre>
 <pre><code>## [1] 11  5</code></pre>
-<p>As of April 24, 2026, there are 11 samples in the Surette sample data
-sheet that are missing from the IMAGINE sheet.</p>
+<p>As of October 22, 2026, there are 11 samples in the Surette sample
+data sheet that are missing from the IMAGINE sheet.</p>
 <pre class="r"><code>samp_only</code></pre>
 <pre><code>##    Sample.ID          Study.ID Date.Received Illumina.Plate.Number
 ## 1     105043       IMG1279 DNP    2020-08-27 ineligilble,DNP,LR417
@@ -750,11 +750,11 @@ two datasets!</p>
 <p>This is where I check for re-sequenced samples and merge them.</p>
 <pre class="r"><code>asvtab = readRDS(&#39;input/active_mergetab_nochim.rds&#39;)
 dim(asvtab)</code></pre>
-<pre><code>## [1]  13604 100302</code></pre>
+<pre><code>## [1]  13604 100681</code></pre>
 <pre class="r"><code>asvtab = t(asvtab)
 dim(asvtab)</code></pre>
-<pre><code>## [1] 100302  13604</code></pre>
-<p>There are 100,302 ASVs in 13,604 samples sequenced.</p>
+<pre><code>## [1] 100681  13604</code></pre>
+<p>There are 100,681 ASVs in 13,604 samples sequenced.</p>
 <pre class="r"><code>seq_ids = colnames(asvtab)
 head(seq_ids)</code></pre>
 <pre><code>## [1] &quot;IMG100&quot; &quot;IMG101&quot; &quot;IMG102&quot; &quot;IMG103&quot; &quot;IMG104&quot; &quot;IMG105&quot;</code></pre>
@@ -762,9 +762,9 @@ head(seq_ids)</code></pre>
 length(negs)</code></pre>
 <pre><code>## [1] 73</code></pre>
 <pre class="r"><code>negs</code></pre>
-<pre><code>##  [1] &quot;LR404neg&quot;  &quot;LR405neg2&quot; &quot;LR405neg&quot;  &quot;LR418neg&quot;  &quot;LR427neg2&quot; &quot;LR432neg2&quot;
+<pre><code>##  [1] &quot;LR404neg&quot;  &quot;LR405neg&quot;  &quot;LR405neg2&quot; &quot;LR418neg&quot;  &quot;LR427neg2&quot; &quot;LR432neg2&quot;
 ##  [7] &quot;LR445neg&quot;  &quot;LR448neg&quot;  &quot;LR450neg&quot;  &quot;LR473neg&quot;  &quot;LR474neg&quot;  &quot;LR476neg&quot; 
-## [13] &quot;LR477neg&quot;  &quot;LR478neg&quot;  &quot;LR479neg2&quot; &quot;LR479neg&quot;  &quot;LR480neg&quot;  &quot;LR481neg&quot; 
+## [13] &quot;LR477neg&quot;  &quot;LR478neg&quot;  &quot;LR479neg&quot;  &quot;LR479neg2&quot; &quot;LR480neg&quot;  &quot;LR481neg&quot; 
 ## [19] &quot;LR482neg&quot;  &quot;LR483neg&quot;  &quot;LR484neg&quot;  &quot;LR485neg&quot;  &quot;LR486neg&quot;  &quot;LR487neg&quot; 
 ## [25] &quot;LR490neg2&quot; &quot;LR492neg&quot;  &quot;LR493neg&quot;  &quot;LR494neg&quot;  &quot;LR496neg&quot;  &quot;LR498neg&quot; 
 ## [31] &quot;LR499neg&quot;  &quot;LR500neg&quot;  &quot;LR501neg2&quot; &quot;LR502neg&quot;  &quot;LR503neg&quot;  &quot;LR504neg&quot; 
@@ -781,7 +781,7 @@ now.</p>
 seq_rem = seq_ids[!(seq_ids %in% negs)]
 asvtab_no_neg = asvtab[,seq_rem]
 dim(asvtab_no_neg)</code></pre>
-<pre><code>## [1] 100302  13531</code></pre>
+<pre><code>## [1] 100681  13531</code></pre>
 <p>This leaves 13,531 samples. Now let’s look for any IMG ids that are
 missing from the sample data sheet</p>
 <pre class="r"><code>seq_only = seq_rem[!(seq_rem %in% samp_inf$Study.ID)]
@@ -797,7 +797,7 @@ length(seq_only)</code></pre>
 ## [37] &quot;IMG5874&quot;   &quot;IMG7B&quot;     &quot;IMG8522&quot;   &quot;IMG8526&quot;   &quot;IMG85A&quot;    &quot;IMG8674&quot;  
 ## [43] &quot;IMG86A&quot;    &quot;IMG87A&quot;    &quot;IMG88A&quot;    &quot;IMG89A&quot;    &quot;IMG90A&quot;    &quot;IMG91A&quot;   
 ## [49] &quot;IMG9850&quot;</code></pre>
-<p>As of April 24, 2026, there are 49 samples that start with IMG but
+<p>As of October 22, 2026, there are 49 samples that start with IMG but
 are missing from the sample info sheet. Most of these end in A or B,
 which means they are re-sequenced samples, but a couple don’t. Let’s
 look at those:</p>
@@ -890,7 +890,7 @@ dups = dups[endsWith(dups, &#39;B&#39;)]</code></pre>
 <p>Remove the actual duplicates to their own table for now</p>
 <pre class="r"><code>duptab = asvtab_no_neg[,c(dups, dup_origs)]
 dim(duptab)</code></pre>
-<pre><code>## [1] 100302     26</code></pre>
+<pre><code>## [1] 100681     26</code></pre>
 <pre class="r"><code>seq_rem = seq_rem[!(seq_rem %in% c(dups, dup_origs))]
 length(seq_rem)</code></pre>
 <pre><code>## [1] 13505</code></pre>
@@ -925,27 +925,27 @@ for (i in 1:length(dups)){
 }
 head(dedupped)</code></pre>
 <pre><code>##       [,1] [,2] [,3] [,4]  [,5] [,6] [,7] [,8]  [,9] [,10] [,11] [,12] [,13]
-## [1,] 11330  169 2315 5676  9584 1473  917  659  4576   228  3416  1153  1367
-## [2,]   614 3080  148 8955 22797  376 1463    0  1290     0  7420  4906  4398
-## [3,]   433  374 2144    0     0   17 1965 2966 23932  1400  1290  1446   947
-## [4,]    48  314 1033 6738   104   33 2747   19   328     0 15951  3252   346
-## [5,]  2181  880  451 2417  1262   26 1112  712     0   124  5245   412  1173
-## [6,]    26  196   15 8760  4263  435 1114  423   434   162 10355  1523   162</code></pre>
+## [1,] 11330  169 2315 5676  9584 1473  917  659  4576   228  3416  1153  1153
+## [2,]   614 3080  148 8955 22797  376 1463    0  1290     0  7420  4906  3586
+## [3,]   433  374 2144    0     0   17 1965 2966 23932  1400  1290  1446   781
+## [4,]    48  314 1033 6738   104   33 2747   19   328     0 15951  3253   286
+## [5,]  2181  880  451 2417  1262   26 1112  712     0   124  5245   412   999
+## [6,]    26  196   15 8760  4263  435 1114  423   434   162 10355  1523   135</code></pre>
 <pre class="r"><code>colnames(dedupped) = dup_origs
 rownames(dedupped) = rownames(duptab)</code></pre>
 <p>Bring all the samples back together:</p>
 <pre class="r"><code>asvtab_fixed = cbind(neg_ctl, asvtab_no_dup, dedupped)
 dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100302  13591</code></pre>
+<pre><code>## [1] 100681  13591</code></pre>
 <p>Let’s double check that adding up the samples worked:</p>
 <pre class="r"><code>asv_tots = rowSums(asvtab)
 asv_tot_dedup = rowSums(asvtab_fixed)
 all(asv_tots == asv_tot_dedup)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <pre class="r"><code>dim(asvtab)</code></pre>
-<pre><code>## [1] 100302  13604</code></pre>
+<pre><code>## [1] 100681  13604</code></pre>
 <pre class="r"><code>dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100302  13591</code></pre>
+<pre><code>## [1] 100681  13591</code></pre>
 <pre class="r"><code>length(dups)</code></pre>
 <pre><code>## [1] 13</code></pre>
 <p>The rowsums are the same and there are 13 samples fewer in the fixed
@@ -964,28 +964,28 @@ missing</code></pre>
 <pre><code>## [1] &quot;IMG3919&quot; &quot;IMG5874&quot; &quot;IMG8522&quot; &quot;IMG8526&quot; &quot;IMG8674&quot; &quot;IMG9850&quot;</code></pre>
 <p>Just the 6 that should be discarded. I’ll discard them now.</p>
 <pre class="r"><code>dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100302  13591</code></pre>
+<pre><code>## [1] 100681  13591</code></pre>
 <pre class="r"><code>asvtab_fixed = asvtab_fixed[,colnames(asvtab_fixed)[!(colnames(asvtab_fixed) %in% 
                                                           missing)]]
 dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100302  13585</code></pre>
+<pre><code>## [1] 100681  13585</code></pre>
 <p>Removed 6 samples.</p>
 <p>Removing a sample may bring some ASVs down to 0 everywhere. Let’s
 check and remove them if necessary:</p>
 <pre class="r"><code>dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100302  13585</code></pre>
+<pre><code>## [1] 100681  13585</code></pre>
 <pre class="r"><code>sum(rowSums(asvtab_fixed) == 0)</code></pre>
 <pre><code>## [1] 25</code></pre>
 <pre class="r"><code>asvtab_fixed = asvtab_fixed[rowSums(asvtab_fixed) &gt; 0,]
 dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100277  13585</code></pre>
+<pre><code>## [1] 100656  13585</code></pre>
 <pre class="r"><code>dim(samp_inf)</code></pre>
 <pre><code>## [1] 13523     5</code></pre>
 <pre class="r"><code>ncol(asvtab_fixed) - nrow(samp_inf)</code></pre>
 <pre><code>## [1] 62</code></pre>
 <p>There were 25 ASVs with 0s everywhere. They have been removed,
 leaving us with 100,277 ASVs in 13,585 samples.</p>
-<p>There are 62 more columns in asvtab_fixed than in samp_inf</p>
+<p>There are 62 more samples in asvtab_fixed than in samp_inf</p>
 <pre class="r"><code>all(samp_inf$Study.ID %in% colnames(asvtab_fixed))</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>tst = (samp_inf %&gt;% 
@@ -1002,9 +1002,9 @@ tst</code></pre>
 <pre class="r"><code>all(colnames(asvtab_fixed) %in% samp_inf$Study.ID)</code></pre>
 <pre><code>## [1] FALSE</code></pre>
 <pre class="r"><code>colnames(asvtab_fixed)[!colnames(asvtab_fixed) %in% samp_inf$Study.ID]</code></pre>
-<pre><code>##  [1] &quot;LR404neg&quot;  &quot;LR405neg2&quot; &quot;LR405neg&quot;  &quot;LR418neg&quot;  &quot;LR427neg2&quot; &quot;LR432neg2&quot;
+<pre><code>##  [1] &quot;LR404neg&quot;  &quot;LR405neg&quot;  &quot;LR405neg2&quot; &quot;LR418neg&quot;  &quot;LR427neg2&quot; &quot;LR432neg2&quot;
 ##  [7] &quot;LR445neg&quot;  &quot;LR448neg&quot;  &quot;LR450neg&quot;  &quot;LR473neg&quot;  &quot;LR474neg&quot;  &quot;LR476neg&quot; 
-## [13] &quot;LR477neg&quot;  &quot;LR478neg&quot;  &quot;LR479neg2&quot; &quot;LR479neg&quot;  &quot;LR480neg&quot;  &quot;LR481neg&quot; 
+## [13] &quot;LR477neg&quot;  &quot;LR478neg&quot;  &quot;LR479neg&quot;  &quot;LR479neg2&quot; &quot;LR480neg&quot;  &quot;LR481neg&quot; 
 ## [19] &quot;LR482neg&quot;  &quot;LR483neg&quot;  &quot;LR484neg&quot;  &quot;LR485neg&quot;  &quot;LR486neg&quot;  &quot;LR487neg&quot; 
 ## [25] &quot;LR490neg2&quot; &quot;LR492neg&quot;  &quot;LR493neg&quot;  &quot;LR494neg&quot;  &quot;LR496neg&quot;  &quot;LR498neg&quot; 
 ## [31] &quot;LR499neg&quot;  &quot;LR500neg&quot;  &quot;LR501neg2&quot; &quot;LR502neg&quot;  &quot;LR503neg&quot;  &quot;LR504neg&quot; 
@@ -1078,7 +1078,7 @@ maptab = rbind(maptab, neg_map)
 dim(maptab)</code></pre>
 <pre><code>## [1] 13596    10</code></pre>
 <pre class="r"><code>dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100277  13585</code></pre>
+<pre><code>## [1] 100656  13585</code></pre>
 <p>Including negative controls, that leaves us with 13,596 samples in
 the maptab. There are 13,585 in the ASV table.</p>
 <pre class="r"><code>all(maptab$Study.ID %in% colnames(asvtab_fixed))</code></pre>
@@ -1146,7 +1146,7 @@ write_rds(asvtab_fixed, file = &#39;data/merged_seqtab.rds&#39;)</code></pre>
 <pre class="r"><code>dim(maptab)</code></pre>
 <pre><code>## [1] 13585    10</code></pre>
 <pre class="r"><code>dim(asvtab_fixed)</code></pre>
-<pre><code>## [1] 100277  13585</code></pre>
+<pre><code>## [1] 100656  13585</code></pre>
 <pre class="r"><code>stat_df = data.frame(Step = &#39;00_manual_qc_steps.Rmd&#39;,
                      Samples = c(nrow(maptab), ncol(asvtab_fixed)),
                      Taxa = c(NA, nrow(asvtab_fixed)),
@@ -1155,7 +1155,7 @@ write_rds(asvtab_fixed, file = &#39;data/merged_seqtab.rds&#39;)</code></pre>
 stat_df</code></pre>
 <pre><code>##                     Step Samples   Taxa                   File
 ## 1 00_manual_qc_steps.Rmd   13585     NA data/merged_maptab.rds
-## 2 00_manual_qc_steps.Rmd   13585 100277 data/merged_seqtab.rds</code></pre>
+## 2 00_manual_qc_steps.Rmd   13585 100656 data/merged_seqtab.rds</code></pre>
 <pre class="r"><code>if (!dir.exists(&#39;stats&#39;)){
     dir.create(&#39;stats&#39;)
 }

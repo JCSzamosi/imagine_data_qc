@@ -1,4 +1,0 @@
-"Step","Samples","Taxa","File"
-"00_manual_qc_steps.Rmd",13585,NA,"data/merged_maptab.rds"
-"00_manual_qc_steps.Rmd",13585,100277,"data/merged_seqtab.rds"
-"01_assign_tax_asvs.R: gg",NA,1000,"data/merged_taxboot_gg.rds"

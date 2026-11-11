@@ -17,6 +17,8 @@ full = 'full'
 otufile = 'clstab99.csv'
 taxfile_g = 'clstaxtab99_gg.csv'
 taxfile_s = 'clstaxtab99_silva.csv'
+taxbfile_g = 'clstaxboot99_gg.csv'
+taxbfile_s = 'clstaxboot99_silva.csv'
 mapfile = 'full_map.csv'
 
 ## output
@@ -26,6 +28,8 @@ outmat = 'full99_mat.Rdata'
 otucsv = 'full99_otu.csv'
 taxcsv_g = 'full99_tax_g.csv'
 taxcsv_s = 'full99_tax_s.csv'
+taxbcsv_g = 'full99_taxboot_g.csv'
+taxbcsv_s = 'full99_taxboot_s.csv'
 mapcsv = 'full99_map.csv'
 outdf = 'full99_df.Rdata'
 outps = 'full99_ps.Rdata'
@@ -36,6 +40,8 @@ outseq = 'full99_seqs.Rdata'
 cat('\nRead in the tax table\n')
 taxtab_g = read.csv(file.path(intdir, taxfile_g), row.names = 1)
 taxtab_s = read.csv(file.path(intdir, taxfile_s), row.names = 1)
+taxboot_g = read.csv(file.path(intdir, taxbfile_g), row.names = 1)
+taxboot_s = read.csv(file.path(intdir, taxbfile_s), row.names = 1)
 
 cat('\nRead in the otu table\n')
 otutab = read.csv(file.path(intdir, otufile), row.names = 1)
@@ -47,31 +53,30 @@ taxtab_g = (taxtab_g
 taxtab_s = (taxtab_s
 			%>% column_to_rownames('seqs')
 			%>% select(-cluster))
-if (nrow(taxtab_g) != nrow(taxtab_s)){
-  msg = 'The two taxonomy tables have different numbers of taxa'
+
+if (!all(sapply(list(taxtab_g, taxtab_s, taxboot_g, otutab), 
+       function(x) nrow(x) == nrow(taxboot_s)))){
+  msg = 'The tables dont\'t all have the same numbers of rows'
   stop(msg)
-}
-if (nrow(taxtab_g) != nrow(otutab)){
-	msg = 'Counts table and tax table have different numbers of taxa'
-	stop(msg)
-} else if (!all(rownames(taxtab_g) %in% rownames(otutab))){
+} else if (!all(sapply(list(taxtab_g, taxtab_s), 
+       function(x) all(rownames(x) %in% rownames(otutab)) & 
+         all(rownames(otutab) %in% rownames(x))))){
 	msg = 'The tax and counts tables do not have the same sequences'
 	stop(msg)
-} else if (!all(rownames(taxtab_s) %in% rownames(otutab))) {
-	msg = 'The tax and counts tables do not have the same sequences'
-	stop(msg)
-} else if (!all(taxtab_g$ASVid == taxtab_s$ASVid)){
-  msg = 'The tax table and counts table ASVid columns don\'t match.'
-} else if (!all(taxtab_s$ASVid == taxtab_s$ASVid)){
+} else if (!all(sapply(list(taxtab_g, taxtab_s, taxboot_g),
+       function(x) all(x$ASVid == taxboot_s$ASVid)))){
   msg = 'The tax table and counts table ASVid columns don\'t match.'
 }
 
 otu_seqs = rownames(taxtab_g)
 names(otu_seqs) = taxtab_g$ASVid
-rownames(taxtab_g) = rownames(taxtab_s) = rownames(otutab) = taxtab_g$ASVid
+rownames(taxboot_g) = rownames(taxboot_s) = 
+  rownames(taxtab_g) = rownames(taxtab_s) = rownames(otutab) = taxtab_g$ASVid
 
 taxtab_g = select(taxtab_g, -ASVid)
 taxtab_s = select(taxtab_s, -ASVid)
+taxboot_g = select(taxboot_g, -ASVid)
+taxboot_s = select(taxboot_s, -ASVid)
 otutab = select(otutab, -ASVid)
 
 
@@ -88,22 +93,12 @@ if (nrow(maptab) != ncol(otutab)){
 	stop(msg)
 }
 
-cat('\nReorder the tax table to match the otu table\n')
-
-if (!all(rownames(taxtab_g) == rownames(taxtab_s))){
-  msg = 'The tax table rownames don\'t match each other.'
-  stop(msg)
-} 
-
-if (!all(rownames(taxtab_g) == rownames(otutab))){
-  msg = 'The tax and otu table rownames don\'t match.'
-  stop(msg)
-}
-
 ## Make matrices
 otutab = as.matrix(otutab)
 taxtab_g = as.matrix(taxtab_g)
 taxtab_s = as.matrix(taxtab_s)
+taxboot_g = as.matrix(taxboot_g)
+taxboot_s = as.matrix(taxboot_s)
 taxtab_g = sub('^[a-z]__', '', taxtab_g)
 
 ps99_full = phyloseq(otu_table(otutab, taxa_are_rows = TRUE),
@@ -128,6 +123,8 @@ tax_propped_s = prop_tax_down(tax_table(taxtab_s), indic = FALSE)
 
 tax99_full_g = tax_propped_g[taxa_names(ps99_full),]
 tax99_full_s = tax_propped_s[taxa_names(ps99_full),]
+taxboot99_full_g = taxboot_g[taxa_names(ps99_full),]
+taxboot99_full_s = taxboot_s[taxa_names(ps99_full),]
 otu99_full = otutab[taxa_names(ps99_full),]
 
 ## Write the phyloseq object
@@ -150,16 +147,21 @@ map99_full = data.frame(sample_data(ps99_full))
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('otu99_full', 'tax99_full_g', 'tax99_full_s', 'map99_full'), 
+save(list = c('otu99_full', 'tax99_full_g', 'tax99_full_s', 'taxboot99_full_g',
+              'taxboot99_full_s', 'map99_full'), 
      file = wrmat)
 
 wrotu = file.path(outdir, otucsv)
 wrtax_g = file.path(outdir, taxcsv_g)
 wrtax_s = file.path(outdir, taxcsv_s)
+wrtaxb_g = file.path(outdir, taxbcsv_g)
+wrtaxb_s = file.path(outdir, taxbcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(otu99_full, file = wrotu, row.names = TRUE)
 write.csv(tax99_full_g, file = wrtax_g, row.names = TRUE)
 write.csv(tax99_full_s, file = wrtax_s, row.names = TRUE)
+write.csv(taxboot99_full_g, file = wrtaxb_g, row.names = TRUE)
+write.csv(taxboot99_full_s, file = wrtaxb_s, row.names = TRUE)
 write.csv(map99_full, file = wrmap, row.names = TRUE)
 
 cat('\nWriting track stats\n')

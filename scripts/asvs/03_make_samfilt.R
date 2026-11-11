@@ -19,6 +19,8 @@ outseq = 'samfilt_seqs.Rdata'
 asvcsv = 'samfilt_asv.csv'
 taxcsv_g = 'samfilt_tax_g.csv'
 taxcsv_s = 'samfilt_tax_s.csv'
+taxbcsv_g = 'samfilt_taxboot_g.csv'
+taxbcsv_s = 'samfilt_taxboot_s.csv'
 mapcsv = 'samfilt_map.csv'
 tots = 'samfilt_asv_sample_totals.Rdata'
 
@@ -51,6 +53,8 @@ cat(sprintf('\nRemoved 0-count taxa. %i out of %i taxa remaining, or %.2f%%.\n',
 seqs_samfilt = seqs[taxa_names(ps_samfilt)]
 tax_samfilt_g = tax_full_g[taxa_names(ps_samfilt),]
 tax_samfilt_s = tax_full_s[taxa_names(ps_samfilt),]
+taxboot_samfilt_g = taxboot_full_g[taxa_names(ps_samfilt),]
+taxboot_samfilt_s = taxboot_full_s[taxa_names(ps_samfilt),]
 
 ## Write the phyloseq object
 
@@ -74,16 +78,21 @@ map_samfilt = data.frame(sample_data(ps_samfilt))
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('asv_samfilt', 'tax_samfilt_g', 'tax_samfilt_s', 'map_samfilt'), 
+save(list = c('asv_samfilt', 'tax_samfilt_g', 'tax_samfilt_s',
+              'taxboot_samfilt_g', 'taxboot_samfilt_s', 'map_samfilt'), 
      file = wrmat)
 
 wrasv = file.path(outdir, asvcsv)
 wrtax_g = file.path(outdir, taxcsv_g)
 wrtax_s = file.path(outdir, taxcsv_s)
+wrtaxb_g = file.path(outdir, taxbcsv_g)
+wrtaxb_s = file.path(outdir, taxbcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(asv_samfilt, file = wrasv, row.names = TRUE)
 write.csv(tax_samfilt_g, file = wrtax_g, row.names = TRUE)
 write.csv(tax_samfilt_s, file = wrtax_s, row.names = TRUE)
+write.csv(taxboot_samfilt_g, file = wrtaxb_g, row.names = TRUE)
+write.csv(taxboot_samfilt_s, file = wrtaxb_s, row.names = TRUE)
 write.csv(map_samfilt, file = wrmap, row.names = TRUE)
 
 cat('\nWriting count totals\n')

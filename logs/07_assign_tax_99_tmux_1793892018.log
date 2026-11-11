@@ -1,0 +1,55 @@
+./sbatch/cluster99/07_run_assign_tax_99_silva.sh 
+[?2004lmodule load r/4.5.0
+Rscript ./scripts/cluster99/07_assign_tax_clsts99.R -d silva
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+Read in the consensus sequences
+[?25h[?25h[?25h[?25h[?25h
+Check sequences
+[?25h[?25h
+Get the taxonomy from the ASV tax table
+[?25h[?25h
+Finished assigning taxonomy
+[?25h[?25h
+Write tax table[?25h[?25h[?25h
+Writing track stats
+[?25h[?25h[?25h
+Done
+[?25h[?25h[?2004h[szamosjc@l2.nibi DataQC]$ ./sbatch/cluster99/07_run_assign_tax_99_silva.sh gg.sh 
+[?2004lmodule load r/4.5.0
+Rscript ./scripts/cluster99/07_assign_tax_clsts99.R -d gg
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h[?25h
+Read in the consensus sequences
+[?25h[?25h[?25h[?25h[?25h
+Check sequences
+[?25h[?25h
+Get the taxonomy from the ASV tax table
+[?25h[?25h
+Finished assigning taxonomy
+[?25h[?25h
+Write tax table[?25h[?25h[?25h
+Writing track stats
+[?25h[?25h[?25h
+Done
+[?25h[?25h[?2004h[szamosjc@l2.nibi DataQC]$ 

@@ -11,18 +11,24 @@ outmat = 'full_mat.Rdata'
 asvcsv = 'full_asv.csv'
 taxcsv_g = 'full_tax_g.csv'
 taxcsv_s = 'full_tax_s.csv'
+taxbcsv_g = 'full_tax_g.csv'
+taxbcsv_s = 'full_tax_s.csv'
 mapcsv = 'full_map.csv'
 outps = 'full_ps.Rdata'
 seqf = 'full_seqs.Rdata'
 datdir = 'data'
 taxf_g = 'merged_taxtab_gg.rds'
 taxf_s = 'merged_taxtab_silva.rds'
+taxb_g = str_replace(taxf_g, 'tab', 'boot')
+taxb_s = str_replace(taxf_s, 'tab', 'boot')
 asvf = 'merged_seqtab.rds'
 mapf = 'merged_maptab.rds'
 tots = 'asv_sample_totals.Rdata'
 
 taxfile_g = file.path(datdir, taxf_g)
 taxfile_s = file.path(datdir, taxf_s)
+taxbfile_g = file.path(datdir, taxb_g)
+taxbfile_s = file.path(datdir, taxb_s)
 asvfile = file.path(datdir, asvf)
 mapfile = file.path(datdir, mapf)
 
@@ -31,6 +37,8 @@ mapfile = file.path(datdir, mapf)
 cat('\nReading in tax table\n')
 taxtab_g = readRDS(taxfile_g)
 taxtab_s = readRDS(taxfile_s)
+taxboot_g = readRDS(taxbfile_g)
+taxboot_s = readRDS(taxbfile_s)
 
 ## Read in the asv table
 cat('\nReading in asv table\n')
@@ -38,16 +46,14 @@ asvtab = readRDS(asvfile)
 
 ## Check the rows
 cat('\nChecking the rownames match\n')
-if (!all(rownames(taxtab_g) == rownames(taxtab_s))){
-    msg = 'The two taxtab rownames don\'t match'
+if (!all(sapply(list(taxtab_g,taxtab_s,taxboot_g,taxboot_s), 
+           function(x) rownames(x) == rownames(asvtab)))){
+    msg = 'The tax and asv table rownames don\'t match!'
     stop(msg)
 }
 seqs = rownames(taxtab_g)
-if (!all(seqs == rownames(asvtab))){
-	msg = 'The taxtab and asvtab rownames don\'t match'
-	stop(msg)
-}
-rownames(taxtab_g) = rownames(taxtab_s) = rownames(asvtab) = NULL
+rownames(taxboot_g) = rownames(taxboot_s) = 
+  rownames(taxtab_g) = rownames(taxtab_s) = rownames(asvtab) = NULL
 
 ## Read in the mapfile
 cat('\nReading in the mapfile\n')
@@ -112,7 +118,8 @@ rownames(maptab) = maptab$Study.ID
 asvtab = as.matrix(asvtab)
 taxtab_g = as.matrix(taxtab_g)
 taxtab_s = as.matrix(taxtab_s)
-
+taxboot_g = as.matrix(taxboot_g)
+taxboot_s = as.matrix(taxboot_s)
 
 # Create the phyloseq & seqs objects ####
 
@@ -122,7 +129,8 @@ ps_full = phyloseq(otu_table(asvtab, taxa_are_rows = TRUE),
               sample_data(maptab))
 
 ## Name the sequence data & tax tables
-rownames(asvtab) = rownames(taxtab_g) = rownames(taxtab_s) = 
+rownames(taxboot_g) = rownames(taxboot_s) = 
+  rownames(asvtab) = rownames(taxtab_g) = rownames(taxtab_s) = 
   names(seqs) = taxa_names(ps_full)
 taxtab_g = sub('^[a-z]__', '', taxtab_g)
 
@@ -169,6 +177,8 @@ ps_full = prune_taxa(not_host, ps_full)
 seqs = seqs[taxa_names(ps_full)]
 tax_full_g = tax_propped_g[taxa_names(ps_full),]
 tax_full_s = tax_propped_s[taxa_names(ps_full),]
+taxboot_full_g = taxboot_g[taxa_names(ps_full),]
+taxboot_full_s = taxboot_s[taxa_names(ps_full),]
 asv_full = asvtab[taxa_names(ps_full),]
 
 cat(sprintf('\nThe phyloseq object has %i taxa after removing host.\n',
@@ -195,16 +205,21 @@ map_full = data.frame(sample_data(ps_full))
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('asv_full', 'tax_full_g', 'tax_full_s', 'map_full'), 
+save(list = c('asv_full', 'tax_full_g', 'tax_full_s', 'taxboot_full_g',
+              'taxboot_full_s', 'map_full'), 
      file = wrmat)
 
 wrasv = file.path(outdir, asvcsv)
 wrtax_g = file.path(outdir, taxcsv_g)
 wrtax_s = file.path(outdir, taxcsv_s)
+wrtaxb_g = file.path(outdir, taxbcsv_g)
+wrtaxb_s = file.path(outdir, taxbcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(asv_full, file = wrasv, row.names = TRUE)
 write.csv(tax_full_g, file = wrtax_g, row.names = TRUE)
 write.csv(tax_full_s, file = wrtax_s, row.names = TRUE)
+write.csv(taxboot_full_g, file = wrtaxb_g, row.names = TRUE)
+write.csv(taxboot_full_s, file = wrtaxb_s, row.names = TRUE)
 write.csv(map_full, file = wrmap, row.names = TRUE)
 
 ## Write some totals in case I want/need them later

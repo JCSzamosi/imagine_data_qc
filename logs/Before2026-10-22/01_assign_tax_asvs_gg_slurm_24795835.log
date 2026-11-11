@@ -1,0 +1,10 @@
+module load r/4.5.0
+Rscript ./scripts/01_assign_tax_asvs.R -d gg
+Loading required package: Rcpp
+
+Read in the asv table
+
+Check sequences
+
+Start assigning taxonomy
+Finished processing reference fasta.[2026-10-22T11:56:11.092] error: *** JOB 24795835 ON c660 CANCELLED AT 2026-10-22T11:56:11 DUE to SIGNAL Terminated ***

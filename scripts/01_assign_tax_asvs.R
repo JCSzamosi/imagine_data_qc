@@ -22,7 +22,7 @@ seqfile = 'merged_seqtab.rds'
 inf = file.path(datdir, seqfile)
 refd = 'refs'
 if (db == 'silva'){
-    refdb = 'silva_nr99_v138_train_set.fa'
+    refdb = 'silva_nr99_v138_wSpecies_train_set.fa'
 } else if (db == 'gg'){
     refdb = 'gg2_2024_09_toSpecies_trainset.fa'
 } else {
@@ -49,11 +49,10 @@ if (!length(unique(seqs))/length(seqs) == 1){
 
 # Assign taxonomy
 cat('\nStart assigning taxonomy\n')
-tax_lst = assignTaxonomy(seqs[1:1000],
+tax_lst = assignTaxonomy(seqs,
                         refFasta = ref,
                         outputBootstraps = TRUE,
-                        # tryRC = TRUE, multithread = 40, verbose = TRUE)
-                        tryRC = TRUE, multithread = 10, verbose = TRUE)
+                        tryRC = TRUE, multithread = 40, verbose = TRUE)
 
 taxboot = tax_lst$boot
 

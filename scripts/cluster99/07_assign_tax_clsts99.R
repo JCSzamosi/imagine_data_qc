@@ -16,17 +16,19 @@ opt <- parse_args(opt_parser)
 db = opt$db
 
 datd = 'data'
-if (db == 'silva'){
-    taxf = 'merged_taxtab_silva.rds'
-} else if (db == 'gg'){
-    taxf = 'merged_taxtab_gg.rds'
-} else {
+if (!db %in% c('gg', 'silva')){
     stop('Database must be one of "silva" or "gg".')
 }
+
+taxf = sprintf('merged_taxtab_%s.rds', db)
+taxb = sprintf('merged_taxboot_%s.rds', db)
+
 ref = file.path(datd, taxf)
+refb = file.path(datd, taxb)
 indir = 'intermed'
 conseqf = 'conseqs99.csv'
 outf = sprintf('clstaxtab99_%s.csv', db)
+outbf = sprintf('clstaxboot99_%s.csv', db)
 
 # Read in the data ####
 
@@ -38,8 +40,14 @@ conseq = read.csv(file = file.path(indir, conseqf),
 seqs = conseq$conseq
 
 taxtab = readRDS(ref)
+taxboot = readRDS(refb)
 
 if (!all(seqs %in% rownames(taxtab))){
+  msg = 'Some reference sequences are missing from the tax table'
+  stop(msg)
+}
+
+if (!all(seqs %in% rownames(taxboot))){
   msg = 'Some reference sequences are missing from the tax table'
   stop(msg)
 }
@@ -52,6 +60,7 @@ if (length(unique(seqs))/length(seqs) != 1){
 cat('\nGet the taxonomy from the ASV tax table\n')
 
 clstax = taxtab[seqs,]
+clsboot = taxboot[seqs,]
 
 cat('\nFinished assigning taxonomy\n')
 
@@ -60,11 +69,18 @@ clstax = (clstax
        %>% mutate(seqs = rownames(.))
           %>% full_join(conseq, by = c('seqs' = 'conseq'))
           %>% select(-max, -min, -size))
+clsboot = (clsboot
+           %>% data.frame()
+           %>% mutate(seqs = rownames(.))
+           %>% full_join(conseq, by = c('seqs' = 'conseq'))
+           %>% select(-max, -min, -seqs, -size))
 
 cat('\nWrite tax table')
 
 outp = file.path(indir, outf)
+outbp = file.path(indir, outbf)
 write.csv(clstax, outp)
+write.csv(clsboot, outbp)
 
 cat('\nWriting track stats\n')
 

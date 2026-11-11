@@ -13,6 +13,8 @@ indir = file.path(cld, clst, full)
 inf = 'full99_ps.Rdata'
 intax_g = 'full99_tax_g.csv'
 intax_s = 'full99_tax_s.csv'
+intaxb_g = 'full99_taxboot_g.csv'
+intaxb_s = 'full99_taxboot_s.csv'
 
 ## output
 
@@ -21,6 +23,8 @@ outmat = 'samfilt99_mat.Rdata'
 otucsv = 'samfilt99_otu.csv'
 taxcsv_g = 'samfilt99_tax_g.csv'
 taxcsv_s = 'samfilt99_tax_s.csv'
+taxbcsv_g = 'samfilt99_taxboot_g.csv'
+taxbcsv_s = 'samfilt99_taxboot_s.csv'
 mapcsv = 'samfilt99_map.csv'
 outps = 'samfilt99_ps.Rdata'
 outseq = 'samfilt99_seqs.Rdata'
@@ -29,6 +33,10 @@ load(file.path(indir, inf))
 tax99_full_g = read.csv(file.path(indir, intax_g),
                       row.names = 1)
 tax99_full_s = read.csv(file.path(indir, intax_s),
+                      row.names = 1)
+taxb99_full_g = read.csv(file.path(indir, intaxb_g),
+                      row.names = 1)
+taxb99_full_s = read.csv(file.path(indir, intaxb_s),
                       row.names = 1)
 
 cat('\nThe distribution of read depths is:\n')
@@ -59,16 +67,16 @@ cat(sprintf('\nRemoved 0-count taxa. %i out of %i taxa remaining, or %.2f%%.\n',
 otu_seqs_samfilt = otu_seqs[taxa_names(ps99_samfilt)]
 tax99_samfilt_g = tax99_full_g[taxa_names(ps99_samfilt),]
 tax99_samfilt_s = tax99_full_s[taxa_names(ps99_samfilt),]
+taxb99_samfilt_g = taxb99_full_g[taxa_names(ps99_samfilt),]
+taxb99_samfilt_s = taxb99_full_s[taxa_names(ps99_samfilt),]
 
-if (nrow(tax99_samfilt_g) != nrow(tax99_samfilt_s)){
-  msg = 'the output tax tables don\'t match.'
+if (!all(sapply(list(tax99_samfilt_g, tax99_samfilt_s, taxb99_samfilt_g,
+                     taxb99_samfilt_s),
+       function(x) nrow(x) == ntaxa(ps99_samfilt)))){
+  msg = 'the output tax tables don\'t match each other or the ps object.'
   stop(msg)
 }
 
-if (nrow(tax99_samfilt_g) != ntaxa(ps99_samfilt)){
-  msg = 'The number of taxa in the tax table doesn\'t match the ps object.'
-  stop(msg)
-}
 
 cat('\nWriting phyloseq object files\n')
 if (!dir.exists(outdir)){
@@ -90,16 +98,21 @@ map99_samfilt = data.frame(sample_data(ps99_samfilt))
 
 cat('\nWriting the individual tables\n')
 wrmat = file.path(outdir, outmat)
-save(list = c('otu99_samfilt', 'tax99_samfilt_g', 'tax99_samfilt_s', 'map99_samfilt'), 
+save(list = c('otu99_samfilt', 'tax99_samfilt_g', 'tax99_samfilt_s', 
+              'taxb99_samfilt_g', 'taxb99_samfilt_s', 'map99_samfilt'), 
      file = wrmat)
 
 wrotu = file.path(outdir, otucsv)
 wrtax_g = file.path(outdir, taxcsv_g)
 wrtax_s = file.path(outdir, taxcsv_s)
+wrtaxb_g = file.path(outdir, taxbcsv_g)
+wrtaxb_s = file.path(outdir, taxbcsv_s)
 wrmap = file.path(outdir, mapcsv)
 write.csv(otu99_samfilt, file = wrotu, row.names = TRUE)
 write.csv(tax99_samfilt_g, file = wrtax_g, row.names = TRUE)
 write.csv(tax99_samfilt_s, file = wrtax_s, row.names = TRUE)
+write.csv(taxb99_samfilt_g, file = wrtaxb_g, row.names = TRUE)
+write.csv(taxb99_samfilt_s, file = wrtaxb_s, row.names = TRUE)
 write.csv(map99_samfilt, file = wrmap, row.names = TRUE)
 
 cat('\nWriting track stats\n')
